@@ -1,0 +1,100 @@
+:root {
+  --brand-primary: #0f766e;
+  --brand-accent: #f59e0b;
+  --brand-surface: #f4fbfa;
+  --brand-text: #0f172a;
+}
+
+html {
+  font-size: 14px;
+  position: relative;
+  min-height: 100%;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+  margin-bottom: 60px;
+  color: var(--brand-text);
+  background:
+    radial-gradient(circle at top right, rgba(245, 158, 11, 0.10), transparent 22%),
+    linear-gradient(180deg, #f8fffe 0%, #eef8f6 100%);
+}
+
+.btn-primary {
+  background-color: var(--brand-primary);
+  border-color: var(--brand-primary);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #0b5c56;
+  border-color: #0b5c56;
+}
+
+.btn-outline-primary {
+  color: var(--brand-primary);
+  border-color: var(--brand-primary);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--brand-primary);
+  border-color: var(--brand-primary);
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus,
+.form-select:focus {
+  box-shadow: 0 0 0 0.15rem rgba(15, 118, 110, 0.2);
+}
+
+.hero-section {
+  background: linear-gradient(135deg, rgba(15, 118, 110, 0.12), rgba(255, 255, 255, 0.95));
+  border: 1px solid rgba(15, 118, 110, 0.08);
+}
+
+.stats-card,
+.feature-card {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.metric-label {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.doctor-card,
+.feature-card,
+.stats-card {
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.doctor-card:hover,
+.feature-card:hover,
+.stats-card:hover {
+  transform: translateY(-2px);
+}
+
+.form-floating > .form-control-plaintext::placeholder,
+.form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder,
+.form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}

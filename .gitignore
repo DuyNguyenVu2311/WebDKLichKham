@@ -1,0 +1,13 @@
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+run.err
+run.out
+run2.err
+run2.out
+run3.err
+run3.out

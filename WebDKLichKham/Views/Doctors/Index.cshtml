@@ -1,0 +1,33 @@
+@model IEnumerable<WebDKLichKham.Models.Doctor>
+@{
+    ViewData["Title"] = "Danh sách bác sĩ";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h2 mb-1">Danh sách bác sĩ</h1>
+        <p class="text-secondary mb-0">Người dùng có thể xem chuyên khoa, học vị và phí khám trước khi đặt lịch.</p>
+    </div>
+    <a class="btn btn-primary" asp-controller="Appointments" asp-action="Create">Đặt lịch</a>
+</div>
+
+<div class="row g-3">
+    @foreach (var doctor in Model)
+    {
+        <div class="col-md-6 col-xl-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <span class="badge text-bg-light text-primary mb-3">@doctor.Specialty</span>
+                    <h2 class="h5">@doctor.FullName</h2>
+                    <p class="mb-2 text-secondary">@doctor.Qualification</p>
+                    <p class="small mb-3">@doctor.Biography</p>
+                    <div class="small text-secondary mb-3">
+                        <div>Kinh nghiệm: @doctor.ExperienceYears năm</div>
+                        <div>Phí khám: @doctor.Fee.ToString("N0") VND</div>
+                    </div>
+                    <a asp-action="Details" asp-route-id="@doctor.Id">Xem lịch làm việc</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

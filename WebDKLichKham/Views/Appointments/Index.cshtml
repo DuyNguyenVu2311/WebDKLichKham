@@ -1,0 +1,77 @@
+@model WebDKLichKham.Models.ViewModels.MyAppointmentsViewModel
+@{
+    ViewData["Title"] = "Lịch của tôi";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h2 mb-1">Lịch của tôi</h1>
+        <p class="text-secondary mb-0">Theo dõi lịch sắp tới và lịch sử đặt khám của @Model.PatientName.</p>
+    </div>
+    <a class="btn btn-primary" asp-action="Create">Đặt lịch mới</a>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="h4 mb-3">Lịch sắp tới</h2>
+                @if (Model.UpcomingAppointments.Count == 0)
+                {
+                    <p class="text-secondary mb-0">Chưa có lịch hẹn nào sắp tới.</p>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Bác sĩ</th>
+                                    <th>Ngày</th>
+                                    <th>Giờ</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.UpcomingAppointments)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div>@item.DoctorName</div>
+                                            <small class="text-secondary">@item.Specialty</small>
+                                        </td>
+                                        <td>@item.AppointmentDate.ToString("dd/MM/yyyy")</td>
+                                        <td>@item.StartTime.ToString(@"hh\:mm") - @item.EndTime.ToString(@"hh\:mm")</td>
+                                        <td>@item.Status.GetDisplayName()</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="h4 mb-3">Lịch sử</h2>
+                @if (Model.HistoryAppointments.Count == 0)
+                {
+                    <p class="text-secondary mb-0">Chưa có dữ liệu lịch sử.</p>
+                }
+                else
+                {
+                    @foreach (var item in Model.HistoryAppointments)
+                    {
+                        <div class="border rounded-3 p-3 mb-3">
+                            <div class="fw-semibold">@item.DoctorName</div>
+                            <div class="small text-secondary">@item.AppointmentDate.ToString("dd/MM/yyyy") | @item.StartTime.ToString(@"hh\:mm")</div>
+                            <div class="small">Trạng thái: @item.Status.GetDisplayName()</div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

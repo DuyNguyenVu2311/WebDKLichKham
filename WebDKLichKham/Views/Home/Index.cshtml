@@ -1,0 +1,92 @@
+@model WebDKLichKham.Models.ViewModels.HomeDashboardViewModel
+@{
+    ViewData["Title"] = "Trang chủ";
+}
+
+<section class="hero-section rounded-4 p-4 p-lg-5 mb-4">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+            <span class="badge text-bg-light text-primary mb-3">Hệ thống đặt lịch khám online</span>
+            <h1 class="display-5 fw-bold mb-3">Website đặt lịch khám cho phòng khám vừa và nhỏ</h1>
+            <p class="lead text-secondary mb-4">
+                Tổ chức quy trình đặt lịch, quản lý bác sĩ, bệnh nhân và lịch khám trên một hệ thống ASP.NET Core MVC để dễ dàng mở rộng sau này.
+            </p>
+            <div class="d-flex flex-wrap gap-3">
+                <a class="btn btn-primary btn-lg" asp-controller="Appointments" asp-action="Create">Đặt lịch ngay</a>
+                <a class="btn btn-outline-primary btn-lg" asp-controller="Doctors" asp-action="Index">Xem đội ngũ bác sĩ</a>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="stats-card shadow-sm rounded-4 p-4 bg-white">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="metric-label">Bác sĩ</div>
+                        <div class="metric-value">@Model.TotalDoctors</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="metric-label">Lịch khám</div>
+                        <div class="metric-value">@Model.TotalAppointments</div>
+                    </div>
+                    <div class="col-12">
+                        <div class="metric-label">Ca làm việc sắp tới</div>
+                        <div class="metric-value">@Model.UpcomingSchedules</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="h3 mb-1">Chức năng cốt lõi</h2>
+            <p class="text-secondary mb-0">Đúng theo hướng đặc tả use case trong tài liệu.</p>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="feature-card h-100 p-4 rounded-4">
+                <h3 class="h5">Cho bệnh nhân</h3>
+                <p>Đăng ký, đăng nhập, xem bác sĩ, đặt lịch và theo dõi lịch đã đặt.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature-card h-100 p-4 rounded-4">
+                <h3 class="h5">Cho phòng khám</h3>
+                <p>Quản lý bác sĩ, thông tin bệnh nhân, lịch hẹn và cập nhật trạng thái lịch khám.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="h3 mb-1">Bác sĩ nổi bật</h2>
+            <p class="text-secondary mb-0">Dữ liệu mẫu để nhìn rõ bộ sườn giao diện và nghiệp vụ.</p>
+        </div>
+        <a class="btn btn-sm btn-outline-secondary" asp-controller="Doctors" asp-action="Index">Xem tất cả</a>
+    </div>
+
+    <div class="row g-3">
+        @foreach (var doctor in Model.FeaturedDoctors)
+        {
+            <div class="col-md-4">
+                <div class="doctor-card card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis mb-3">@doctor.Specialty</span>
+                        <h3 class="h5">@doctor.FullName</h3>
+                        <p class="text-secondary small mb-2">@doctor.Qualification</p>
+                        <p class="mb-3">@doctor.Biography</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <strong>@doctor.Fee.ToString("N0") VND</strong>
+                            <a asp-controller="Doctors" asp-action="Details" asp-route-id="@doctor.Id">Chi tiết</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>

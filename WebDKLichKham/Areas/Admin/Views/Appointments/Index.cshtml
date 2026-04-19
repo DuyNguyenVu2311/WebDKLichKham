@@ -1,0 +1,100 @@
+@model IEnumerable<WebDKLichKham.Models.Appointment>
+@using WebDKLichKham.Models
+@{
+    ViewData["Title"] = "Quan ly lich kham";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h2 mb-1">Quan ly lich kham</h1>
+        <p class="text-secondary mb-0">Theo doi, xac nhan va cap nhat trang thai lich hen cua benh nhan.</p>
+    </div>
+    <a class="btn btn-outline-secondary" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Ve dashboard</a>
+</div>
+
+@if (TempData["StatusMessage"] is string message)
+{
+    <div class="alert alert-success" role="alert">
+        @message
+    </div>
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Benh nhan</th>
+                    <th>Bac si</th>
+                    <th>Ngay kham</th>
+                    <th>Ly do</th>
+                    <th>Trang thai</th>
+                    <th class="text-end">Thao tac</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var appointment in Model)
+                {
+                    <tr>
+                        <td>@appointment.PatientProfile?.FullName</td>
+                        <td>@appointment.Doctor?.FullName</td>
+                        <td>@appointment.AppointmentDate.ToString("dd/MM/yyyy") @appointment.StartTime.ToString(@"hh\:mm")</td>
+                        <td>@appointment.ReasonForVisit</td>
+                        <td>
+                            <span class="badge @GetStatusBadgeClass(appointment.Status)">
+                                @appointment.Status.GetDisplayName()
+                            </span>
+                        </td>
+                        <td class="text-end">
+                            <div class="d-inline-flex gap-2 flex-wrap justify-content-end">
+                                @if (appointment.Status == AppointmentStatus.Pending)
+                                {
+                                    <form asp-area="Admin" asp-controller="Appointments" asp-action="Confirm" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@appointment.Id" />
+                                        <button type="submit" class="btn btn-sm btn-success">Xac nhan</button>
+                                    </form>
+
+                                    <form asp-area="Admin" asp-controller="Appointments" asp-action="Cancel" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@appointment.Id" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Huy</button>
+                                    </form>
+                                }
+                                else if (appointment.Status == AppointmentStatus.Confirmed)
+                                {
+                                    <form asp-area="Admin" asp-controller="Appointments" asp-action="Complete" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@appointment.Id" />
+                                        <button type="submit" class="btn btn-sm btn-primary">Hoan thanh</button>
+                                    </form>
+
+                                    <form asp-area="Admin" asp-controller="Appointments" asp-action="Cancel" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@appointment.Id" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Huy</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span class="text-muted small">Khong co thao tac</span>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@functions {
+    private static string GetStatusBadgeClass(AppointmentStatus status) => status switch
+    {
+        AppointmentStatus.Pending => "bg-warning text-dark",
+        AppointmentStatus.Confirmed => "bg-success",
+        AppointmentStatus.Completed => "bg-primary",
+        AppointmentStatus.Cancelled => "bg-danger",
+        _ => "bg-secondary"
+    };
+}

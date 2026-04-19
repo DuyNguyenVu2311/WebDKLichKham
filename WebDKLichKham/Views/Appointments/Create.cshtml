@@ -1,0 +1,78 @@
+@model WebDKLichKham.Models.ViewModels.AppointmentBookingViewModel
+@{
+    ViewData["Title"] = "Đặt lịch khám";
+}
+
+<div class="row justify-content-center">
+    <div class="col-xl-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4 p-lg-5">
+                <h1 class="h2 mb-2">Đặt lịch khám online</h1>
+                <p class="text-secondary mb-4">Bộ form này là khung nghiệp vụ cho use case đặt lịch khám trong tài liệu.</p>
+
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="FullName" class="form-label"></label>
+                            <input asp-for="FullName" class="form-control" />
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="PhoneNumber" class="form-label"></label>
+                            <input asp-for="PhoneNumber" class="form-control" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="Address" class="form-label"></label>
+                            <input asp-for="Address" class="form-control" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="DoctorId" class="form-label"></label>
+                            <select asp-for="DoctorId" asp-items="Model.Doctors" class="form-select">
+                                <option value="">-- Chọn bác sĩ --</option>
+                            </select>
+                            <span asp-validation-for="DoctorId" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="AppointmentDate" class="form-label"></label>
+                            <input asp-for="AppointmentDate" class="form-control" />
+                            <span asp-validation-for="AppointmentDate" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="StartTime" class="form-label"></label>
+                            <input asp-for="StartTime" class="form-control" />
+                            <span asp-validation-for="StartTime" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="EndTime" class="form-label"></label>
+                            <input asp-for="EndTime" class="form-control" />
+                            <span asp-validation-for="EndTime" class="text-danger"></span>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="ReasonForVisit" class="form-label"></label>
+                            <textarea asp-for="ReasonForVisit" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="ReasonForVisit" class="text-danger"></span>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="MedicalHistory" class="form-label"></label>
+                            <textarea asp-for="MedicalHistory" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="MedicalHistory" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3 mt-4">
+                        <button type="submit" class="btn btn-primary">Xác nhận đặt lịch</button>
+                        <a class="btn btn-outline-secondary" asp-controller="Doctors" asp-action="Index">Xem bác sĩ</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
