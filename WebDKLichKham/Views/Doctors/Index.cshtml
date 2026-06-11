@@ -1,33 +1,249 @@
-@model IEnumerable<WebDKLichKham.Models.Doctor>
+@model WebDKLichKham.Models.ViewModels.DoctorDirectoryViewModel
+@using WebDKLichKham.Models
 @{
-    ViewData["Title"] = "Danh sách bác sĩ";
+    ViewData["Title"] = "Danh Sách Bác Sĩ & Đặt Hẹn";
+    var today = DateTime.Today;
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-        <h1 class="h2 mb-1">Danh sách bác sĩ</h1>
-        <p class="text-secondary mb-0">Người dùng có thể xem chuyên khoa, học vị và phí khám trước khi đặt lịch.</p>
-    </div>
-    <a class="btn btn-primary" asp-controller="Appointments" asp-action="Create">Đặt lịch</a>
-</div>
+<main class="max-w-[1280px] mx-auto px-4 md:px-8 py-8 font-sans">
+    <!-- Breadcrumbs & Header -->
+    <section class="mb-6">
+        <nav class="flex items-center gap-2 text-[13px] text-gray-500 mb-3">
+            <a class="hover:text-[#008a7b] no-underline text-gray-500" asp-controller="Home" asp-action="Index">Trang chủ</a>
+            <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+            <span class="text-[#00346f] font-medium">Lịch khám & Đặt hẹn</span>
+        </nav>
+        <div class="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-6">
+            <div>
+                <h1 class="text-[32px] md:text-[36px] font-bold text-[#1e293b] mb-2 font-sans tracking-tight">Lịch Khám & Đặt Hẹn</h1>
+                <p class="text-[15px] text-gray-500">Tra cứu lịch làm việc của các bác sĩ chuyên khoa và đặt lịch trực tuyến.</p>
+            </div>
+            <a href="https://zalo.me/0775571311" target="_blank" class="flex items-center gap-3 bg-[#e6f7f5] px-4 py-2 rounded-xl border border-[#b2dfdb] shrink-0 mt-2 hover:bg-[#d2f0ec] transition-colors no-underline">
+                <span class="material-symbols-outlined text-[#008a7b] text-[24px]">phone_in_talk</span>
+                <div>
+                    <p class="text-[12px] text-[#008a7b] font-medium leading-tight mb-0.5">Hotline / Zalo hỗ trợ</p>
+                    <p class="text-[15px] text-[#008a7b] font-bold leading-tight mb-0">0775 571 311</p>
+                </div>
+            </a>
+        </div>
 
-<div class="row g-3">
-    @foreach (var doctor in Model)
-    {
-        <div class="col-md-6 col-xl-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body p-4">
-                    <span class="badge text-bg-light text-primary mb-3">@doctor.Specialty</span>
-                    <h2 class="h5">@doctor.FullName</h2>
-                    <p class="mb-2 text-secondary">@doctor.Qualification</p>
-                    <p class="small mb-3">@doctor.Biography</p>
-                    <div class="small text-secondary mb-3">
-                        <div>Kinh nghiệm: @doctor.ExperienceYears năm</div>
-                        <div>Phí khám: @doctor.Fee.ToString("N0") VND</div>
+        <!-- Redesigned Search & Filter Form -->
+        <div class="bg-white p-4 md:p-5 rounded-2xl border border-gray-200 shadow-sm mb-6">
+            <form method="get" action="/Doctors#danh-sach-bac-si" class="space-y-4">
+                <div class="flex flex-col md:flex-row gap-3">
+                    <!-- Search Input -->
+                    <div class="relative flex-1">
+                        <span class="material-symbols-outlined absolute left-4 top-3.5 text-gray-400 text-[20px]">search</span>
+                        <input name="keyword" value="@Model.Keyword" placeholder="Tìm kiếm bác sĩ..." 
+                               class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-11 pr-4 py-3 text-[15px] focus:bg-white focus:border-[#008a7b] focus:ring-1 focus:ring-[#008a7b] outline-none transition-all shadow-inner" type="text" />
                     </div>
-                    <a asp-action="Details" asp-route-id="@doctor.Id">Xem lịch làm việc</a>
+                    <div class="flex gap-2 w-full md:w-auto">
+                        <!-- Toggle Filter Button -->
+                        <button type="button" id="toggle-filter-btn" 
+                                class="flex-1 md:flex-none flex items-center justify-center gap-2 bg-white border border-gray-200 hover:border-gray-300 rounded-xl px-5 py-3 text-[14px] font-semibold text-gray-700 hover:bg-gray-50 transition-all shadow-sm cursor-pointer select-none">
+                            <span class="material-symbols-outlined text-[20px] text-gray-500">tune</span> 
+                            Bộ lọc
+                        </button>
+                        <!-- Search Submit Button -->
+                        <button type="submit" 
+                                class="flex-1 md:flex-none bg-[#0d8a72] hover:bg-[#0b7762] text-white px-6 py-3 rounded-xl text-[14px] font-bold flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer">
+                            <span class="material-symbols-outlined text-[20px]">search</span> Tìm kiếm
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Collapsible Filters Panel -->
+                <div id="filter-panel" class="hidden grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-gray-100 transition-all duration-300">
+                    <div class="space-y-1.5">
+                        <label class="block text-[13px] font-bold text-gray-600">Chi Nhánh</label>
+                        <select name="branch" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-[14px] focus:bg-white focus:border-[#008a7b] focus:ring-1 focus:ring-[#008a7b] outline-none shadow-sm cursor-pointer transition-all">
+                            <option value="">Tất cả chi nhánh</option>
+                            <option value="Thủ Đức" selected="@(Model.Branch == "Thủ Đức")">Cơ sở 1: TP. Thủ Đức</option>
+                            <option value="Nhơn Trạch" selected="@(Model.Branch == "Nhơn Trạch")">Cơ sở 2: Nhơn Trạch</option>
+                        </select>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="block text-[13px] font-bold text-gray-600">Chuyên Khoa</label>
+                        <select asp-for="SpecialtyId" asp-items="Model.SpecialtyOptions" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-[14px] focus:bg-white focus:border-[#008a7b] focus:ring-1 focus:ring-[#008a7b] outline-none shadow-sm cursor-pointer transition-all">
+                            <option value="">Tất cả chuyên khoa</option>
+                        </select>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="block text-[13px] font-bold text-gray-600">Chọn Tuần / Ngày Khám</label>
+                        <input name="date" type="date" value="@(Model.Date?.ToString("yyyy-MM-dd"))" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-[14px] focus:bg-white focus:border-[#008a7b] focus:ring-1 focus:ring-[#008a7b] outline-none shadow-sm cursor-pointer transition-all" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Booking steps component -->
+    <partial name="_BookingSteps" model="1" />
+
+    <!-- Search results count -->
+    <div class="mb-6 text-[14px] text-gray-600 flex items-center gap-1.5">
+        <span>Tìm thấy</span>
+        <span class="font-bold text-gray-900 text-[16px]">@Model.Doctors.Count()</span>
+        <span>bác sĩ</span>
+    </div>
+
+    <!-- Doctor Cards Grid -->
+    <section id="danh-sach-bac-si" class="mb-10">
+        @if (!Model.Doctors.Any())
+        {
+            <div class="bg-white border border-gray-200 rounded-2xl p-12 text-center shadow-sm">
+                <span class="material-symbols-outlined text-gray-300 text-[64px] mb-3">person_search</span>
+                <h3 class="text-[18px] font-bold text-gray-700 mb-1">Không tìm thấy bác sĩ</h3>
+                <p class="text-gray-500 text-[14px]">Vui lòng thử lại với các tiêu chí tìm kiếm khác.</p>
+            </div>
+        }
+        else
+        {
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                @foreach (var doctor in Model.Doctors)
+                {
+                    var specialtyName = doctor.SpecialtyInfo?.Name ?? doctor.Specialty;
+                    var cleanName = doctor.FullName.Replace("BS. ", "").Replace("ThS. ", "").Replace("GS. ", "").Replace("TS. ", "").Trim();
+                    var isMale = !doctor.AvatarUrl?.Contains("female") ?? true;
+                    
+                    var avatarSrc = string.IsNullOrEmpty(doctor.AvatarUrl) 
+                        ? $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(cleanName)}&background=e2e8f0&color=475569&size=256&font-size=0.35&bold=true"
+                        : doctor.AvatarUrl;
+
+                    <div class="bg-white rounded-2xl border border-gray-200 hover:border-gray-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col justify-between shadow-sm group">
+                        <a asp-action="Details" asp-route-id="@doctor.Id" class="no-underline text-inherit block flex-grow">
+                            <!-- Doctor Image Section -->
+                            <div class="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden border-b border-gray-100">
+                                <img src="@avatarSrc" alt="@doctor.FullName" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                @if (doctor.IsFeatured)
+                                {
+                                    <span class="absolute top-3 left-3 bg-[#e6f4ea] text-[#1e8e3e] text-[11px] font-bold px-2.5 py-1 rounded-lg shadow-sm flex items-center gap-1 border border-[#a3e2ab]">
+                                        <span class="material-symbols-outlined text-[13px] font-bold">verified</span> Nổi bật
+                                    </span>
+                                }
+                            </div>
+
+                            <!-- Doctor Card Details -->
+                            <div class="p-5">
+                                <!-- Name -->
+                                <h3 class="font-bold text-[17px] text-gray-800 leading-tight mb-2 hover:text-[#0d8a72] transition-colors">
+                                    @(doctor.FullName.StartsWith("BS.") || doctor.FullName.StartsWith("ThS.") || doctor.FullName.StartsWith("GS.") || doctor.FullName.StartsWith("TS.") ? doctor.FullName : "BS. " + doctor.FullName)
+                                </h3>
+
+                                <!-- Specialty -->
+                                <p class="text-[13px] text-[#0d8a72] font-bold mb-3 uppercase tracking-wide leading-tight">
+                                    @specialtyName
+                                </p>
+
+                                <!-- Workplace & Location -->
+                                <div class="flex items-start gap-2 text-[13px] text-gray-600 mb-4 min-h-[48px]">
+                                    <span class="material-symbols-outlined text-[16px] text-gray-400 shrink-0 mt-0.5">location_on</span>
+                                    <div>
+                                        <p class="font-semibold text-gray-700 leading-snug">@(doctor.Workplace ?? "Cơ sở khám bệnh")</p>
+                                        <p class="text-[12px] text-gray-500 mt-0.5 leading-normal">
+                                            @if (doctor.Workplace?.Contains("Thủ Đức") == true)
+                                            {
+                                                @:18 Đường 22, P. Linh Chiểu, TP. Thủ Đức, TP. HCM
+                                            }
+                                            else if (doctor.Workplace?.Contains("Nhơn Trạch") == true)
+                                            {
+                                                @:Đường Tôn Đức Thắng, Phú Hội, Nhơn Trạch, Đồng Nai
+                                            }
+                                            else
+                                            {
+                                                @:Phòng khám đa khoa cơ sở chất lượng cao
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Experience Years -->
+                                <div class="flex items-center gap-1.5 text-[13px] text-gray-600 mb-2">
+                                    <span class="material-symbols-outlined text-[18px] text-[#0d8a72]">trending_up</span>
+                                    <span class="font-medium">@(doctor.ExperienceYears)+ năm KN</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <!-- Card Footer -->
+                        <div class="p-5 pt-0 border-t border-gray-100 mt-auto">
+                            <div class="flex flex-col gap-3 pt-3">
+                                <div class="flex items-baseline justify-between">
+                                    <span class="text-[12px] text-gray-400 uppercase tracking-wider font-semibold">Phí khám</span>
+                                    <span class="text-[18px] font-bold text-[#0d8a72]">@doctor.Fee.ToString("N0")đ</span>
+                                </div>
+                                
+                                <a href="/Appointments/Create?doctorId=@doctor.Id&specialtyId=@doctor.SpecialtyId@(Model.Date.HasValue ? $"&appointmentDate={Model.Date.Value.ToString("yyyy-MM-dd")}" : "")" 
+                                   class="w-full bg-[#0d8a72] hover:bg-[#0b7762] text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all no-underline text-[14px] shadow-sm hover:shadow-md cursor-pointer select-none">
+                                    <span class="material-symbols-outlined text-[18px]">calendar_today</span> Đặt lịch khám
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </section>
+
+    <!-- Support and Info Section -->
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 bg-[#f0f4fa] p-8 rounded-xl border border-[#e2e8f0] flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+            <div class="flex items-start gap-5">
+                <div class="bg-[#dbe6f5] p-3.5 rounded-lg flex items-center justify-center shrink-0 shadow-sm border border-blue-100">
+                    <span class="material-symbols-outlined text-[#00346f] text-[32px]">lock_person</span>
+                </div>
+                <div>
+                    <h3 class="font-bold text-[#00346f] text-[15px] mb-1.5">Yêu cầu đăng nhập để đặt hẹn</h3>
+                    <p class="text-[14px] text-gray-600 leading-relaxed">Vui lòng <b>đăng nhập</b> vào <b>Cổng Bệnh Nhân</b> để xem chi tiết tình trạng phòng khám và xác nhận đặt chỗ trực tuyến một cách an toàn.</p>
+                </div>
+            </div>
+            <div class="shrink-0 flex flex-col items-center gap-2">
+                <a asp-area="" asp-controller="Home" asp-action="Login" class="bg-[#00346f] text-white px-6 py-2.5 rounded-md font-semibold text-[14px] hover:bg-[#002244] shadow-md transition-all no-underline text-center w-full">Đăng Nhập Ngay</a>
+                <a class="text-[#00346f] text-[13px] font-medium hover:underline no-underline mt-1" asp-area="" asp-controller="Home" asp-action="Register">Chưa có tài khoản? Đăng ký</a>
+            </div>
+        </div>
+        <div class="bg-[#f8fafc] p-6 rounded-xl border border-[#e2e8f0] shadow-sm">
+            <h4 class="font-bold text-gray-700 text-[13px] mb-5 uppercase tracking-wider flex items-center gap-2">
+                <span class="material-symbols-outlined text-[#00346f] text-[20px]">support_agent</span> HỖ TRỢ TRỰC TUYẾN
+            </h4>
+            <div class="space-y-4">
+                <div class="flex items-start gap-4">
+                    <div class="bg-white p-2 rounded-md border border-gray-200 flex items-center justify-center shadow-sm"><span class="material-symbols-outlined text-[#00346f] text-[20px]">call</span></div>
+                    <div><p class="font-bold text-[14px] text-gray-800 mb-0.5">Tổng đài 24/7</p><p class="text-[13px] text-gray-500 leading-tight">Thủ Đức: 1900 1234<br/>Nhơn Trạch: 1900 5678</p></div>
+                </div>
+                <a href="https://zalo.me/0775571311" target="_blank" class="flex items-start gap-4 no-underline hover:opacity-80 transition-opacity">
+                    <div class="bg-white p-2 rounded-md border border-gray-200 flex items-center justify-center shadow-sm"><span class="material-symbols-outlined text-[#00346f] text-[20px]">chat</span></div>
+                    <div><p class="font-bold text-[14px] text-gray-800 mb-0.5">Zalo / Hotline cá nhân</p><p class="text-[14px] text-[#00346f] font-bold mb-0">0775 571 311</p></div>
+                </a>
+                <div class="flex items-start gap-4">
+                    <div class="bg-white p-2 rounded-md border border-gray-200 flex items-center justify-center shadow-sm"><span class="material-symbols-outlined text-[#00346f] text-[20px]">mail</span></div>
+                    <div><p class="font-bold text-[14px] text-gray-800 mb-0.5">Email liên hệ</p><p class="text-[13px] text-gray-500">cskh@phongkhamquocte.vn</p></div>
                 </div>
             </div>
         </div>
-    }
-</div>
+    </section>
+</main>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toggleBtn = document.getElementById("toggle-filter-btn");
+        const filterPanel = document.getElementById("filter-panel");
+
+        if (toggleBtn && filterPanel) {
+            // Check if any query parameters are active to auto-expand the panel
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasActiveFilters = urlParams.get("branch") || urlParams.get("SpecialtyId") || urlParams.get("date");
+
+            if (hasActiveFilters) {
+                filterPanel.classList.remove("hidden");
+                toggleBtn.classList.add("bg-gray-100", "border-gray-300");
+            }
+
+            toggleBtn.addEventListener("click", function () {
+                filterPanel.classList.toggle("hidden");
+                toggleBtn.classList.toggle("bg-gray-100");
+                toggleBtn.classList.toggle("border-gray-300");
+            });
+        }
+    });
+</script>

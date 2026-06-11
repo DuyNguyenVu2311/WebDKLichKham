@@ -1,0 +1,204 @@
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng nhập hệ thống nội bộ - Phòng Khám Đa Khoa Duy Tâm</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .material-symbols-outlined.filled { font-variation-settings: 'FILL' 1; }
+    </style>
+</head>
+<body class="min-h-screen bg-white text-slate-800 flex flex-col md:flex-row">
+
+        <div class="hidden md:flex md:w-[400px] lg:w-[450px] bg-gradient-to-b from-[#f4f7fc] to-[#eaf1ff] border-r border-slate-200 flex-col p-8 lg:p-12 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl"></div>
+            
+            <div class="mb-10 relative z-10">
+                <a href="/" class="inline-flex items-center gap-3 no-underline shrink-0 mb-6">
+                    <div class="w-10 h-10 bg-gradient-to-br from-[#1e40af] to-[#2563eb] rounded-xl flex items-center justify-center shadow-md">
+                        <span class="material-symbols-outlined text-white text-[22px]">local_hospital</span>
+                    </div>
+                    <div>
+                        <div class="text-[17px] font-bold text-[#1e293b] leading-tight">Duy Tâm</div>
+                        <div class="text-[12px] text-[#64748b] font-medium leading-none">Phòng Khám Đa Khoa</div>
+                    </div>
+                </a>
+                <h1 class="text-[24px] font-bold text-[#00346f] mb-2">Cổng Thông Tin Số</h1>
+                <p class="text-[14px] text-slate-500 leading-relaxed">Hệ thống quản lý thông tin tích hợp dành cho Khách hàng, Bác sĩ và Ban Quản lý.</p>
+            </div>
+
+            <div class="space-y-6 flex-1 relative z-10">
+                <div class="bg-white/80 backdrop-blur border border-white rounded-xl p-5 shadow-sm">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="material-symbols-outlined text-blue-600">health_and_safety</span>
+                        <h4 class="font-bold text-[#1e293b] text-[15px]">Khách hàng</h4>
+                    </div>
+                    <p class="text-[13px] text-slate-500 leading-relaxed m-0">Tra cứu hồ sơ bệnh án điện tử, xem toa thuốc và quản lý lịch hẹn trực tuyến mọi lúc mọi nơi.</p>
+                </div>
+                
+                <div class="bg-white/80 backdrop-blur border border-white rounded-xl p-5 shadow-sm">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="material-symbols-outlined text-teal-600">stethoscope</span>
+                        <h4 class="font-bold text-[#1e293b] text-[15px]">Bác sĩ</h4>
+                    </div>
+                    <p class="text-[13px] text-slate-500 leading-relaxed m-0">Quản lý danh sách bệnh nhân, cập nhật chẩn đoán và chỉ định cận lâm sàng nhanh chóng.</p>
+                </div>
+
+                <div class="bg-white/80 backdrop-blur border border-white rounded-xl p-5 shadow-sm">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="material-symbols-outlined text-orange-600">admin_panel_settings</span>
+                        <h4 class="font-bold text-[#1e293b] text-[15px]">Quản lý</h4>
+                    </div>
+                    <p class="text-[13px] text-slate-500 leading-relaxed m-0">Giám sát doanh thu, quản lý nhân sự y tế và thiết lập dịch vụ phòng khám.</p>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-slate-200/50">
+                <p class="text-[12px] text-slate-400">Hệ thống Duy Tâm eHospital v3.0</p>
+            </div>
+        </div>
+
+        <div class="flex-1 flex items-center justify-center p-6 sm:p-12 relative">
+            <!-- Back to Home -->
+            <a href="/" class="absolute top-6 right-6 lg:top-8 lg:right-8 flex items-center gap-2 text-[14px] font-semibold text-slate-500 hover:text-[#00346f] transition-colors">
+                <span class="material-symbols-outlined text-[18px]">home</span> Về trang chủ
+            </a>
+
+            <div class="w-full max-w-[480px]">
+                
+                <div class="md:hidden text-center mb-8">
+                    <h1 class="text-[24px] font-bold text-[#00346f] mb-1">Duy Tâm eHospital</h1>
+                    <p class="text-[14px] text-slate-500">Cổng thông tin điện tử tích hợp</p>
+                </div>
+
+                <div class="mb-8 text-center md:text-left">
+                    <h2 class="text-[32px] font-bold text-[#0f172a] mb-2">Đăng nhập</h2>
+                    <p class="text-[15px] text-slate-500" id="loginDescription">Vui lòng chọn vai trò để truy cập vào hệ thống.</p>
+                </div>
+
+                <form action="/Home/SubmitLogin" method="post" class="space-y-6">
+                    @if (TempData["LoginError"] != null)
+                    {
+                        <div class="bg-red-50 text-red-600 p-4 rounded-xl text-[14px] font-medium border border-red-100 flex items-center gap-2 animate-pulse">
+                            <span class="material-symbols-outlined">error</span> @TempData["LoginError"]
+                        </div>
+                    }
+
+                    <input type="hidden" name="Role" id="selectedRole" value="Customer" />
+                    
+                    <div>
+                        <label class="block text-[12px] font-bold text-slate-500 uppercase tracking-wider mb-3">BẠN LÀ AI?</label>
+                        <div class="grid grid-cols-3 gap-3">
+                            <button type="button" onclick="selectRole('Customer')" id="btnRoleCustomer" class="role-btn flex flex-col items-center justify-center gap-2 p-3 rounded-xl border-2 border-[#00346f] bg-[#f0f4fa] text-[#00346f] transition-all">
+                                <span class="material-symbols-outlined text-[24px]">person</span>
+                                <span class="text-[13px] font-bold">Khách Hàng</span>
+                            </button>
+                            <button type="button" onclick="selectRole('Doctor')" id="btnRoleDoctor" class="role-btn flex flex-col items-center justify-center gap-2 p-3 rounded-xl border-2 border-transparent bg-slate-50 text-slate-500 hover:bg-slate-100 transition-all">
+                                <span class="material-symbols-outlined text-[24px]">medical_information</span>
+                                <span class="text-[13px] font-semibold">Bác Sĩ</span>
+                            </button>
+                            <button type="button" onclick="selectRole('Admin')" id="btnRoleAdmin" class="role-btn flex flex-col items-center justify-center gap-2 p-3 rounded-xl border-2 border-transparent bg-slate-50 text-slate-500 hover:bg-slate-100 transition-all">
+                                <span class="material-symbols-outlined text-[24px]">shield_person</span>
+                                <span class="text-[13px] font-semibold">Quản Lý</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[12px] font-bold text-slate-600 uppercase tracking-wider mb-2" id="labelUsername">SỐ ĐIỆN THOẠI KHÁCH HÀNG</label>
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]" id="iconUsername">smartphone</span>
+                            <input type="text" name="Username" placeholder="Dùng tài khoản mẫu: 0775571311" id="inputUsername" required class="w-full pl-12 pr-4 py-3.5 rounded-xl border border-slate-300 text-[15px] focus:border-[#00346f] focus:ring-1 focus:ring-[#00346f] outline-none transition-all placeholder:text-slate-400 bg-white" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <label class="block text-[12px] font-bold text-slate-600 uppercase tracking-wider">MẬT KHẨU</label>
+                            <a href="#" class="text-[13px] font-semibold text-[#00346f] hover:underline">Quên mật khẩu?</a>
+                        </div>
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">lock</span>
+                            <input type="password" name="Password" placeholder="Dùng mật khẩu mẫu: 123456" required class="w-full pl-12 pr-12 py-3.5 rounded-xl border border-slate-300 text-[15px] focus:border-[#00346f] focus:ring-1 focus:ring-[#00346f] outline-none transition-all placeholder:text-slate-400 bg-white" />
+                            <button type="button" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                                <span class="material-symbols-outlined text-[20px]">visibility</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-[#00346f] text-white py-4 rounded-xl font-bold text-[15px] hover:bg-[#002244] shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 mt-2">
+                        <span id="btnLoginText">ĐĂNG NHẬP HỒ SƠ</span> <span class="material-symbols-outlined text-[20px]">login</span>
+                    </button>
+
+                    <div class="text-center mt-6" id="registerPrompt">
+                        <p class="text-[14px] text-slate-600">Bạn chưa có hồ sơ y tế? <a href="/Home/Register" class="font-bold text-[#00346f] hover:underline">Đăng ký ngay</a></p>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+        <script>
+            function selectRole(role) {
+                document.getElementById('selectedRole').value = role;
+                
+                // Reset all buttons
+                const btns = document.querySelectorAll('.role-btn');
+                btns.forEach(btn => {
+                    btn.className = 'role-btn flex flex-col items-center justify-center gap-2 p-3 rounded-xl border-2 border-transparent bg-slate-50 text-slate-500 hover:bg-slate-100 transition-all';
+                    btn.querySelector('span:nth-child(2)').classList.remove('font-bold');
+                    btn.querySelector('span:nth-child(2)').classList.add('font-semibold');
+                });
+
+                // Active button logic
+                const activeBtn = document.getElementById('btnRole' + role);
+                activeBtn.className = 'role-btn flex flex-col items-center justify-center gap-2 p-3 rounded-xl border-2 border-[#00346f] bg-[#f0f4fa] text-[#00346f] transition-all';
+                activeBtn.querySelector('span:nth-child(2)').classList.remove('font-semibold');
+                activeBtn.querySelector('span:nth-child(2)').classList.add('font-bold');
+
+                // UI Context updates
+                const desc = document.getElementById('loginDescription');
+                const lblUser = document.getElementById('labelUsername');
+                const inpUser = document.getElementById('inputUsername');
+                const icnUser = document.getElementById('iconUsername');
+                const btnText = document.getElementById('btnLoginText');
+                const regPrompt = document.getElementById('registerPrompt');
+
+                if(role === 'Customer') {
+                    desc.innerText = "Tra cứu hồ sơ bệnh án và lịch hẹn trực tuyến.";
+                    lblUser.innerText = "SỐ ĐIỆN THOẠI KHÁCH HÀNG";
+                    inpUser.placeholder = "Dùng tài khoản mẫu: 0775571311";
+                    icnUser.innerText = "smartphone";
+                    btnText.innerText = "ĐĂNG NHẬP HỒ SƠ";
+                    regPrompt.style.display = "block";
+                } else if(role === 'Doctor') {
+                    desc.innerText = "Hệ thống quản lý không gian làm việc Bác sĩ.";
+                    lblUser.innerText = "MÃ ĐỊNH DANH BÁC SĨ";
+                    inpUser.placeholder = "Dùng tài khoản mẫu: bs.an";
+                    icnUser.innerText = "badge";
+                    btnText.innerText = "VÀO KHÔNG GIAN LÀM VIỆC";
+                    regPrompt.style.display = "none";
+                } else if(role === 'Admin') {
+                    desc.innerText = "Trang quản trị toàn diện dành cho Quản lý.";
+                    lblUser.innerText = "TÀI KHOẢN QUẢN TRỊ VIÊN";
+                    inpUser.placeholder = "Dùng tài khoản mẫu: admin";
+                    icnUser.innerText = "shield_person";
+                    btnText.innerText = "TRUY CẬP TRANG QUẢN TRỊ";
+                    regPrompt.style.display = "none";
+                }
+            }
+        </script>
+    </div>
+
+</body>
+</html>
+

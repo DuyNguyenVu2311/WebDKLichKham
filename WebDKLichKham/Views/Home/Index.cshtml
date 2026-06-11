@@ -3,90 +3,1977 @@
     ViewData["Title"] = "Trang chủ";
 }
 
-<section class="hero-section rounded-4 p-4 p-lg-5 mb-4">
-    <div class="row align-items-center g-4">
-        <div class="col-lg-7">
-            <span class="badge text-bg-light text-primary mb-3">Hệ thống đặt lịch khám online</span>
-            <h1 class="display-5 fw-bold mb-3">Website đặt lịch khám cho phòng khám vừa và nhỏ</h1>
-            <p class="lead text-secondary mb-4">
-                Tổ chức quy trình đặt lịch, quản lý bác sĩ, bệnh nhân và lịch khám trên một hệ thống ASP.NET Core MVC để dễ dàng mở rộng sau này.
-            </p>
-            <div class="d-flex flex-wrap gap-3">
-                <a class="btn btn-primary btn-lg" asp-controller="Appointments" asp-action="Create">Đặt lịch ngay</a>
-                <a class="btn btn-outline-primary btn-lg" asp-controller="Doctors" asp-action="Index">Xem đội ngũ bác sĩ</a>
+<section class="relative w-full min-h-[100vh] flex items-center overflow-hidden bg-[#f0f4ff]">
+    <!-- Decorative blobs -->
+    <div class="absolute top-[-120px] left-[-120px] w-[500px] h-[500px] bg-[#2563eb]/10 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="absolute bottom-[-80px] right-[-80px] w-[400px] h-[400px] bg-[#0ea5e9]/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+    <div class="relative z-10 w-full max-w-[1280px] mx-auto px-4 md:px-8 py-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        
+        <!-- LEFT SIDE: Content -->
+        <div class="flex flex-col gap-8">
+
+            <!-- Badge -->
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-[#2563eb]/20 text-[#2563eb] rounded-full text-[13px] font-bold shadow-sm">
+                    <span class="w-2 h-2 bg-[#2563eb] rounded-full animate-pulse"></span>
+                    Tiêu chuẩn JCI Quốc tế
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-4 py-2 bg-[#059669]/10 text-[#059669] rounded-full text-[13px] font-bold border border-[#059669]/20">
+                    <span class="material-symbols-outlined text-[14px]">health_and_safety</span> Bộ Y Tế cấp phép
+                </span>
             </div>
-        </div>
-        <div class="col-lg-5">
-            <div class="stats-card shadow-sm rounded-4 p-4 bg-white">
-                <div class="row g-3">
-                    <div class="col-6">
-                        <div class="metric-label">Bác sĩ</div>
-                        <div class="metric-value">@Model.TotalDoctors</div>
+
+            <!-- Main Headline -->
+            <div>
+                <p class="text-[13px] font-bold text-[#2563eb] uppercase tracking-[0.15em] mb-3">Phòng Khám Đa Khoa Duy Tâm</p>
+                <h1 class="text-[42px] md:text-[56px] font-extrabold text-[#0f172a] leading-[1.15] tracking-tight mb-5">
+                    Chăm Sóc <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#2563eb] to-[#0ea5e9]">Tận Tâm,</span><br/>
+                    Vươn Tầm <span class="text-[#0f172a]">Quốc Tế</span>
+                </h1>
+                <p class="text-[17px] text-[#475569] leading-relaxed max-w-lg">
+                    Phòng khám đa khoa hàng đầu với đội ngũ bác sĩ chuyên gia và công nghệ chẩn đoán y khoa tiên tiến nhất hiện nay.
+                </p>
+            </div>
+
+            <!-- Founder Story Card (Redesigned) -->
+            <div class="bg-white rounded-3xl p-7 shadow-lg border border-gray-100 relative overflow-hidden">
+                <!-- Subtle top-left accent -->
+                <div class="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-[#2563eb] to-[#0ea5e9] rounded-l-3xl"></div>
+                
+                <div class="pl-2">
+                    <!-- Founder identity -->
+                    <div class="flex items-center gap-4 mb-5">
+                        <div class="relative shrink-0">
+                            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#1e40af] to-[#2563eb] flex items-center justify-center text-white text-[22px] font-black shadow-md">NVD</div>
+                            <div class="absolute -bottom-1.5 -right-1.5 w-6 h-6 bg-[#059669] rounded-full flex items-center justify-center shadow">
+                                <span class="material-symbols-outlined text-white text-[14px]">verified</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-[18px] font-bold text-[#1e293b]">CEO Nguyễn Vũ Duy</h3>
+                            <p class="text-[12px] font-bold text-[#64748b] uppercase tracking-widest">Người sáng lập & Điều hành</p>
+                        </div>
                     </div>
-                    <div class="col-6">
-                        <div class="metric-label">Lịch khám</div>
-                        <div class="metric-value">@Model.TotalAppointments</div>
+                    
+                    <!-- Narrative Story -->
+                    <div class="space-y-3 text-[14px] text-[#475569] leading-relaxed">
+                        <p class="italic text-[15px] text-[#1e293b] font-medium border-l-4 border-[#2563eb]/30 pl-4">
+                            "Tôi lớn lên trong một gia đình mà người thân mắc bệnh mãn tính. Tôi đã chứng kiến sự khó khăn, sự chờ đợi và nỗi lo lắng của họ tại mỗi lần đi khám..."
+                        </p>
+                        <p>
+                            Đó là lý do tôi quyết định dành toàn bộ sự nghiệp để xây dựng một nơi mà bệnh nhân không chỉ được <strong class="text-[#1e293b]">chữa bệnh</strong> — mà còn được <strong class="text-[#1e293b]">cảm thấy an toàn và được lắng nghe</strong>.
+                        </p>
                     </div>
-                    <div class="col-12">
-                        <div class="metric-label">Ca làm việc sắp tới</div>
-                        <div class="metric-value">@Model.UpcomingSchedules</div>
+
+                    <!-- Credentials row -->
+                    <div class="flex flex-wrap gap-2 mt-5">
+                        <span class="inline-flex items-center gap-1 text-[11px] font-bold text-[#2563eb] bg-[#eff6ff] px-3 py-1.5 rounded-full border border-[#bfdbfe]">
+                            <span class="material-symbols-outlined text-[13px]">workspace_premium</span> Cam kết chất lượng
+                        </span>
+                        <span class="inline-flex items-center gap-1 text-[11px] font-bold text-[#059669] bg-[#ecfdf5] px-3 py-1.5 rounded-full border border-[#a7f3d0]">
+                            <span class="material-symbols-outlined text-[13px]">shield</span> Minh bạch – Tận tâm
+                        </span>
+                        <span class="inline-flex items-center gap-1 text-[11px] font-bold text-[#d97706] bg-[#fffbeb] px-3 py-1.5 rounded-full border border-[#fde68a]">
+                            <span class="material-symbols-outlined text-[13px]">star</span> 10+ năm kinh nghiệm
+                        </span>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
 
-<section class="mb-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <div>
-            <h2 class="h3 mb-1">Chức năng cốt lõi</h2>
-            <p class="text-secondary mb-0">Đúng theo hướng đặc tả use case trong tài liệu.</p>
-        </div>
-    </div>
-
-    <div class="row g-3">
-        <div class="col-md-4">
-            <div class="feature-card h-100 p-4 rounded-4">
-                <h3 class="h5">Cho bệnh nhân</h3>
-                <p>Đăng ký, đăng nhập, xem bác sĩ, đặt lịch và theo dõi lịch đã đặt.</p>
+            <!-- Stats Row -->
+            <div class="grid grid-cols-3 gap-3">
+                <div class="bg-white rounded-2xl px-4 py-4 flex flex-col items-center gap-1.5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <div class="w-9 h-9 rounded-xl bg-[#eff6ff] flex items-center justify-center mb-1">
+                        <span class="material-symbols-outlined text-[#2563eb] text-[18px]">stethoscope</span>
+                    </div>
+                    <div class="text-[26px] font-black text-[#1e293b] leading-none">@Model.TotalDoctors<span class="text-[#2563eb]">+</span></div>
+                    <div class="text-[12px] text-[#64748b] font-medium text-center leading-tight">Bác sĩ<br/>chuyên gia</div>
+                </div>
+                <div class="bg-white rounded-2xl px-4 py-4 flex flex-col items-center gap-1.5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <div class="w-9 h-9 rounded-xl bg-[#ecfdf5] flex items-center justify-center mb-1">
+                        <span class="material-symbols-outlined text-[#059669] text-[18px]">local_hospital</span>
+                    </div>
+                    <div class="text-[26px] font-black text-[#1e293b] leading-none">@Model.FeaturedSpecialties.Count<span class="text-[#059669]">+</span></div>
+                    <div class="text-[12px] text-[#64748b] font-medium text-center leading-tight">Chuyên<br/>khoa</div>
+                </div>
+                <div class="bg-white rounded-2xl px-4 py-4 flex flex-col items-center gap-1.5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <div class="w-9 h-9 rounded-xl bg-[#fff7ed] flex items-center justify-center mb-1">
+                        <span class="material-symbols-outlined text-[#d97706] text-[18px]">schedule</span>
+                    </div>
+                    <div class="text-[26px] font-black text-[#1e293b] leading-none">15<span class="text-[#d97706] text-[16px] font-bold">'</span></div>
+                    <div class="text-[12px] text-[#64748b] font-medium text-center leading-tight">Xác nhận<br/>lịch hẹn</div>
+                </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="feature-card h-100 p-4 rounded-4">
-                <h3 class="h5">Cho phòng khám</h3>
-                <p>Quản lý bác sĩ, thông tin bệnh nhân, lịch hẹn và cập nhật trạng thái lịch khám.</p>
-            </div>
-        </div>
-    </div>
-</section>
 
-<section>
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <div>
-            <h2 class="h3 mb-1">Bác sĩ nổi bật</h2>
-            <p class="text-secondary mb-0">Dữ liệu mẫu để nhìn rõ bộ sườn giao diện và nghiệp vụ.</p>
-        </div>
-        <a class="btn btn-sm btn-outline-secondary" asp-controller="Doctors" asp-action="Index">Xem tất cả</a>
-    </div>
+        <!-- RIGHT SIDE: Booking Form -->
+        <div class="flex justify-center lg:justify-end">
+            <div class="bg-white rounded-3xl shadow-2xl border border-gray-100 w-full max-w-[430px] overflow-hidden">
+                <!-- Form header gradient -->
+                <div class="bg-gradient-to-r from-[#1e40af] to-[#2563eb] px-8 py-6">
+                    <h2 class="text-[20px] font-bold text-white flex items-center gap-2 mb-1">
+                        <span class="material-symbols-outlined">edit_calendar</span> Đặt Lịch Khám Online
+                    </h2>
+                    <p class="text-[13px] text-blue-200">Xác nhận lịch hẹn trong vòng 15 phút</p>
+                </div>
+                
+                <div class="px-8 py-7">
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="bg-red-50 text-red-600 p-3 rounded-lg text-sm font-semibold mb-4 border border-red-200">
+                            @TempData["ErrorMessage"]
+                        </div>
+                    }
+                    <form id="homeBookingForm" class="space-y-4">
+                        <div>
+                            <label class="block text-[13px] font-semibold text-[#374151] mb-1.5">Họ và tên *</label>
+                            <input name="fullName" id="fullName" type="text" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none transition-all text-[15px] bg-[#f8fafc]" placeholder="Nguyễn Văn A" />
+                        </div>
+                        <div>
+                            <label class="block text-[13px] font-semibold text-[#374151] mb-1.5">Số điện thoại *</label>
+                            <input name="phoneNumber" id="phoneNumber" type="tel" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none transition-all text-[15px] bg-[#f8fafc]" placeholder="0901 234 567" />
+                        </div>
+                        <div>
+                            <label class="block text-[13px] font-semibold text-[#374151] mb-1.5">Chuyên khoa khám</label>
+                            <select name="specialtyId" id="homeSpecialtySelect" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none transition-all appearance-none bg-[#f8fafc] text-[15px]">
+                                <option value="">-- Chọn chuyên khoa --</option>
+                                @foreach (var sp in Model.AllSpecialtiesWithDoctors)
+                                {
+                                    <option value="@sp.Id">@sp.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[13px] font-semibold text-[#374151] mb-1.5">Cơ sở khám</label>
+                            <select name="Facility" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none transition-all appearance-none bg-[#f8fafc] text-[15px]">
+                                <option value="">-- Chọn cơ sở --</option>
+                                <option value="CS1">Cơ sở 1: TP. Thủ Đức</option>
+                                <option value="CS2">Cơ sở 2: Nhơn Trạch</option>
+                            </select>
+                        </div>
+                        <!-- Dịch vụ khám -->
+                        <div>
+                            <label class="block text-[13px] font-semibold text-[#374151] mb-1.5">Dịch vụ khám</label>
+                            <select name="medicalService" id="homeMedicalServiceSelect" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none transition-all appearance-none bg-[#f8fafc] text-[15px]">
+                                <option value="">-- Chọn dịch vụ khám --</option>
+                                <optgroup label="Khám Chuyên Khoa">
+                                    <option value="Khám Nội tổng quát">Khám Nội tổng quát</option>
+                                    <option value="Tầm soát Tim mạch & Đái tháo đường">Tầm soát Tim mạch & Đái tháo đường</option>
+                                    <option value="Khám & Điều trị bệnh lý Da liễu">Khám & Điều trị bệnh lý Da liễu</option>
+                                    <option value="Trị mụn & Chăm sóc da chuyên sâu">Trị mụn & Chăm sóc da chuyên sâu</option>
+                                    <option value="Khám Nhi tổng quát & Tư vấn dinh dưỡng">Khám Nhi tổng quát & Tư vấn dinh dưỡng</option>
+                                    <option value="Khám & Tiêm chủng vắc-xin cho trẻ">Khám & Tiêm chủng vắc-xin cho trẻ</option>
+                                    <option value="Khám & Nội soi Tai Mũi Họng">Khám & Nội soi Tai Mũi Họng</option>
+                                    <option value="Điều trị viêm mũi họng, viêm xoang">Điều trị viêm mũi họng, viêm xoang</option>
+                                    <option value="Khám thai định kỳ & Quản lý thai sản">Khám thai định kỳ & Quản lý thai sản</option>
+                                    <option value="Khám Phụ khoa & Tầm soát ung thư cổ tử cung">Khám Phụ khoa & Tầm soát ung thư cổ tử cung</option>
+                                    <option value="Khám răng tổng quát & Cạo vôi răng">Khám răng tổng quát & Cạo vôi răng</option>
+                                    <option value="Nhổ răng khôn & Hàn răng thẩm mỹ">Nhổ răng khôn & Hàn răng thẩm mỹ</option>
+                                    <option value="Khám Nội thần kinh (Đau đầu, chóng mặt, mất ngủ)">Khám Nội thần kinh (Đau đầu, chóng mặt, mất ngủ)</option>
+                                    <option value="Tầm soát nguy cơ đột quỵ & Tai biến">Tầm soát nguy cơ đột quỵ & Tai biến</option>
+                                </optgroup>
+                                <optgroup label="Dịch Vụ Khám Đặc Thù">
+                                    <option value="Khám sức khỏe tổng quát định kỳ">Khám sức khỏe tổng quát định kỳ</option>
+                                    <option value="Gói tầm soát sức khỏe Toàn diện (VIP)">Gói tầm soát sức khỏe Toàn diện (VIP)</option>
+                                    <option value="Xét nghiệm máu & Kiểm tra sinh hóa tại nhà">Xét nghiệm máu & Kiểm tra sinh hóa tại nhà</option>
+                                </optgroup>
+                            </select>
+                        </div>
 
-    <div class="row g-3">
-        @foreach (var doctor in Model.FeaturedDoctors)
-        {
-            <div class="col-md-4">
-                <div class="doctor-card card border-0 shadow-sm h-100">
-                    <div class="card-body p-4">
-                        <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis mb-3">@doctor.Specialty</span>
-                        <h3 class="h5">@doctor.FullName</h3>
-                        <p class="text-secondary small mb-2">@doctor.Qualification</p>
-                        <p class="mb-3">@doctor.Biography</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <strong>@doctor.Fee.ToString("N0") VND</strong>
-                            <a asp-controller="Doctors" asp-action="Details" asp-route-id="@doctor.Id">Chi tiết</a>
+                        <!-- Thời gian khám (Ngày) -->
+                        <div>
+                            <label class="block text-[13px] font-semibold text-[#374151] mb-2 flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-green-600 text-[18px]">calendar_today</span> Thời gian khám
+                            </label>
+                            <input name="appointmentDate" id="appointmentDate" type="hidden" />
+                            <div class="grid grid-cols-4 gap-2 md:gap-3" id="homeDateCardsContainer">
+                                <button type="button" id="homeQuickDateCard0" class="date-card py-2.5 px-2 border border-gray-200 rounded-xl flex flex-col items-center justify-center transition-all bg-white hover:border-gray-400 cursor-pointer">
+                                    <span class="text-[13px] font-bold text-gray-800" id="homeQuickDateStr0"></span>
+                                    <span class="text-[10px] text-gray-400 mt-0.5" id="homeQuickDayStr0"></span>
+                                </button>
+                                <button type="button" id="homeQuickDateCard1" class="date-card py-2.5 px-2 border border-gray-200 rounded-xl flex flex-col items-center justify-center transition-all bg-white hover:border-gray-400 cursor-pointer">
+                                    <span class="text-[13px] font-bold text-gray-800" id="homeQuickDateStr1"></span>
+                                    <span class="text-[10px] text-gray-400 mt-0.5" id="homeQuickDayStr1"></span>
+                                </button>
+                                <button type="button" id="homeQuickDateCard2" class="date-card py-2.5 px-2 border border-gray-200 rounded-xl flex flex-col items-center justify-center transition-all bg-white hover:border-gray-400 cursor-pointer">
+                                    <span class="text-[13px] font-bold text-gray-800" id="homeQuickDateStr2"></span>
+                                    <span class="text-[10px] text-gray-400 mt-0.5" id="homeQuickDayStr2"></span>
+                                </button>
+                                <button type="button" id="homeOtherDateCard" class="date-card py-2.5 px-2 border border-gray-200 rounded-xl flex flex-col items-center justify-center transition-all bg-white hover:border-gray-400 cursor-pointer relative">
+                                    <span class="material-symbols-outlined text-[18px] text-gray-500 mb-0.5">calendar_month</span>
+                                    <span class="text-[10px] text-gray-500 font-bold">Ngày khác</span>
+                                    <input type="date" id="homeHiddenDateInput" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full" />
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Chọn giờ khám -->
+                        <div>
+                            <label class="block text-[13px] font-semibold text-[#374151] mb-2 flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-green-600 text-[18px]">schedule</span> Chọn giờ khám
+                            </label>
+                            <input name="startTime" id="homeStartTime" type="hidden" />
+                            <input name="endTime" id="homeEndTime" type="hidden" />
+                            <div class="grid grid-cols-4 gap-2 text-center" id="homeTimeSlotsContainer">
+                                @{
+                                    var timeSlots = new[] {
+                                        "07:00", "07:30", "08:00", "08:30",
+                                        "09:00", "09:30", "10:00", "10:30",
+                                        "11:00", "11:30", "13:00", "13:30",
+                                        "14:00", "14:30", "15:00", "15:30",
+                                        "16:00", "16:30", "17:00", "17:30"
+                                    };
+                                }
+                                @foreach (var ts in timeSlots)
+                                {
+                                    <button type="button" data-time="@ts" onclick="selectHomeTimeSlot('@ts')" class="home-time-slot-btn py-2 px-1 text-[13px] font-medium rounded-xl border border-gray-200 bg-white hover:border-green-500 hover:text-green-600 transition-all cursor-pointer text-gray-700">
+                                        @ts
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[13px] font-semibold text-[#374151] mb-1.5">Mã xác nhận (4 số) *</label>
+                                <input name="passcode" id="passcode" type="password" maxlength="4" pattern="\d{4}" inputmode="numeric" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none transition-all text-[15px] bg-[#f8fafc]" placeholder="1234" />
+                            </div>
+                            <div>
+                                <label class="block text-[13px] font-semibold text-[#374151] mb-1.5">Nhập lại mã *</label>
+                                <input name="confirmPasscode" id="confirmPasscode" type="password" maxlength="4" pattern="\d{4}" inputmode="numeric" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#2563eb] focus:border-transparent outline-none transition-all text-[15px] bg-[#f8fafc]" placeholder="1234" />
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-amber-600 font-medium leading-normal mt-1 m-0">
+                            Lưu ý: Bạn phải nhớ mã này để tra cứu lịch khám sau này.
+                        </p>
+                        <button type="button" onclick="showQuickBookModal()" class="w-full py-4 bg-gradient-to-r from-[#1e40af] to-[#2563eb] text-white rounded-2xl font-bold text-[16px] shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-[0.98] transition-all mt-2 flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined">event_available</span> ĐĂNG KÝ NGAY
+                        </button>
+                    </form>
+
+                    <!-- Trust signals below form -->
+                    <div class="flex items-center justify-center gap-5 mt-5 pt-5 border-t border-gray-100">
+                        <div class="flex items-center gap-1.5 text-[12px] text-[#64748b]">
+                            <span class="material-symbols-outlined text-[#059669] text-[16px]">lock</span> Bảo mật thông tin
+                        </div>
+                        <div class="w-px h-4 bg-gray-200"></div>
+                        <div class="flex items-center gap-1.5 text-[12px] text-[#64748b]">
+                            <span class="material-symbols-outlined text-[#2563eb] text-[16px]">verified</span> Xác nhận ngay
+                        </div>
+                        <div class="w-px h-4 bg-gray-200"></div>
+                        <div class="flex items-center gap-1.5 text-[12px] text-[#64748b]">
+                            <span class="material-symbols-outlined text-[#d97706] text-[16px]">support_agent</span> Hỗ trợ 24/7
                         </div>
                     </div>
                 </div>
             </div>
-        }
+        </div>
+
     </div>
 </section>
+
+<!-- Modal Đăng Ký Nhanh -->
+<div id="quickBookModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+    <div class="bg-white p-8 rounded-3xl max-w-md w-full shadow-2xl relative animate-fadeInUp">
+        <div class="w-16 h-16 bg-surface-container-low text-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <span class="material-symbols-outlined text-[32px]">contact_support</span>
+        </div>
+        <h3 class="text-headline-md font-headline-md text-primary text-center mb-3">Bạn có muốn tư vấn kỹ hơn?</h3>
+        <p class="text-on-surface-variant text-center mb-8 text-body-md">Việc cung cấp thêm triệu chứng và tình trạng bệnh sử sẽ giúp bác sĩ chuẩn bị phác đồ tư vấn chính xác nhất cho bạn.</p>
+        
+        <div class="flex flex-col gap-3">
+            <button type="button" onclick="submitDetailedBook()" class="w-full py-3.5 bg-primary text-white rounded-xl font-bold hover:bg-primary-container transition-colors shadow-md flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined">edit_document</span> Có, nhập thêm triệu chứng
+            </button>
+            <form id="postQuickBookForm" method="post" asp-controller="Appointments" asp-action="QuickBook">
+                <!-- hidden fields auto populated by JS -->
+                <button type="submit" onclick="populatePostForm()" class="w-full py-3.5 bg-white text-primary border-2 border-primary/20 rounded-xl font-bold hover:bg-surface-container-low transition-colors flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined">flash_on</span> Không, đặt lịch ngay
+                </button>
+            </form>
+            <button type="button" onclick="hideQuickBookModal()" class="w-full py-2 text-on-surface-variant font-medium underline mt-2 hover:text-primary transition-colors">
+                Đóng
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+    @@keyframes fadeInUpModal {
+        from { opacity: 0; transform: translateY(20px) scale(0.95); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .animate-fadeInUp { animation: fadeInUpModal 0.3s ease-out forwards; }
+</style>
+
+<script>
+    function selectHomeTimeSlot(timeStr) {
+        document.getElementById('homeStartTime').value = timeStr;
+        
+        let [h, m] = timeStr.split(':').map(Number);
+        let endMin = h * 60 + m + 30;
+        let endH = Math.floor(endMin / 60) % 24;
+        let endM = endMin % 60;
+        document.getElementById('homeEndTime').value = String(endH).padStart(2, '0') + ':' + String(endM).padStart(2, '0');
+        
+        document.querySelectorAll('.home-time-slot-btn').forEach(btn => {
+            if (btn.dataset.time === timeStr) {
+                btn.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
+                btn.classList.add('bg-[#10b981]', 'text-white', 'border-[#10b981]', 'font-bold', 'scale-[1.02]');
+            } else {
+                btn.classList.remove('bg-[#10b981]', 'text-white', 'border-[#10b981]', 'font-bold', 'scale-[1.02]');
+                btn.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
+            }
+        });
+    }
+
+    function showQuickBookModal() {
+        const form = document.getElementById('homeBookingForm');
+        
+        // Custom validations for Date and Time
+        const dateInput = document.getElementById('appointmentDate');
+        if (!dateInput.value) {
+            alert('Vui lòng chọn ngày khám.');
+            return;
+        }
+
+        const startTime = document.getElementById('homeStartTime');
+        if (!startTime.value) {
+            alert('Vui lòng chọn khung giờ khám.');
+            return;
+        }
+
+        // Passcode match validation
+        const passcode = document.getElementById('passcode');
+        const confirmPasscode = document.getElementById('confirmPasscode');
+        if (passcode.value !== confirmPasscode.value) {
+            confirmPasscode.setCustomValidity('Mã xác nhận nhập lại không khớp.');
+        } else {
+            confirmPasscode.setCustomValidity('');
+        }
+
+        // HTML5 validation
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+        const modal = document.getElementById('quickBookModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function hideQuickBookModal() {
+        const modal = document.getElementById('quickBookModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    function submitDetailedBook() {
+        const form = document.getElementById('homeBookingForm');
+        form.method = 'get';
+        form.action = '/Appointments/Create';
+        form.submit();
+    }
+
+    function populatePostForm() {
+        const getForm = document.getElementById('homeBookingForm');
+        const postForm = document.getElementById('postQuickBookForm');
+        
+        postForm.querySelectorAll('input[type="hidden"]:not([name="__RequestVerificationToken"])').forEach(e => e.remove());
+
+        const fields = ['fullName', 'phoneNumber', 'specialtyId', 'Facility', 'appointmentDate', 'passcode', 'confirmPasscode', 'startTime', 'endTime', 'medicalService'];
+        fields.forEach(field => {
+            const el = getForm.querySelector(`[name="${field}"]`);
+            if (el) {
+                const val = el.value;
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = field;
+                input.value = val;
+                postForm.appendChild(input);
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const specialtySelect = document.getElementById('homeSpecialtySelect');
+        const serviceSelectElement = document.getElementById('homeMedicalServiceSelect');
+
+        const medicalServices = [
+            // Nội tổng hợp
+            { value: "Khám Nội tổng quát", text: "Khám Nội tổng quát", specialty: "Nội tổng hợp", group: "Khám Chuyên Khoa" },
+            { value: "Tầm soát Tim mạch & Đái tháo đường", text: "Tầm soát Tim mạch & Đái tháo đường", specialty: "Nội tổng hợp", group: "Khám Chuyên Khoa" },
+            
+            // Da liễu
+            { value: "Khám & Điều trị bệnh lý Da liễu", text: "Khám & Điều trị bệnh lý Da liễu", specialty: "Da liễu", group: "Khám Chuyên Khoa" },
+            { value: "Trị mụn & Chăm sóc da chuyên sâu", text: "Trị mụn & Chăm sóc da chuyên sâu", specialty: "Da liễu", group: "Khám Chuyên Khoa" },
+            
+            // Nhi khoa
+            { value: "Khám Nhi tổng quát & Tư vấn dinh dưỡng", text: "Khám Nhi tổng quát & Tư vấn dinh dưỡng", specialty: "Nhi khoa", group: "Khám Chuyên Khoa" },
+            { value: "Khám & Tiêm chủng vắc-xin cho trẻ", text: "Khám & Tiêm chủng vắc-xin cho trẻ", specialty: "Nhi khoa", group: "Khám Chuyên Khoa" },
+            
+            // Tai Mũi Họng
+            { value: "Khám & Nội soi Tai Mũi Họng", text: "Khám & Nội soi Tai Mũi Họng", specialty: "Tai Mũi Họng", group: "Khám Chuyên Khoa" },
+            { value: "Điều trị viêm mũi họng, viêm xoang", text: "Điều trị viêm mũi họng, viêm xoang", specialty: "Tai Mũi Họng", group: "Khám Chuyên Khoa" },
+            
+            // Sản phụ khoa
+            { value: "Khám thai định kỳ & Quản lý thai sản", text: "Khám thai định kỳ & Quản lý thai sản", specialty: "Sản phụ khoa", group: "Khám Chuyên Khoa" },
+            { value: "Khám Phụ khoa & Tầm soát ung thư cổ tử cung", text: "Khám Phụ khoa & Tầm soát ung thư cổ tử cung", specialty: "Sản phụ khoa", group: "Khám Chuyên Khoa" },
+            
+            // Răng Hàm Mặt
+            { value: "Khám răng tổng quát & Cạo vôi răng", text: "Khám răng tổng quát & Cạo vôi răng", specialty: "Răng Hàm Mặt", group: "Khám Chuyên Khoa" },
+            { value: "Nhổ răng khôn & Hàn răng thẩm mỹ", text: "Nhổ răng khôn & Hàn răng thẩm mỹ", specialty: "Răng Hàm Mặt", group: "Khám Chuyên Khoa" },
+            
+            // Nội thần kinh
+            { value: "Khám Nội thần kinh (Đau đầu, chóng mặt, mất ngủ)", text: "Khám Nội thần kinh (Đau đầu, chóng mặt, mất ngủ)", specialty: "Nội thần kinh", group: "Khám Chuyên Khoa" },
+            { value: "Tầm soát nguy cơ đột quỵ & Tai biến", text: "Tầm soát nguy cơ đột quỵ & Tai biến", specialty: "Nội thần kinh", group: "Khám Chuyên Khoa" },
+            
+            // Dịch Vụ Khám Đặc Thù
+            { value: "Khám sức khỏe tổng quát định kỳ", text: "Khám sức khỏe tổng quát định kỳ", specialty: "", group: "Dịch Vụ Khám Đặc Thù" },
+            { value: "Gói tầm soát sức khỏe Toàn diện (VIP)", text: "Gói tầm soát sức khỏe Toàn diện (VIP)", specialty: "", group: "Dịch Vụ Khám Đặc Thù" },
+            { value: "Xét nghiệm máu & Kiểm tra sinh hóa tại nhà", text: "Xét nghiệm máu & Kiểm tra sinh hóa tại nhà", specialty: "", group: "Dịch Vụ Khám Đặc Thù" }
+        ];
+
+        const specialtyNameToId = {};
+        const specialtyIdToName = {};
+        if (specialtySelect) {
+            Array.from(specialtySelect.options).forEach(opt => {
+                if (opt.value) {
+                    specialtyNameToId[opt.text.trim()] = opt.value;
+                    specialtyIdToName[opt.value] = opt.text.trim();
+                }
+            });
+        }
+
+        function renderServices(specialtyName) {
+            if (!serviceSelectElement) return;
+            const currentServiceVal = serviceSelectElement.value;
+            
+            const filtered = medicalServices.filter(s => {
+                return !specialtyName || s.specialty === specialtyName;
+            });
+
+            serviceSelectElement.innerHTML = '<option value="">-- Chọn dịch vụ khám --</option>';
+            const groups = {};
+            filtered.forEach(s => {
+                if (!groups[s.group]) groups[s.group] = [];
+                groups[s.group].push(s);
+            });
+
+            for (const groupName in groups) {
+                const optGroup = document.createElement('optgroup');
+                optGroup.label = groupName;
+                groups[groupName].forEach(s => {
+                    const opt = document.createElement('option');
+                    opt.value = s.value;
+                    opt.textContent = s.text;
+                    if (s.value === currentServiceVal) opt.selected = true;
+                    optGroup.appendChild(opt);
+                });
+                serviceSelectElement.appendChild(optGroup);
+            }
+        }
+
+        function lockSpecialties(allowedSpecialtyId) {
+            if (!specialtySelect) return;
+            Array.from(specialtySelect.options).forEach(opt => {
+                if (opt.value === "") {
+                    opt.style.display = "";
+                    opt.disabled = false;
+                } else if (allowedSpecialtyId !== "" && opt.value === allowedSpecialtyId) {
+                    opt.style.display = "";
+                    opt.disabled = false;
+                } else {
+                    opt.style.display = "none";
+                    opt.disabled = true;
+                }
+            });
+        }
+
+        function unlockSpecialties() {
+            if (!specialtySelect) return;
+            Array.from(specialtySelect.options).forEach(opt => {
+                opt.style.display = "";
+                opt.disabled = false;
+            });
+        }
+
+        function syncHomeSpecialtyAndService(changedSource) {
+            const specialtyVal = specialtySelect ? specialtySelect.value : '';
+            const specialtyName = specialtyIdToName[specialtyVal] || '';
+            const serviceVal = serviceSelectElement ? serviceSelectElement.value : '';
+            const selectedService = medicalServices.find(s => s.value === serviceVal);
+
+            if (changedSource === 'specialty') {
+                renderServices(specialtyName);
+                
+                const currentServiceObj = medicalServices.find(s => s.value === serviceSelectElement.value);
+                if (currentServiceObj && specialtyVal !== "" && currentServiceObj.specialty !== specialtyName) {
+                    serviceSelectElement.value = "";
+                }
+            } 
+            else if (changedSource === 'service') {
+                if (selectedService) {
+                    if (selectedService.specialty !== "") {
+                        const targetSpecialtyId = specialtyNameToId[selectedService.specialty];
+                        if (targetSpecialtyId) {
+                            specialtySelect.value = targetSpecialtyId;
+                            lockSpecialties(targetSpecialtyId);
+                        }
+                    } else {
+                        specialtySelect.value = "";
+                        lockSpecialties("");
+                    }
+                    renderServices(selectedService.specialty);
+                } else {
+                    unlockSpecialties();
+                    renderServices(specialtyName);
+                }
+            }
+        }
+
+        if (serviceSelectElement) {
+            serviceSelectElement.addEventListener('change', function() {
+                syncHomeSpecialtyAndService('service');
+            });
+        }
+        if (specialtySelect) {
+            specialtySelect.addEventListener('change', function() {
+                syncHomeSpecialtyAndService('specialty');
+            });
+        }
+
+        // Run initial synchronization
+        if (specialtySelect && specialtySelect.value) {
+            syncHomeSpecialtyAndService('specialty');
+        } else if (serviceSelectElement && serviceSelectElement.value) {
+            syncHomeSpecialtyAndService('service');
+        }
+
+        const dateInput = document.getElementById('appointmentDate');
+        if (dateInput) {
+            const now = new Date();
+            const todayStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+            let minDateStr = todayStr;
+            
+            // If past 17:30, clinic is closed for today, set min and value to tomorrow
+            if (now.getHours() > 17 || (now.getHours() === 17 && now.getMinutes() >= 30)) {
+                const tomorrow = new Date(now);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                const tomorrowStr = tomorrow.getFullYear() + '-' + String(tomorrow.getMonth() + 1).padStart(2, '0') + '-' + String(tomorrow.getDate()).padStart(2, '0');
+                dateInput.min = tomorrowStr;
+                minDateStr = tomorrowStr;
+                dateInput.value = tomorrowStr;
+            } else {
+                dateInput.min = todayStr;
+                dateInput.value = todayStr;
+            }
+
+            // Initialize quick date cards for Home page
+            initHomeQuickDateCards(minDateStr);
+        }
+
+        function initHomeQuickDateCards(minDateStr) {
+            const parts = minDateStr.split('-');
+            const baseDate = new Date(parts[0], parts[1] - 1, parts[2]);
+            const dates = [];
+            for (let i = 0; i < 3; i++) {
+                const d = new Date(baseDate);
+                d.setDate(baseDate.getDate() + i);
+                dates.push(d);
+            }
+
+            const dayNames = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+
+            dates.forEach((d, idx) => {
+                const yyyy = d.getFullYear();
+                const mm = String(d.getMonth() + 1).padStart(2, '0');
+                const dd = String(d.getDate()).padStart(2, '0');
+                const ymd = `${yyyy}-${mm}-${dd}`;
+
+                const dateStr = `${dd}/${mm}`;
+                const dayStr = dayNames[d.getDay()];
+
+                const cardBtn = document.getElementById(`homeQuickDateCard${idx}`);
+                if (cardBtn) {
+                    document.getElementById(`homeQuickDateStr${idx}`).textContent = dateStr;
+                    document.getElementById(`homeQuickDayStr${idx}`).textContent = dayStr;
+                    cardBtn.dataset.date = ymd;
+
+                    cardBtn.onclick = function() {
+                        dateInput.value = ymd;
+                        updateHomeDateCardsHighlight();
+                    };
+                }
+            });
+
+            const hiddenDateInput = document.getElementById('homeHiddenDateInput');
+            if (hiddenDateInput) {
+                hiddenDateInput.min = minDateStr;
+                hiddenDateInput.onchange = function() {
+                    if (this.value) {
+                        dateInput.value = this.value;
+                        updateHomeDateCardsHighlight();
+                    }
+                };
+            }
+
+            updateHomeDateCardsHighlight();
+        }
+
+        function updateHomeDateCardsHighlight() {
+            const selectedVal = dateInput.value;
+            let found = false;
+
+            for (let i = 0; i < 3; i++) {
+                const cardBtn = document.getElementById(`homeQuickDateCard${i}`);
+                if (cardBtn) {
+                    if (cardBtn.dataset.date === selectedVal) {
+                        cardBtn.classList.remove('bg-white', 'text-gray-800', 'border-gray-200');
+                        cardBtn.classList.add('bg-[#10b981]', 'text-white', 'border-[#10b981]', 'shadow-sm', 'font-bold');
+                        found = true;
+                    } else {
+                        cardBtn.classList.remove('bg-[#10b981]', 'text-white', 'border-[#10b981]', 'shadow-sm', 'font-bold');
+                        cardBtn.classList.add('bg-white', 'text-gray-800', 'border-gray-200');
+                    }
+                }
+            }
+
+            const otherCard = document.getElementById('homeOtherDateCard');
+            if (otherCard) {
+                const labelSpan = otherCard.querySelector('span.font-bold');
+                const iconSpan = otherCard.querySelector('span.material-symbols-outlined');
+                if (!found && selectedVal) {
+                    otherCard.classList.remove('bg-white', 'text-gray-800', 'border-gray-200');
+                    otherCard.classList.add('bg-[#10b981]', 'text-white', 'border-[#10b981]', 'shadow-sm', 'font-bold');
+                    
+                    const parts = selectedVal.split('-');
+                    if (parts.length === 3) {
+                        labelSpan.textContent = `${parts[2]}/${parts[1]}`;
+                    }
+                    if (iconSpan) {
+                        iconSpan.classList.remove('text-gray-500');
+                        iconSpan.classList.add('text-white');
+                    }
+                } else {
+                    otherCard.classList.remove('bg-[#10b981]', 'text-white', 'border-[#10b981]', 'shadow-sm', 'font-bold');
+                    otherCard.classList.add('bg-white', 'text-gray-800', 'border-gray-200');
+                    labelSpan.textContent = 'Ngày khác';
+                    if (iconSpan) {
+                        iconSpan.classList.remove('text-white');
+                        iconSpan.classList.add('text-gray-500');
+                    }
+                }
+            }
+            filterHomeTimeSlots();
+        }
+
+        function filterHomeTimeSlots() {
+            const selectedVal = dateInput.value;
+            const now = new Date();
+            const todayStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+            const isToday = selectedVal === todayStr;
+
+            const timeBtnSelected = document.getElementById('homeStartTime').value;
+
+            document.querySelectorAll('.home-time-slot-btn').forEach(btn => {
+                const slotTime = btn.dataset.time;
+                if (!slotTime) return;
+
+                let isPast = false;
+                if (isToday) {
+                    const [sh, sm] = slotTime.split(':').map(Number);
+                    if (sh < now.getHours() || (sh === now.getHours() && sm <= now.getMinutes())) {
+                        isPast = true;
+                    }
+                }
+
+                if (isPast) {
+                    btn.disabled = true;
+                    btn.classList.remove('bg-white', 'text-gray-700', 'border-gray-200', 'bg-[#10b981]', 'text-white', 'border-[#10b981]', 'font-bold', 'scale-[1.02]');
+                    btn.classList.add('bg-gray-50', 'text-gray-300', 'border-gray-200', 'cursor-not-allowed', 'opacity-60');
+                    btn.style.pointerEvents = 'none';
+
+                    if (timeBtnSelected === slotTime) {
+                        document.getElementById('homeStartTime').value = "";
+                        document.getElementById('homeEndTime').value = "";
+                    }
+                } else {
+                    btn.disabled = false;
+                    btn.style.pointerEvents = '';
+                    btn.classList.remove('bg-gray-50', 'text-gray-300', 'cursor-not-allowed', 'opacity-60');
+                    
+                    if (timeBtnSelected === slotTime) {
+                        btn.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
+                        btn.classList.add('bg-[#10b981]', 'text-white', 'border-[#10b981]', 'font-bold', 'scale-[1.02]');
+                    } else {
+                        btn.classList.remove('bg-[#10b981]', 'text-white', 'border-[#10b981]', 'font-bold', 'scale-[1.02]');
+                        btn.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
+                    }
+                }
+            });
+        }
+    });
+</script>
+
+<section class="py-20 bg-[#f8f9ff] relative">
+    <div class="max-w-[1280px] mx-auto px-4 md:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-[36px] font-bold text-[#1e293b] mb-4">Bảng Giá Niêm Yết Dịch Vụ</h2>
+            <p class="text-[16px] text-gray-500 max-w-2xl mx-auto">Chi phí minh bạch, chuẩn xác theo quy định Bộ Y tế. Cam kết không phát sinh phụ phí ẩn trong quá trình điều trị.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Cột 1 -->
+            <div class="space-y-8">
+                <!-- Danh mục: Khám Lâm Sàng -->
+                <div class="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
+                    <div class="bg-gradient-to-r from-blue-50 to-white px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+                        <span class="material-symbols-outlined text-blue-600 text-[24px]">stethoscope</span>
+                        <h3 class="font-bold text-[#1e293b] text-[18px] m-0">Khám Lâm Sàng</h3>
+                    </div>
+                    <div class="divide-y divide-gray-100">
+                        <div class="flex justify-between items-center px-6 py-4 hover:bg-gray-50 transition-colors">
+                            <div>
+                                <p class="font-bold text-[#1e293b] text-[15px] m-0">Khám Chuyên Khoa</p>
+                                <p class="text-[13px] text-gray-500 m-0 mt-0.5">Nội, Ngoại, Sản, Nhi, Tai Mũi Họng...</p>
+                            </div>
+                            <div class="font-bold text-[#2563eb] text-[16px]">300.000đ</div>
+                        </div>
+                        <div class="flex justify-between items-center px-6 py-4 hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center gap-2">
+                                <div>
+                                    <p class="font-bold text-[#1e293b] text-[15px] m-0">Khám Chuyên Gia / PGS. TS</p>
+                                    <p class="text-[13px] text-gray-500 m-0 mt-0.5">Cùng các chuyên gia đầu ngành</p>
+                                </div>
+                                <span class="bg-red-100 text-red-600 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">Đề xuất</span>
+                            </div>
+                            <div class="font-bold text-[#2563eb] text-[16px]">450.000đ</div>
+                        </div>
+                        <div class="flex justify-between items-center px-6 py-4 hover:bg-gray-50 transition-colors">
+                            <div>
+                                <p class="font-bold text-[#1e293b] text-[15px] m-0">Khám Cấp Cứu Ngoài Giờ</p>
+                                <p class="text-[13px] text-gray-500 m-0 mt-0.5">Xử lý các tình huống khẩn cấp 24/7</p>
+                            </div>
+                            <div class="font-bold text-[#2563eb] text-[16px]">500.000đ</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Danh mục: Gói Tầm Soát -->
+                <div class="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
+                    <div class="bg-gradient-to-r from-purple-50 to-white px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+                        <span class="material-symbols-outlined text-purple-600 text-[24px]">vital_signs</span>
+                        <h3 class="font-bold text-[#1e293b] text-[18px] m-0">Gói Khám Tầm Soát</h3>
+                    </div>
+                    <div class="divide-y divide-gray-100">
+                        <div class="flex justify-between items-center px-6 py-4 hover:bg-gray-50 transition-colors">
+                            <div>
+                                <p class="font-bold text-[#1e293b] text-[15px] m-0">Tầm Soát Ung Thư Toàn Diện</p>
+                                <p class="text-[13px] text-gray-500 m-0 mt-0.5">Phát hiện sớm 12 loại ung thư phổ biến</p>
+                            </div>
+                            <div class="font-bold text-[#2563eb] text-[16px]">4.500.000đ</div>
+                        </div>
+                        <div class="flex justify-between items-center px-6 py-4 hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center gap-2">
+                                <div>
+                                    <p class="font-bold text-[#1e293b] text-[15px] m-0">Khám Sức Khỏe Tổng Quát</p>
+                                    <p class="text-[13px] text-gray-500 m-0 mt-0.5">Gói khám định kỳ hàng năm cho người lớn</p>
+                                </div>
+                                <span class="bg-blue-100 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">Phổ biến</span>
+                            </div>
+                            <div class="font-bold text-[#2563eb] text-[16px]">1.800.000đ</div>
+                        </div>
+                        <div class="flex justify-between items-center px-6 py-4 hover:bg-gray-50 transition-colors">
+                            <div>
+                                <p class="font-bold text-[#1e293b] text-[15px] m-0">Khám Tiền Hôn Nhân</p>
+                                <p class="text-[13px] text-gray-500 m-0 mt-0.5">Đánh giá sức khỏe sinh sản nam & nữ</p>
+                            </div>
+                            <div class="font-bold text-[#2563eb] text-[16px]">2.200.000đ</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cột 2 -->
+            <div class="space-y-8">
+                <!-- Danh mục: Chẩn Đoán Hình Ảnh -->
+                <div class="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
+                    <div class="bg-gradient-to-r from-teal-50 to-white px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+                        <span class="material-symbols-outlined text-teal-600 text-[24px]">radiology</span>
+                        <h3 class="font-bold text-[#1e293b] text-[18px] m-0">Chẩn Đoán Hình Ảnh</h3>
+                    </div>
+                    <div class="divide-y divide-gray-100">
+                        <div class="flex justify-between items-center px-6 py-4 hover:bg-gray-50 transition-colors">
+                            <div>
+                                <p class="font-bold text-[#1e293b] text-[15px] m-0">Siêu Âm Màu 4D</p>
+                                <p class="text-[13px] text-gray-500 m-0 mt-0.5">Ổ bụng, tuyến giáp, thai kỳ</p>
+                            </div>
+                            <div class="font-bold text-[#2563eb] text-[16px]">250.000đ</div>
+                        </div>
+                        <div class="flex justify-between items-center px-6 py-4 hover:bg-gray-50 transition-colors">
+                            <div>
+                                <p class="font-bold text-[#1e293b] text-[15px] m-0">Chụp X-Quang Kỹ Thuật Số</p>
+                                <p class="text-[13px] text-gray-500 m-0 mt-0.5">Tim phổi, xương khớp (1 tư thế)</p>
+                            </div>
+                            <div class="font-bold text-[#2563eb] text-[16px]">200.000đ</div>
+                        </div>
+                        <div class="flex justify-between items-center px-6 py-4 hover:bg-gray-50 transition-colors">
+                            <div>
+                                <p class="font-bold text-[#1e293b] text-[15px] m-0">Chụp Cắt Lớp CT Scanner</p>
+                                <p class="text-[13px] text-gray-500 m-0 mt-0.5">Tầm soát bệnh lý sọ não, lồng ngực</p>
+                            </div>
+                            <div class="font-bold text-[#2563eb] text-[16px]">1.500.000đ</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Danh mục: Xét Nghiệm & Nội Soi -->
+                <div class="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
+                    <div class="bg-gradient-to-r from-orange-50 to-white px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+                        <span class="material-symbols-outlined text-orange-600 text-[24px]">science</span>
+                        <h3 class="font-bold text-[#1e293b] text-[18px] m-0">Xét Nghiệm & Nội Soi</h3>
+                    </div>
+                    <div class="divide-y divide-gray-100">
+                        <div class="flex justify-between items-center px-6 py-4 hover:bg-gray-50 transition-colors">
+                            <div>
+                                <p class="font-bold text-[#1e293b] text-[15px] m-0">Xét Nghiệm Máu (Tổng Quát)</p>
+                                <p class="text-[13px] text-gray-500 m-0 mt-0.5">Đường huyết, mỡ máu, chức năng gan thận</p>
+                            </div>
+                            <div class="font-bold text-[#2563eb] text-[16px]">450.000đ</div>
+                        </div>
+                        <div class="flex justify-between items-center px-6 py-4 hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center gap-2">
+                                <div>
+                                    <p class="font-bold text-[#1e293b] text-[15px] m-0">Nội Soi Dạ Dày NBI</p>
+                                    <p class="text-[13px] text-gray-500 m-0 mt-0.5">Công nghệ NBI phóng đại, gây mê không đau</p>
+                                </div>
+                            </div>
+                            <div class="font-bold text-[#2563eb] text-[16px]">1.800.000đ</div>
+                        </div>
+                        <div class="flex justify-between items-center px-6 py-4 hover:bg-gray-50 transition-colors">
+                            <div>
+                                <p class="font-bold text-[#1e293b] text-[15px] m-0">Nội Soi Đại Trực Tràng</p>
+                                <p class="text-[13px] text-gray-500 m-0 mt-0.5">Phát hiện sớm polyp và ung thư</p>
+                            </div>
+                            <div class="font-bold text-[#2563eb] text-[16px]">2.200.000đ</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Banner Khuyến Mãi -->
+        <div class="bg-gradient-to-r from-yellow-100 via-orange-50 to-yellow-100 p-8 rounded-2xl border border-yellow-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6 transform transition-transform hover:-translate-y-1">
+            <div class="flex items-center gap-4">
+                <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-inner shrink-0">
+                    <span class="material-symbols-outlined text-orange-500 text-[36px]">redeem</span>
+                </div>
+                <div>
+                    <p class="font-bold text-orange-900 text-[20px] m-0 mb-1">🎁 Ưu Đãi Độc Quyền Dành Cho Khách Hàng Online</p>
+                    <p class="text-[15px] text-orange-800 m-0 leading-relaxed">Đăng ký lịch hẹn trước qua website để tránh xếp hàng và nhận ngay ưu đãi giảm <strong class="text-red-600 text-[18px]">3%</strong> tổng chi phí dịch vụ.</p>
+                </div>
+            </div>
+            <button onclick="document.getElementById('homeBookingForm').scrollIntoView({behavior: 'smooth'})" class="shrink-0 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white text-[16px] font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all border-none cursor-pointer flex items-center gap-2">
+                <span class="material-symbols-outlined text-[20px]">event_available</span>
+                Đăng Ký Khám Ngay
+            </button>
+        </div>
+    </div>
+</section>
+
+<section class="py-24 bg-gradient-to-br from-surface-container-lowest to-surface-container-low overflow-hidden relative">
+    <!-- Decorative background elements -->
+    <div class="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-secondary/5 rounded-full blur-[80px] translate-y-1/3 -translate-x-1/4 pointer-events-none"></div>
+
+    <div class="max-w-container-max mx-auto px-margin-desktop relative z-10">
+        <div class="bg-white rounded-[40px] p-8 md:p-12 lg:p-16 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-outline-variant/60">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                
+                <!-- Content -->
+                <div class="order-2 lg:order-1">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-primary/5 rounded-full mb-6 border border-primary/10">
+                        <span class="relative flex h-3 w-3">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
+                        </span>
+                        <span class="text-label-md font-bold text-primary uppercase tracking-wide">Tiêu Chuẩn Quốc Tế</span>
+                    </div>
+                    
+                    <h2 class="text-[32px] md:text-[44px] font-bold text-[#1e293b] leading-tight mb-6">
+                        Minh Bạch Pháp Lý,<br/>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Cam Kết Chất Lượng</span>
+                    </h2>
+                    
+                    <p class="text-[16px] text-gray-500 mb-10 leading-relaxed max-w-lg">
+                        Phòng Khám Đa Khoa Duy Tâm luôn đặt an toàn của bệnh nhân lên hàng đầu, tuân thủ nghiêm ngặt các tiêu chuẩn y tế khắt khe nhất trong nước và quốc tế.
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <!-- Item 1 -->
+                        <div class="group flex gap-5 p-5 rounded-2xl hover:bg-[#f8fafc] transition-all duration-300 border border-transparent hover:border-gray-200 hover:shadow-sm cursor-default">
+                            <div class="w-14 h-14 rounded-2xl bg-[#eff6ff] text-[#2563eb] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                <span class="material-symbols-outlined text-[28px]">gavel</span>
+                            </div>
+                            <div>
+                                <h4 class="text-[18px] font-bold text-[#1e293b] mb-1">Giấy Tờ & Cấp Phép</h4>
+                                <p class="text-[14px] text-gray-600 leading-relaxed">Sở hữu đầy đủ giấy phép hoạt động. 100% bác sĩ có chứng chỉ hành nghề chuyên sâu.</p>
+                            </div>
+                        </div>
+
+                        <!-- Item 2 -->
+                        <div class="group flex gap-5 p-5 rounded-2xl hover:bg-[#f8fafc] transition-all duration-300 border border-transparent hover:border-gray-200 hover:shadow-sm cursor-default">
+                            <div class="w-14 h-14 rounded-2xl bg-[#ecfdf5] text-[#059669] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                <span class="material-symbols-outlined text-[28px]">verified_user</span>
+                            </div>
+                            <div>
+                                <h4 class="text-[18px] font-bold text-[#1e293b] mb-1">Dịch Vụ Uy Tín</h4>
+                                <p class="text-[14px] text-gray-600 leading-relaxed">Cam kết chất lượng dịch vụ với cơ quan nhà nước, mang lại sự an tâm tuyệt đối.</p>
+                            </div>
+                        </div>
+
+                        <!-- Item 3 -->
+                        <div class="group flex gap-5 p-5 rounded-2xl hover:bg-[#f8fafc] transition-all duration-300 border border-transparent hover:border-gray-200 hover:shadow-sm cursor-default">
+                            <div class="w-14 h-14 rounded-2xl bg-[#fffbeb] text-[#d97706] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                <span class="material-symbols-outlined text-[28px]">workspace_premium</span>
+                            </div>
+                            <div>
+                                <h4 class="text-[18px] font-bold text-[#1e293b] mb-1">Quản Lý Đạt Chuẩn</h4>
+                                <p class="text-[14px] text-gray-600 leading-relaxed">Tuân thủ ISO 9001, ISO 15189 và bộ tiêu chí chất lượng nghiêm ngặt của Bộ Y tế.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image -->
+                <div class="order-1 lg:order-2 relative">
+                    <!-- Background blob -->
+                    <div class="absolute inset-0 bg-gradient-to-tr from-[#bfdbfe] to-[#e0e7ff] rounded-[40px] transform rotate-6 scale-105 z-0 opacity-50"></div>
+                    
+                    <!-- Main image container -->
+                    <div class="relative z-10 bg-white rounded-[32px] p-2 shadow-2xl border border-white">
+                        <div class="overflow-hidden rounded-[24px] bg-[#f8fafc]">
+                            <img src="~/images/certificate-illustration.png" alt="Chứng nhận y tế" class="w-full h-auto object-cover max-h-[500px] hover:scale-105 transition-transform duration-700 mix-blend-multiply" />
+                        </div>
+                        
+                        <!-- Floating Badges -->
+                        <div class="absolute -bottom-6 -left-6 bg-white px-5 py-4 rounded-2xl shadow-xl border border-gray-100 flex items-center gap-4 animate-[bounce_4s_infinite]">
+                            <div class="w-12 h-12 bg-[#ecfdf5] rounded-full flex items-center justify-center text-[#059669]">
+                                <span class="material-symbols-outlined text-[24px]">health_and_safety</span>
+                            </div>
+                            <div>
+                                <p class="text-[12px] text-gray-500 font-medium uppercase tracking-wider mb-0.5">Đạt chuẩn</p>
+                                <p class="text-[16px] font-bold text-[#1e293b]">Bộ Y Tế</p>
+                            </div>
+                        </div>
+
+                        <div class="absolute -top-6 -right-6 bg-white px-5 py-4 rounded-2xl shadow-xl border border-gray-100 flex items-center gap-4 animate-[bounce_5s_infinite_1s]">
+                            <div class="w-12 h-12 bg-[#eff6ff] rounded-full flex items-center justify-center text-[#2563eb]">
+                                <span class="material-symbols-outlined text-[24px]">award_star</span>
+                            </div>
+                            <div>
+                                <p class="text-[12px] text-gray-500 font-medium uppercase tracking-wider mb-0.5">Chứng nhận</p>
+                                <p class="text-[16px] font-bold text-[#1e293b]">ISO 9001</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-24 bg-[#f8fafc] overflow-hidden" id="quy-trinh">
+    <div class="max-w-[1280px] mx-auto px-4 md:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-[32px] md:text-[40px] font-bold text-[#1e293b] mb-4">Quy Trình Khám Chữa Bệnh Chuẩn Y Khoa</h2>
+            <p class="text-[16px] text-gray-500 max-w-2xl mx-auto">Hệ thống quản trị thông minh giúp tối ưu hóa từng bước trải nghiệm của bệnh nhân.</p>
+        </div>
+        
+        <!-- STEPPER TABS -->
+        <div class="flex flex-col md:flex-row justify-between relative mb-12">
+            <!-- connecting line -->
+            <div class="hidden md:block absolute top-10 left-10 right-10 h-0.5 bg-gray-200 z-0 border-t-2 border-dashed border-gray-300"></div>
+            
+            @{ 
+                var stepsData = new[] { 
+                    new { Id = 1, Icon = "how_to_reg", Title = "Tiếp Nhận", Desc = "Phân luồng, xác thực danh tính và kiểm tra sinh hiệu lâm sàng ban đầu." },
+                    new { Id = 2, Icon = "stethoscope", Title = "Thăm Khám", Desc = "Khám lâm sàng chuyên sâu, khai thác tiền sử và đánh giá triệu chứng cơ năng." },
+                    new { Id = 3, Icon = "biotech", Title = "Chẩn Đoán", Desc = "Thực hiện xét nghiệm sinh hóa, huyết học và chẩn đoán hình ảnh kỹ thuật cao." },
+                    new { Id = 4, Icon = "assignment", Title = "Kết Luận", Desc = "Bác sĩ phân tích kết quả cận lâm sàng, chẩn đoán xác định và tư vấn phác đồ." },
+                    new { Id = 5, Icon = "medication", Title = "Điều Trị", Desc = "Cấp phát thuốc theo đơn điện tử, hướng dẫn dược lâm sàng hoặc làm thủ thuật." }
+                }; 
+            }
+            @foreach (var s in stepsData)
+            { 
+                var isActive = s.Id == 1;
+                var iconClass = isActive ? $"step-icon-active {(s.Id == 5 ? "step-5" : "")}" : "step-icon-inactive";
+                var titleClass = isActive ? $"step-title-active {(s.Id == 5 ? "step-5" : "")}" : "step-title-inactive";
+                
+                <div class="relative z-10 flex flex-col items-center text-center group cursor-pointer w-full md:w-1/5 mb-8 md:mb-0" onclick="showProcessStep(@s.Id)">
+                    <div id="step-icon-@s.Id" class="w-20 h-20 rounded-3xl border flex items-center justify-center mb-5 transition-all duration-400 @iconClass">
+                        <span class="material-symbols-outlined text-[36px]">@s.Icon</span>
+                    </div>
+                    <h3 id="step-title-@s.Id" class="text-[18px] font-bold mb-2 transition-colors @titleClass">@s.Id. @s.Title</h3>
+                    <p class="text-[14px] text-slate-500 px-2 line-clamp-3 leading-relaxed">@s.Desc</p>
+                </div>
+            }
+        </div>
+
+        <!-- STEP DETAILS CONTENT -->
+        <div class="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 md:p-10 relative overflow-hidden min-h-[300px]">
+            <!-- STEP 1 CONTENT -->
+            <div id="step-content-1" class="process-step-content block animate-[fadeIn_0.5s_ease-out]">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="px-3 py-1 bg-[#00346f]/10 text-[#00346f] rounded-full text-[13px] font-bold">BƯỚC 1</span>
+                    <h3 class="text-[24px] font-bold text-[#1e293b]">TIẾP NHẬN THÔNG TIN & ĐO SINH HIỆU</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="flex items-center gap-2 text-[#00346f] font-bold mb-2"><span class="material-symbols-outlined text-[20px]">task_alt</span> Cách thức thực hiện (Quy trình chuẩn)</h4>
+                            <p class="text-[15px] text-gray-600 leading-relaxed mb-3">Bệnh nhân đến quầy tự phục vụ (Kiosk), thực hiện quét mã QR Code trên điện thoại (mã được cấp khi đặt lịch online thành công) để xác nhận thông tin và nhận số thứ tự tự động mà không cần xếp hàng.</p>
+                            <p class="text-[15px] text-gray-600 leading-relaxed">Điều dưỡng viên hướng dẫn bệnh nhân đến phòng đo chỉ số sinh hiệu để kiểm tra các thông số cơ bản (huyết áp, nhịp tim, nhiệt độ, chiều cao, cân nặng) trước khi vào phòng khám. Dữ liệu này sẽ tự động đồng bộ thẳng vào Sổ sức khỏe điện tử của bác sĩ.</p>
+                        </div>
+                    </div>
+                    <div class="bg-[#f8fafc] rounded-2xl p-6 border border-gray-100 space-y-5">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm"><span class="material-symbols-outlined text-[#00346f] text-[20px]">timer</span></div>
+                            <div>
+                                <h5 class="font-bold text-[#1e293b] text-[15px] mb-1">Thời gian tối ưu</h5>
+                                <p class="text-[14px] text-gray-600">5 - 7 phút.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm"><span class="material-symbols-outlined text-[#00346f] text-[20px]">devices</span></div>
+                            <div>
+                                <h5 class="font-bold text-[#1e293b] text-[15px] mb-1">Trang thiết bị công nghệ</h5>
+                                <p class="text-[14px] text-gray-600">Hệ thống Kiosk thông minh tích hợp máy quét mã vạch/QR Code, Máy đo huyết áp điện tử tự động Omron, Nhiệt kế hồng ngoại búa chuyên dụng, Cân điện tử kiểm tra chỉ số BMI.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm"><span class="material-symbols-outlined text-[#00346f] text-[20px]">group</span></div>
+                            <div>
+                                <h5 class="font-bold text-[#1e293b] text-[15px] mb-1">Nhân sự phụ trách</h5>
+                                <p class="text-[14px] text-gray-600">Đội ngũ Lễ tân điều phối & Điều dưỡng viên phòng sơ chẩn.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2 CONTENT -->
+            <div id="step-content-2" class="process-step-content hidden animate-[fadeIn_0.5s_ease-out]">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="px-3 py-1 bg-[#00346f]/10 text-[#00346f] rounded-full text-[13px] font-bold">BƯỚC 2</span>
+                    <h3 class="text-[24px] font-bold text-[#1e293b]">THĂM KHÁM LÂM SÀNG CÙNG CHUYÊN GIA</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="flex items-center gap-2 text-[#00346f] font-bold mb-2"><span class="material-symbols-outlined text-[20px]">task_alt</span> Cách thức thực hiện (Quy trình chuẩn)</h4>
+                            <p class="text-[15px] text-gray-600 leading-relaxed mb-3">Bệnh nhân vào phòng khám riêng tư theo bảng điện tử hiển thị số thứ tự trước cửa phòng.</p>
+                            <p class="text-[15px] text-gray-600 leading-relaxed mb-3">Bác sĩ chuyên khoa trực tiếp lắng nghe chia sẻ về triệu chứng, khai thác tiền sử bệnh lý và tiến hành các bước khám lâm sàng chi tiết.</p>
+                            <p class="text-[15px] text-gray-600 leading-relaxed">Dựa trên các dấu hiệu ban đầu, bác sĩ sẽ chỉ định các danh mục cận lâm sàng (xét nghiệm, siêu âm, chụp chiếu) thực sự cần thiết thông qua phần mềm để tối ưu chi phí và thời gian cho người bệnh.</p>
+                        </div>
+                    </div>
+                    <div class="bg-[#f8fafc] rounded-2xl p-6 border border-gray-100 space-y-5">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm"><span class="material-symbols-outlined text-[#00346f] text-[20px]">timer</span></div>
+                            <div>
+                                <h5 class="font-bold text-[#1e293b] text-[15px] mb-1">Thời gian tối ưu</h5>
+                                <p class="text-[14px] text-gray-600">10 - 15 phút.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm"><span class="material-symbols-outlined text-[#00346f] text-[20px]">devices</span></div>
+                            <div>
+                                <h5 class="font-bold text-[#1e293b] text-[15px] mb-1">Trang thiết bị công nghệ</h5>
+                                <p class="text-[14px] text-gray-600">Ống nghe y tế cao cấp Littmann, Bộ dụng cụ khám ngũ quan Welch Allyn, Hệ thống máy tính đồng bộ Hồ sơ bệnh án điện tử (EMR).</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm"><span class="material-symbols-outlined text-[#00346f] text-[20px]">group</span></div>
+                            <div>
+                                <h5 class="font-bold text-[#1e293b] text-[15px] mb-1">Nhân sự phụ trách</h5>
+                                <p class="text-[14px] text-gray-600">Bác sĩ Chuyên khoa trực tiếp thăm khám.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3 CONTENT -->
+            <div id="step-content-3" class="process-step-content hidden animate-[fadeIn_0.5s_ease-out]">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="px-3 py-1 bg-[#00346f]/10 text-[#00346f] rounded-full text-[13px] font-bold">BƯỚC 3</span>
+                    <h3 class="text-[24px] font-bold text-[#1e293b]">CHẨN ĐOÁN CẬN LÂM SÀNG CÔNG NGHỆ CAO AI</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="flex items-center gap-2 text-[#00346f] font-bold mb-2"><span class="material-symbols-outlined text-[20px]">task_alt</span> Cách thức thực hiện (Quy trình chuẩn)</h4>
+                            <p class="text-[15px] text-gray-600 leading-relaxed mb-3">Bệnh nhân di chuyển đến khu vực Cận lâm sàng theo hướng dẫn của nhân viên điều phối. Kỹ thuật viên tiến hành lấy mẫu xét nghiệm hoặc thực hiện kỹ thuật chẩn đoán hình ảnh (Siêu âm, X-Quang, MRI...).</p>
+                            <p class="text-[15px] text-gray-600 leading-relaxed font-medium">Điểm vượt trội: Toàn bộ kết quả hình ảnh chụp chiếu được quét qua hệ thống phần mềm Trí tuệ nhân tạo (AI) giúp tự động phân tích, khoanh vùng tổn thương và phát hiện các bất thường dù là nhỏ nhất, hỗ trợ bác sĩ chẩn đoán chính xác tuyệt đối.</p>
+                        </div>
+                    </div>
+                    <div class="bg-[#f8fafc] rounded-2xl p-6 border border-gray-100 space-y-5">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm"><span class="material-symbols-outlined text-[#00346f] text-[20px]">timer</span></div>
+                            <div>
+                                <h5 class="font-bold text-[#1e293b] text-[15px] mb-1">Thời gian tối ưu</h5>
+                                <p class="text-[14px] text-gray-600">20 - 35 phút (Trả kết quả tự động về máy bác sĩ ngay khi hoàn thành, không cần đợi bản cứng).</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm"><span class="material-symbols-outlined text-[#00346f] text-[20px]">devices</span></div>
+                            <div>
+                                <h5 class="font-bold text-[#1e293b] text-[15px] mb-1">Trang thiết bị công nghệ</h5>
+                                <p class="text-[14px] text-gray-600">Hệ thống máy xét nghiệm sinh hóa tự động Roche, Máy siêu âm 4D/5D GE Healthcare, Máy X-Quang kỹ thuật số Carestream, Phần mềm AI hỗ trợ phân tích hình ảnh y tế tiên tiến.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm"><span class="material-symbols-outlined text-[#00346f] text-[20px]">group</span></div>
+                            <div>
+                                <h5 class="font-bold text-[#1e293b] text-[15px] mb-1">Nhân sự phụ trách</h5>
+                                <p class="text-[14px] text-gray-600">Bác sĩ Chẩn đoán hình ảnh & Kỹ thuật viên phòng Xét nghiệm/Chụp chiếu.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 4 CONTENT -->
+            <div id="step-content-4" class="process-step-content hidden animate-[fadeIn_0.5s_ease-out]">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="px-3 py-1 bg-[#00346f]/10 text-[#00346f] rounded-full text-[13px] font-bold">BƯỚC 4</span>
+                    <h3 class="text-[24px] font-bold text-[#1e293b]">KẾT LUẬN & XÂY DỰNG PHÁC ĐỒ CÁ NHÂN HÓA</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="flex items-center gap-2 text-[#00346f] font-bold mb-2"><span class="material-symbols-outlined text-[20px]">task_alt</span> Cách thức thực hiện (Quy trình chuẩn)</h4>
+                            <p class="text-[15px] text-gray-600 leading-relaxed mb-3">Bệnh nhân quay trở lại phòng khám ban đầu khi hệ thống thông báo đã có đầy đủ kết quả cận lâm sàng.</p>
+                            <p class="text-[15px] text-gray-600 leading-relaxed mb-3">Bác sĩ trình chiếu trực quan các hình ảnh chụp chiếu, chỉ số xét nghiệm lên màn hình để giải thích chi tiết, dễ hiểu nhất về tình trạng sức khỏe của bệnh nhân.</p>
+                            <p class="text-[15px] text-gray-600 leading-relaxed">Bác sĩ đưa ra kết luận bệnh lý cuối cùng và thiết lập một phác đồ điều trị riêng biệt (cá nhân hóa) dựa trên thể trạng, độ tuổi và lịch sử dị ứng thuốc của từng người bệnh để đảm bảo hiệu quả tối ưu.</p>
+                        </div>
+                    </div>
+                    <div class="bg-[#f8fafc] rounded-2xl p-6 border border-gray-100 space-y-5">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm"><span class="material-symbols-outlined text-[#00346f] text-[20px]">timer</span></div>
+                            <div>
+                                <h5 class="font-bold text-[#1e293b] text-[15px] mb-1">Thời gian tối ưu</h5>
+                                <p class="text-[14px] text-gray-600">10 - 12 phút.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm"><span class="material-symbols-outlined text-[#00346f] text-[20px]">devices</span></div>
+                            <div>
+                                <h5 class="font-bold text-[#1e293b] text-[15px] mb-1">Trang thiết bị công nghệ</h5>
+                                <p class="text-[14px] text-gray-600">Hệ thống lưu trữ và truyền tải hình ảnh y tế PACS, Màn hình hiển thị y khoa độ phân giải cao kết nối đồng bộ phòng khám.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm"><span class="material-symbols-outlined text-[#00346f] text-[20px]">group</span></div>
+                            <div>
+                                <h5 class="font-bold text-[#1e293b] text-[15px] mb-1">Nhân sự phụ trách</h5>
+                                <p class="text-[14px] text-gray-600">Bác sĩ Chuyên khoa trực tiếp đưa ra kết luận.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 5 CONTENT -->
+            <div id="step-content-5" class="process-step-content hidden animate-[fadeIn_0.5s_ease-out]">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="px-3 py-1 bg-[#059669]/10 text-[#059669] rounded-full text-[13px] font-bold">BƯỚC 5</span>
+                    <h3 class="text-[24px] font-bold text-[#1e293b]">ĐIỀU TRỊ & CẤP PHÁT THUỐC AN TOÀN</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="flex items-center gap-2 text-[#059669] font-bold mb-2"><span class="material-symbols-outlined text-[20px]">task_alt</span> Cách thức thực hiện (Quy trình chuẩn)</h4>
+                            <p class="text-[15px] text-gray-600 leading-relaxed mb-3"><strong>Trường hợp điều trị nội khoa:</strong> Bệnh nhân di chuyển ra Quầy dược thông minh để nhận thuốc theo đơn y tế điện tử đã được bác sĩ kê. Dược sĩ lâm sàng sẽ kiểm tra chéo thông tin đơn thuốc, cấp phát thuốc và hướng dẫn kỹ lưỡng liều lượng, cách dùng, các lưu ý về dinh dưỡng.</p>
+                            <p class="text-[15px] text-gray-600 leading-relaxed"><strong>Trường hợp cần can thiệp:</strong> Bệnh nhân được điều phối sang phòng thủ thuật để thực hiện các tiểu phẫu, thủ thuật tại chỗ trong điều kiện vô trùng tuyệt đối dưới sự giám sát nghiêm ngặt.</p>
+                        </div>
+                    </div>
+                    <div class="bg-[#f0fdf4] rounded-2xl p-6 border border-[#d1fae5] space-y-5">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm"><span class="material-symbols-outlined text-[#059669] text-[20px]">timer</span></div>
+                            <div>
+                                <h5 class="font-bold text-[#1e293b] text-[15px] mb-1">Thời gian tối ưu</h5>
+                                <p class="text-[14px] text-gray-600">10 - 15 phút (Nhận thuốc) / 20 - 40 phút (Nếu thực hiện thủ thuật).</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm"><span class="material-symbols-outlined text-[#059669] text-[20px]">devices</span></div>
+                            <div>
+                                <h5 class="font-bold text-[#1e293b] text-[15px] mb-1">Trang thiết bị công nghệ</h5>
+                                <p class="text-[14px] text-gray-600">Phần mềm quản lý dược lâm sàng chống tương tác thuốc, Máy in mã vạch đơn thuốc tự động; Hệ thống đèn mổ Led, Dụng cụ phẫu thuật vô trùng khép kín bằng công nghệ hấp sấy chuẩn bọc gói y tế.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm"><span class="material-symbols-outlined text-[#059669] text-[20px]">group</span></div>
+                            <div>
+                                <h5 class="font-bold text-[#1e293b] text-[15px] mb-1">Nhân sự phụ trách</h5>
+                                <p class="text-[14px] text-gray-600">Dược sĩ lâm sàng quầy thuốc hoặc Ê-kíp Bác sĩ/Điều dưỡng phòng thủ thuật.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <!-- CTA inside the section -->
+        <div class="mt-16 text-center">
+            <h3 class="text-[20px] font-bold text-[#1e293b] mb-2">📅 ĐỒNG HÀNH CÙNG SỨC KHỎE CỦA BẠN - ĐẶT LỊCH HẸN NGAY</h3>
+            <p class="text-gray-500 mb-6">Chủ động thời gian - Tránh giờ cao điểm - Không lo chờ đợi.</p>
+            <a asp-controller="Appointments" asp-action="Create" class="inline-flex items-center gap-2 bg-[#00346f] text-white px-8 py-3.5 rounded-full font-bold hover:bg-[#00224d] transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 no-underline">
+                <span class="material-symbols-outlined text-[20px]">event_available</span> ĐẶT LỊCH KHÁM TRỰC TUYẾN
+            </a>
+        </div>
+    </div>
+</section>
+
+<style>
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .step-icon-active {
+        background: linear-gradient(135deg, #2563eb, #00346f);
+        color: white;
+        border-color: transparent;
+        transform: scale(1.15);
+        box-shadow: 0 10px 25px -5px rgba(0, 52, 111, 0.4);
+    }
+    .step-icon-active.step-5 {
+        background: linear-gradient(135deg, #10b981, #059669);
+        box-shadow: 0 10px 25px -5px rgba(5, 150, 105, 0.4);
+    }
+    .step-title-active {
+        color: #1d4ed8;
+    }
+    .step-title-active.step-5 {
+        color: #059669;
+    }
+    .step-icon-inactive {
+        background: white;
+        border-color: #e2e8f0;
+        color: #94a3b8;
+        opacity: 0.8;
+    }
+    .step-icon-inactive:hover {
+        opacity: 1;
+        border-color: #60a5fa;
+        color: #3b82f6;
+        transform: translateY(-4px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    .step-title-inactive {
+        color: #64748b;
+    }
+</style>
+
+<script>
+    function showProcessStep(stepId) {
+        // Hide all contents
+        document.querySelectorAll('.process-step-content').forEach(el => {
+            el.classList.add('hidden');
+            el.classList.remove('block');
+        });
+        
+        // Update styles for all icons
+        for(let i = 1; i <= 5; i++) {
+            const icon = document.getElementById('step-icon-' + i);
+            const title = document.getElementById('step-title-' + i);
+            
+            if(icon && title) {
+                // Reset classes
+                icon.className = "w-20 h-20 rounded-3xl border flex items-center justify-center mb-5 transition-all duration-400";
+                title.className = "text-[18px] font-bold mb-2 transition-colors";
+                
+                if (i === stepId) {
+                    icon.classList.add("step-icon-active");
+                    title.classList.add("step-title-active");
+                    if (stepId === 5) {
+                        icon.classList.add("step-5");
+                        title.classList.add("step-5");
+                    }
+                } else {
+                    icon.classList.add("step-icon-inactive");
+                    title.classList.add("step-title-inactive");
+                }
+            }
+        }
+        
+        // Show active content
+        const activeContent = document.getElementById('step-content-' + stepId);
+        if(activeContent) {
+            activeContent.classList.remove('hidden');
+            activeContent.classList.add('block');
+        }
+    }
+</script>
+
+<section class="py-24 bg-white" id="chuyen-khoa">
+    <div class="max-w-[1280px] mx-auto px-4 md:px-8">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+            <div class="max-w-xl">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/5 text-primary rounded-full text-[13px] font-bold mb-4 border border-primary/10">
+                    <span class="material-symbols-outlined text-[16px]">local_hospital</span> Chuyên Khoa Đầu Ngành
+                </span>
+                <h2 class="text-[32px] md:text-[38px] font-bold text-[#1e293b] mb-4 leading-tight">Chuyên Khoa <span class="text-primary">Nổi Bật</span></h2>
+                <p class="text-[16px] text-gray-500 leading-relaxed">Mỗi chuyên khoa tập hợp đội ngũ bác sĩ đầu ngành, ứng dụng công nghệ hiện đại và phác đồ điều trị được chuẩn hóa theo tiêu chuẩn quốc tế.</p>
+            </div>
+            <a class="inline-flex items-center gap-2 px-6 py-3 border-2 border-primary text-primary rounded-xl font-bold hover:bg-primary hover:text-white transition-all duration-300 no-underline whitespace-nowrap" asp-controller="Doctors" asp-action="Index">
+                Tìm hiểu thêm về toàn bộ chuyên khoa <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            @{ 
+                var specialtyDetails = new[] {
+                    new { 
+                        Icon = "neurology", 
+                        Name = "Nội thần kinh",
+                        DbKeyword = "Nội thần kinh",
+                        Color = "text-[#2563eb]",
+                        BgColor = "bg-[#eff6ff]",
+                        BorderHover = "hover:border-[#2563eb]",
+                        ShadowHover = "hover:shadow-[#2563eb]/10",
+                        Description = "Khoa Nội Thần Kinh chuyên chẩn đoán và điều trị các bệnh lý về não bộ, tủy sống và hệ thần kinh ngoại vi. Với hệ thống MRI 3.0 Tesla và đội ngũ bác sĩ được đào tạo tại Pháp và Nhật Bản, chúng tôi tiếp cận từng ca bệnh bằng phác đồ lâm sàng cá nhân hóa.",
+                        Services = new[] { "Điều trị đau đầu Migraine mãn tính", "Chẩn đoán đột quỵ não cấp tính", "Quản lý bệnh Parkinson & Alzheimer", "Nội soi điện cơ (EMG/NCV)" }
+                    },
+                    new { 
+                        Icon = "cardiology",
+                        Name = "Nội tim mạch",
+                        DbKeyword = "Nội tim mạch",
+                        Color = "text-[#dc2626]",
+                        BgColor = "bg-[#fef2f2]",
+                        BorderHover = "hover:border-[#dc2626]",
+                        ShadowHover = "hover:shadow-[#dc2626]/10",
+                        Description = "Khoa Nội Tim Mạch ứng dụng hệ thống siêu âm tim 4D GE Vivid E95, Holter điện tim 24 giờ và nghiệm pháp gắng sức để phát hiện sớm các bất thường về cấu trúc và chức năng tim. Phác đồ điều trị tuân thủ hướng dẫn ESC/ACC mới nhất.",
+                        Services = new[] { "Siêu âm tim 3D/4D định lượng", "Theo dõi Holter ECG & huyết áp 24h", "Điều trị rối loạn nhịp tim", "Tư vấn phòng ngừa nhồi máu cơ tim" }
+                    },
+                    new { 
+                        Icon = "pulmonology",
+                        Name = "Nội hô hấp",
+                        DbKeyword = "Nội hô hấp",
+                        Color = "text-[#059669]",
+                        BgColor = "bg-[#ecfdf5]",
+                        BorderHover = "hover:border-[#059669]",
+                        ShadowHover = "hover:shadow-[#059669]/10",
+                        Description = "Khoa Nội Hô Hấp trang bị máy hô hấp ký thế hệ mới MasterScreen Body, hệ thống đo DLCO và nội soi phế quản ống mềm. Chuyên gia điều trị các bệnh lý mãn tính (COPD, Hen phế quản) theo mô hình quản lý bệnh nhân toàn diện dài hạn.",
+                        Services = new[] { "Đo chức năng hô hấp toàn phần", "Điều trị COPD & hen phế quản", "Tầm soát ung thư phổi CT liều thấp", "Nội soi phế quản ống mềm ống cứng" }
+                    },
+                    new { 
+                        Icon = "gastroenterology",
+                        Name = "Nội tiêu hóa",
+                        DbKeyword = "Nội tiêu hóa",
+                        Color = "text-[#d97706]",
+                        BgColor = "bg-[#fffbeb]",
+                        BorderHover = "hover:border-[#d97706]",
+                        ShadowHover = "hover:shadow-[#d97706]/10",
+                        Description = "Khoa Nội Tiêu Hóa sở hữu hệ thống nội soi ống mềm Olympus EVIS X1 thế hệ 4K, kết hợp trí tuệ nhân tạo (AI-CADe) phát hiện polyp và ung thư đại tràng giai đoạn sớm. Siêu âm đàn hồi (Fibroscan) đánh giá chính xác mức độ xơ hóa gan không cần sinh thiết.",
+                        Services = new[] { "Nội soi dạ dày & đại tràng 4K + AI", "Đánh giá xơ gan Fibroscan", "Điều trị H.Pylori kháng thuốc", "Phòng ngừa & tầm soát ung thư đại tràng" }
+                    }
+                };
+            }
+            @foreach (var sp in specialtyDetails)
+            {
+                <div class="group rounded-3xl border-2 border-gray-100 bg-white p-8 @sp.BorderHover @sp.ShadowHover hover:shadow-xl transition-all duration-300 cursor-default">
+                    <!-- Header -->
+                    <div class="flex items-start gap-5 mb-5">
+                        <div class="w-16 h-16 @sp.BgColor rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+                            <span class="material-symbols-outlined text-[32px] @sp.Color">@sp.Icon</span>
+                        </div>
+                        <div>
+                            <h3 class="text-[22px] font-bold text-[#1e293b] mb-1 group-hover:@sp.Color transition-colors">@sp.Name</h3>
+                            <span class="inline-flex items-center gap-1 text-[12px] @sp.Color font-semibold @sp.BgColor px-2 py-0.5 rounded-full">
+                                <span class="material-symbols-outlined text-[12px]">verified</span> Chuyên khoa đầu ngành
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Description -->
+                    <p class="text-[15px] text-gray-600 leading-relaxed mb-6">@sp.Description</p>
+                    <!-- Services -->
+                    <div class="border-t border-gray-100 pt-5">
+                        <p class="text-[12px] font-bold text-gray-400 uppercase tracking-wider mb-3">Dịch vụ chính</p>
+                        <ul class="space-y-2">
+                            @foreach (var svc in sp.Services)
+                            {
+                                <li class="flex items-start gap-2 text-[14px] text-gray-600">
+                                    <span class="material-symbols-outlined text-[16px] @sp.Color mt-0.5 shrink-0">check_circle</span>
+                                    @svc
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <!-- CTA → link to Doctors page filtered by this specialty keyword -->
+                    <div class="mt-6 pt-5 border-t border-gray-100">
+                        <a asp-controller="Doctors" asp-action="Index" asp-route-keyword="@sp.DbKeyword" asp-fragment="danh-sach-bac-si"
+                           class="inline-flex items-center gap-1.5 text-[14px] font-bold @sp.Color no-underline hover:underline group-hover:gap-2.5 transition-all duration-300">
+                            Xem bác sĩ chuyên khoa <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<section id="cam-nang-y-te" class="py-24 bg-[#f8faff]">
+    <div class="max-w-[1280px] mx-auto px-4 md:px-8">
+        <div class="text-center mb-14">
+            <span class="inline-flex items-center gap-2 px-4 py-2 bg-[#dc2626]/10 text-[#dc2626] rounded-full text-[13px] font-bold mb-4">
+                <span class="material-symbols-outlined text-[16px]">health_and_safety</span> Cẩm Nang Sức Khỏe
+            </span>
+            <h2 class="text-[32px] md:text-[40px] font-extrabold text-[#1e293b] mb-4">Một Số Bệnh Người Dân Việt Nam Hay Mắc Phải</h2>
+            <p class="text-[16px] text-[#64748b] max-w-2xl mx-auto">Thông tin y khoa chuẩn xác, được kiểm duyệt bởi đội ngũ bác sĩ chuyên khoa — giúp bạn nhận biết, phòng ngừa và xử lý kịp thời.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="group bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer" onclick="openDiseaseModal('sxh')">
+                <div class="aspect-[16/9] overflow-hidden relative">
+                    <img src="/images/dengue.png" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Sốt xuất huyết Dengue" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                    <span class="absolute top-4 left-4 px-3 py-1 bg-[#dc2626] text-white text-[11px] font-bold rounded-full">🦟 Truyền nhiễm</span>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-[20px] font-bold text-[#1e293b] mb-2 group-hover:text-[#2563eb] transition-colors">Sốt xuất huyết Dengue</h3>
+                    <p class="text-[14px] text-[#64748b] mb-5 leading-relaxed">Bệnh do virus Dengue lây qua muỗi Aedes, có thể gây biến chứng xuất huyết nội tạng nguy hiểm nếu không được phát hiện và xử trí kịp thời.</p>
+                    <button class="inline-flex items-center gap-2 text-[14px] font-bold text-[#2563eb] hover:gap-3 transition-all">
+                        Xem chi tiết hướng dẫn <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                    </button>
+                </div>
+            </div>
+            <div class="group bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer" onclick="openDiseaseModal('dd')">
+                <div class="aspect-[16/9] overflow-hidden relative">
+                    <img src="/images/gastric_ulcer.png" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Viêm loét dạ dày" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                    <span class="absolute top-4 left-4 px-3 py-1 bg-[#d97706] text-white text-[11px] font-bold rounded-full">🫁 Tiêu hóa</span>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-[20px] font-bold text-[#1e293b] mb-2 group-hover:text-[#2563eb] transition-colors">Viêm loét &amp; Trào ngược dạ dày</h3>
+                    <p class="text-[14px] text-[#64748b] mb-5 leading-relaxed">Nhóm bệnh tiêu hóa phổ biến nhất Việt Nam, gây đau thượng vị, ợ chua, buồn nôn — tiềm ẩn nguy cơ xuất huyết tiêu hóa nếu điều trị chậm trễ.</p>
+                    <button class="inline-flex items-center gap-2 text-[14px] font-bold text-[#2563eb] hover:gap-3 transition-all">
+                        Xem chi tiết hướng dẫn <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                    </button>
+                </div>
+            </div>
+            <div class="group bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer" onclick="openDiseaseModal('dq')">
+                <div class="aspect-[16/9] overflow-hidden relative">
+                    <img src="/images/stroke.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Đột quỵ" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                    <span class="absolute top-4 left-4 px-3 py-1 bg-[#7c3aed] text-white text-[11px] font-bold rounded-full">🧠 Thần kinh</span>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-[20px] font-bold text-[#1e293b] mb-2 group-hover:text-[#2563eb] transition-colors">Đột quỵ (Tai biến mạch máu não)</h3>
+                    <p class="text-[14px] text-[#64748b] mb-5 leading-relaxed">Nguyên nhân gây tử vong và tàn phế hàng đầu tại Việt Nam. Nhận biết sớm trong "giờ vàng" 4,5 giờ đầu là yếu tố quyết định tính mạng và khả năng phục hồi.</p>
+                    <button class="inline-flex items-center gap-2 text-[14px] font-bold text-[#2563eb] hover:gap-3 transition-all">
+                        Xem chi tiết hướng dẫn <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-12">
+            <a asp-controller="Home" asp-action="MedicalKnowledge" asp-fragment="cam-nang-suc-khoe" class="inline-flex items-center gap-2 px-8 py-3.5 bg-white border-2 border-[#2563eb] text-[#2563eb] rounded-xl font-bold text-[15px] hover:bg-[#2563eb] hover:text-white transition-all shadow-sm no-underline group">
+                Xem tất cả cẩm nang <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- === DISEASE MODALS === -->
+<div id="diseaseModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 backdrop-blur-sm px-4 py-8" onclick="if(arguments[0].target===this)closeDiseaseModal()">
+    <div class="bg-white rounded-3xl w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl relative">
+        <button onclick="closeDiseaseModal()" class="absolute top-5 right-5 w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors z-10">
+            <span class="material-symbols-outlined text-[#475569]">close</span>
+        </button>
+        <div id="diseaseModalContent" class="p-8"></div>
+    </div>
+</div>
+
+<script>
+    var diseaseData = {
+        sxh: {
+            color: '#dc2626', bg: '#fef2f2', tag: '🦟 Truyền nhiễm',
+            title: 'Sốt xuất huyết Dengue',
+            s1title: '1. Triệu chứng & Phán đoán nhanh',
+            s1: '<ul class="space-y-2 text-[15px] text-[#475569]"><li><b>Giai đoạn sốt (ngày 1–3):</b> Sốt cao đột ngột 39–40°C, đau đầu dữ dội vùng trán, đau hốc mắt, đau cơ khớp toàn thân.</li><li><b>Giai đoạn nguy hiểm (ngày 4–6):</b> Sốt giảm đột ngột, xuất hiện chấm/mảng xuất huyết dưới da, chảy máu chân răng, nôn ra máu, đau bụng vùng gan.</li><li><b>Dấu hiệu nặng cần cấp cứu ngay:</b> Chảy máu không cầm, tay chân lạnh, mạch nhanh yếu, li bì hoặc vật vã, tiểu ít.</li></ul>',
+            s2title: '2. Cách sơ cứu & Xử lý ban đầu',
+            s2: '<ul class="space-y-2 text-[15px] text-[#475569] mb-4"><li>✅ Cho người bệnh <b>nghỉ ngơi tuyệt đối</b>, uống nhiều nước (oresol, nước dừa, nước trái cây).</li><li>✅ Hạ sốt bằng <b>Paracetamol</b> (không dùng Ibuprofen, Aspirin — tăng nguy cơ xuất huyết).</li><li>✅ Lau mát bằng khăn ấm vùng trán, nách, bẹn khi sốt cao.</li><li>✅ Theo dõi nhiệt độ và dấu hiệu xuất huyết 4–6 giờ/lần.</li></ul><div class="bg-red-50 border-2 border-red-500 rounded-xl p-4"><p class="text-red-700 font-black text-[15px]">⚠️ LƯU Ý QUAN TRỌNG: Nếu người bệnh có các dấu hiệu cảnh báo nguy hiểm, KHÔNG tự ý điều trị tại nhà mà PHẢI ĐẾN NGAY TRUNG TÂM Y TẾ GẦN NHẤT để được cấp cứu kịp thời.</p></div>',
+            s3title: '3. Điều trị & Gợi ý thuốc',
+            s3: '<p class="text-[15px] text-[#475569]">Hiện chưa có thuốc kháng virus đặc hiệu. Điều trị chủ yếu là hỗ trợ triệu chứng theo chỉ định bác sĩ: bù dịch truyền tĩnh mạch (Ringer Lactate) khi cần, truyền tiểu cầu khi tiểu cầu < 20.000/µL. <b>Tuyệt đối không tự ý mua thuốc uống khi chưa có chỉ định của bác sĩ.</b></p>',
+            s4title: '4. Biện pháp phòng ngừa',
+            s4: '<ul class="space-y-2 text-[15px] text-[#475569]"><li>🪣 Dọn dẹp các vật chứa nước đọng (lọ hoa, xô, máng nước) — nơi muỗi Aedes đẻ trứng.</li><li>🦟 Ngủ màn, mặc quần áo dài, dùng kem chống muỗi kể cả ban ngày.</li><li>🏠 Lắp lưới chắn muỗi cửa sổ, cửa ra vào.</li><li>💉 Tiêm vaccine phòng Dengue (Qdenga) cho người từ 6 tuổi trở lên.</li></ul>'
+        },
+        dd: {
+            color: '#d97706', bg: '#fffbeb', tag: '🫁 Tiêu hóa',
+            title: 'Viêm loét & Trào ngược dạ dày',
+            s1title: '1. Triệu chứng & Phán đoán nhanh',
+            s1: '<ul class="space-y-2 text-[15px] text-[#475569]"><li><b>Viêm loét dạ dày:</b> Đau âm ỉ hoặc灼热 (burning) vùng thượng vị, đau tăng khi đói hoặc sau ăn, ợ chua, buồn nôn, nôn.</li><li><b>Trào ngược (GERD):</b> Ợ nóng, cảm giác acid trào lên họng, ho mạn tính về đêm, khàn tiếng sáng sớm.</li><li><b>Dấu hiệu nguy hiểm:</b> Nôn ra máu hoặc chất màu cà phê, phân đen như hắc ín, sụt cân không rõ nguyên nhân, khó nuốt.</li></ul>',
+            s2title: '2. Cách sơ cứu & Xử lý ban đầu',
+            s2: '<ul class="space-y-2 text-[15px] text-[#475569] mb-4"><li>✅ Ăn nhỏ giọt 5–6 bữa/ngày, tránh để dạ dày rỗng quá lâu.</li><li>✅ Tránh thức ăn cay, chua, đồ uống có gas, cà phê, rượu bia.</li><li>✅ Không nằm ngay sau ăn — chờ ít nhất 2–3 giờ.</li><li>✅ Kê gối cao đầu 15–20cm khi ngủ để giảm trào ngược.</li></ul><div class="bg-red-50 border-2 border-red-500 rounded-xl p-4"><p class="text-red-700 font-black text-[15px]">⚠️ LƯU Ý QUAN TRỌNG: Nếu người bệnh có các dấu hiệu cảnh báo nguy hiểm, KHÔNG tự ý điều trị tại nhà mà PHẢI ĐẾN NGAY TRUNG TÂM Y TẾ GẦN NHẤT để được cấp cứu kịp thời.</p></div>',
+            s3title: '3. Điều trị & Gợi ý thuốc',
+            s3: '<p class="text-[15px] text-[#475569]">Bác sĩ thường kê: <b>PPI</b> (Omeprazole, Pantoprazole) giảm tiết acid; <b>Antacid</b> (Phosphalugel) trung hòa acid nhanh; <b>Kháng sinh diệt H.Pylori</b> (Amoxicillin + Clarithromycin) nếu xét nghiệm dương tính. <b>Không tự mua kháng sinh uống — nguy cơ kháng thuốc rất cao.</b></p>',
+            s4title: '4. Biện pháp phòng ngừa',
+            s4: '<ul class="space-y-2 text-[15px] text-[#475569]"><li>🥗 Ăn đúng giờ, đủ bữa, nhai chậm, không bỏ bữa sáng.</li><li>🚭 Bỏ thuốc lá — nicotine làm tăng tiết acid và giảm cơ thắt thực quản dưới.</li><li>💊 Hạn chế thuốc NSAID (Ibuprofen, Aspirin) — gây tổn thương niêm mạc dạ dày.</li><li>😌 Quản lý stress: yoga, thiền định, ngủ đủ giấc.</li></ul>'
+        },
+        dq: {
+            color: '#7c3aed', bg: '#f5f3ff', tag: '🧠 Thần kinh',
+            title: 'Đột quỵ (Tai biến mạch máu não)',
+            s1title: '1. Triệu chứng & Phán đoán nhanh — Quy tắc BE-FAST',
+            s1: '<div class="grid grid-cols-2 gap-3 mb-3"><div class="bg-[#f5f3ff] rounded-xl p-3 text-center"><div class="text-[24px] font-black text-[#7c3aed]">B</div><div class="text-[13px] font-bold">Balance — Mất thăng bằng</div></div><div class="bg-[#f5f3ff] rounded-xl p-3 text-center"><div class="text-[24px] font-black text-[#7c3aed]">E</div><div class="text-[13px] font-bold">Eyes — Mờ mắt đột ngột</div></div><div class="bg-[#f5f3ff] rounded-xl p-3 text-center"><div class="text-[24px] font-black text-[#7c3aed]">F</div><div class="text-[13px] font-bold">Face — Méo miệng, liệt mặt</div></div><div class="bg-[#f5f3ff] rounded-xl p-3 text-center"><div class="text-[24px] font-black text-[#7c3aed]">A</div><div class="text-[13px] font-bold">Arms — Yếu liệt tay chân</div></div><div class="bg-[#f5f3ff] rounded-xl p-3 text-center"><div class="text-[24px] font-black text-[#7c3aed]">S</div><div class="text-[13px] font-bold">Speech — Nói ngọng, khó nói</div></div><div class="bg-red-100 rounded-xl p-3 text-center"><div class="text-[24px] font-black text-red-600">T</div><div class="text-[13px] font-bold text-red-600">Time — Gọi 115 NGAY!</div></div></div>',
+            s2title: '2. Cách sơ cứu & Xử lý ban đầu',
+            s2: '<ul class="space-y-2 text-[15px] text-[#475569] mb-4"><li>✅ <b>Gọi 115 ngay lập tức</b> — không chờ xem triệu chứng có tự hết không.</li><li>✅ Đặt người bệnh nằm nghiêng an toàn nếu bất tỉnh, đầu và vai hơi cao.</li><li>✅ Nới lỏng quần áo, tháo cà vạt, mở cổ áo để dễ thở.</li><li>❌ Không cho ăn/uống bất cứ thứ gì — nguy cơ sặc vào phổi.</li><li>❌ Không tự lấy kim chích các đầu ngón tay.</li></ul><div class="bg-red-50 border-2 border-red-500 rounded-xl p-4"><p class="text-red-700 font-black text-[15px]">⚠️ LƯU Ý QUAN TRỌNG: Nếu người bệnh có các dấu hiệu cảnh báo nguy hiểm, KHÔNG tự ý điều trị tại nhà mà PHẢI ĐẾN NGAY TRUNG TÂM Y TẾ GẦN NHẤT để được cấp cứu kịp thời.</p></div>',
+            s3title: '3. Điều trị & Gợi ý thuốc',
+            s3: '<p class="text-[15px] text-[#475569]">Điều trị phụ thuộc loại đột quỵ: <b>Nhồi máu não</b> — tiêu huyết khối tPA trong 4,5 giờ đầu hoặc lấy huyết khối cơ học. <b>Xuất huyết não</b> — kiểm soát huyết áp, phẫu thuật nếu cần. Sau cấp cứu: phục hồi chức năng ngôn ngữ, vận động. <b>Tuyệt đối không tự ý dùng thuốc chống đông hay hạ áp khi chưa có chỉ định bác sĩ.</b></p>',
+            s4title: '4. Biện pháp phòng ngừa',
+            s4: '<ul class="space-y-2 text-[15px] text-[#475569]"><li>💊 Kiểm soát <b>huyết áp</b> (mục tiêu < 130/80 mmHg), <b>đường máu</b>, <b>mỡ máu</b> định kỳ.</li><li>🚭 Bỏ thuốc lá — tăng nguy cơ đột quỵ gấp 2–4 lần.</li><li>🏃 Vận động 30 phút/ngày, 5 ngày/tuần.</li><li>🥗 Chế độ ăn DASH: nhiều rau, trái cây, hạn chế muối < 5g/ngày.</li><li>🩺 Tầm soát rung nhĩ, hẹp động mạch cảnh mỗi năm nếu có yếu tố nguy cơ.</li></ul>'
+        }
+    };
+    function openDiseaseModal(id) {
+        var d = diseaseData[id];
+        document.getElementById('diseaseModalContent').innerHTML =
+            '<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] font-bold mb-4" style="background:' + d.bg + ';color:' + d.color + '">' + d.tag + '</div>' +
+            '<h2 class="text-[26px] font-extrabold text-[#1e293b] mb-6">' + d.title + '</h2>' +
+            '<div class="space-y-6">' +
+            '<div><h3 class="text-[16px] font-bold mb-3 pb-2 border-b-2" style="color:' + d.color + ';border-color:' + d.color + '">' + d.s1title + '</h3>' + d.s1 + '</div>' +
+            '<div><h3 class="text-[16px] font-bold mb-3 pb-2 border-b-2" style="color:' + d.color + ';border-color:' + d.color + '">' + d.s2title + '</h3>' + d.s2 + '</div>' +
+            '<div><h3 class="text-[16px] font-bold mb-3 pb-2 border-b-2" style="color:' + d.color + ';border-color:' + d.color + '">' + d.s3title + '</h3>' + d.s3 + '</div>' +
+            '<div><h3 class="text-[16px] font-bold mb-3 pb-2 border-b-2" style="color:' + d.color + ';border-color:' + d.color + '">' + d.s4title + '</h3>' + d.s4 + '</div>' +
+            '</div>' +
+            '<div class="mt-8 pt-6 border-t border-gray-100 flex gap-3"><a href="/Appointments/Create" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white font-bold text-[14px] no-underline" style="background:' + d.color + '"><span class="material-symbols-outlined text-[16px]">edit_calendar</span>Đặt lịch khám ngay</a><button onclick="closeDiseaseModal()" class="px-6 py-3 rounded-xl border border-gray-200 text-[#475569] font-bold text-[14px] hover:bg-gray-50">Đóng</button></div>';
+        var m = document.getElementById('diseaseModal');
+        m.classList.remove('hidden'); m.classList.add('flex');
+    }
+    function closeDiseaseModal() {
+        var m = document.getElementById('diseaseModal');
+        m.classList.add('hidden'); m.classList.remove('flex');
+    }
+</script>
+
+<section class="py-24 bg-white">
+    <div class="max-w-[1280px] mx-auto px-4 md:px-8">
+        <div class="text-center mb-16">
+            <span class="inline-flex items-center gap-2 px-4 py-2 bg-[#2563eb]/10 text-[#2563eb] rounded-full text-[13px] font-bold mb-4">
+                <span class="material-symbols-outlined text-[16px]">edit_calendar</span> Đặt Lịch Trực Tuyến
+            </span>
+            <h2 class="text-[32px] md:text-[38px] font-extrabold text-[#1e293b] mb-4">Quy Trình Đặt Lịch Khám Online</h2>
+            <p class="text-[16px] text-[#64748b] max-w-2xl mx-auto">Chỉ vài bước đơn giản — bạn có ngay lịch hẹn khám với bác sĩ mà không cần xếp hàng chờ đợi.</p>
+        </div>
+
+        <div class="relative">
+            <div class="hidden md:block absolute top-[52px] left-[calc(16.66%-20px)] right-[calc(16.66%-20px)] h-0.5 bg-gradient-to-r from-[#2563eb] via-[#0ea5e9] to-[#2563eb] opacity-20 z-0"></div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+
+                <div class="flex flex-col items-center text-center group">
+                    <div class="w-[72px] h-[72px] rounded-2xl bg-gradient-to-br from-[#2563eb] to-[#0ea5e9] flex items-center justify-center shadow-lg shadow-[#2563eb]/20 mb-5 group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined text-white text-[32px]">app_registration</span>
+                    </div>
+                    <div class="w-7 h-7 rounded-full bg-[#2563eb] text-white text-[12px] font-black flex items-center justify-center mb-4 -mt-2">1</div>
+                    <h3 class="text-[17px] font-bold text-[#1e293b] mb-2">Điền thông tin</h3>
+                    <p class="text-[14px] text-[#64748b] leading-relaxed">Nhập họ tên, số điện thoại, chọn chuyên khoa và ngày giờ mong muốn trên form đặt lịch.</p>
+                </div>
+
+                <div class="flex flex-col items-center text-center group">
+                    <div class="w-[72px] h-[72px] rounded-2xl bg-gradient-to-br from-[#0ea5e9] to-[#059669] flex items-center justify-center shadow-lg shadow-[#0ea5e9]/20 mb-5 group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined text-white text-[32px]">event_available</span>
+                    </div>
+                    <div class="w-7 h-7 rounded-full bg-[#0ea5e9] text-white text-[12px] font-black flex items-center justify-center mb-4 -mt-2">2</div>
+                    <h3 class="text-[17px] font-bold text-[#1e293b] mb-2">Chọn ca khám</h3>
+                    <p class="text-[14px] text-[#64748b] leading-relaxed">Hệ thống hiển thị lịch làm việc thực tế của bác sĩ. Bạn chọn ca sáng hoặc chiều phù hợp.</p>
+                </div>
+
+                <div class="flex flex-col items-center text-center group">
+                    <div class="w-[72px] h-[72px] rounded-2xl bg-gradient-to-br from-[#059669] to-[#d97706] flex items-center justify-center shadow-lg shadow-[#059669]/20 mb-5 group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined text-white text-[32px]">verified</span>
+                    </div>
+                    <div class="w-7 h-7 rounded-full bg-[#059669] text-white text-[12px] font-black flex items-center justify-center mb-4 -mt-2">3</div>
+                    <h3 class="text-[17px] font-bold text-[#1e293b] mb-2">Xác nhận lịch hẹn</h3>
+                    <p class="text-[14px] text-[#64748b] leading-relaxed">Phòng khám xác nhận trong vòng 15 phút. Bạn nhận mã lịch hẹn qua điện thoại để tra cứu.</p>
+                </div>
+
+                <div class="flex flex-col items-center text-center group">
+                    <div class="w-[72px] h-[72px] rounded-2xl bg-gradient-to-br from-[#d97706] to-[#dc2626] flex items-center justify-center shadow-lg shadow-[#d97706]/20 mb-5 group-hover:scale-110 transition-transform duration-300">
+                        <span class="material-symbols-outlined text-white text-[32px]">medical_information</span>
+                    </div>
+                    <div class="w-7 h-7 rounded-full bg-[#d97706] text-white text-[12px] font-black flex items-center justify-center mb-4 -mt-2">4</div>
+                    <h3 class="text-[17px] font-bold text-[#1e293b] mb-2">Đến khám đúng giờ</h3>
+                    <p class="text-[14px] text-[#64748b] leading-relaxed">Xuất trình mã lịch hẹn tại quầy, nhận số thứ tự ưu tiên — không cần xếp hàng chờ đợi.</p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="mt-16 bg-gradient-to-r from-[#f0f4ff] to-[#e0f2fe] rounded-3xl p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-5">
+                <div class="w-14 h-14 rounded-2xl bg-[#2563eb] flex items-center justify-center shrink-0">
+                    <span class="material-symbols-outlined text-white text-[28px]">schedule</span>
+                </div>
+                <div>
+                    <p class="text-[18px] font-bold text-[#1e293b]">Tra cứu lịch hẹn đã đặt</p>
+                    <p class="text-[14px] text-[#64748b]">Nhập mã lịch hẹn hoặc số điện thoại để kiểm tra trạng thái và thông tin chi tiết lịch khám.</p>
+                </div>
+            </div>
+            <a asp-controller="Appointments" asp-action="Lookup"
+               class="shrink-0 inline-flex items-center gap-2 px-7 py-3.5 bg-[#2563eb] text-white rounded-xl font-bold text-[15px] no-underline hover:bg-[#1d4ed8] hover:shadow-lg hover:shadow-[#2563eb]/30 transition-all duration-300">
+                <span class="material-symbols-outlined text-[18px]">search</span> Tra cứu ngay
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="py-24 bg-surface-container-lowest">
+    <div class="max-w-container-max mx-auto px-margin-desktop">
+        <div class="text-center mb-16">
+            <h2 class="text-headline-lg font-headline-lg text-primary mb-4">Đội Ngũ Bác Sĩ Chuyên Gia</h2>
+            <p class="text-on-surface-variant max-w-2xl mx-auto">Đội ngũ y bác sĩ giàu kinh nghiệm, tận tâm, được đào tạo chuyên sâu trong và ngoài nước.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @foreach (var doc in Model.FeaturedDoctors)
+            {
+                var sn = doc.SpecialtyInfo?.Name ?? doc.Specialty;
+                <div class="group bg-white rounded-2xl overflow-hidden shadow-sm border border-outline-variant hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-full">
+                    <div class="p-6 flex flex-col flex-1 justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-4">
+                                <span class="inline-block px-3 py-1 bg-primary/10 text-primary text-label-sm font-bold rounded-full">@sn</span>
+                                <span class="text-label-md font-bold text-secondary">@doc.Fee.ToString("N0")đ</span>
+                            </div>
+                            <h3 class="font-headline-md text-headline-md mb-1 group-hover:text-primary transition-colors">@doc.FullName</h3>
+                            <p class="text-body-sm text-on-surface-variant mb-3">@doc.Qualification · @doc.ExperienceYears năm KN</p>
+                            <p class="text-body-sm text-on-surface-variant line-clamp-3 mb-6">@doc.Biography</p>
+                        </div>
+                        <div class="flex gap-2 mt-auto">
+                            <a class="flex-1 text-center px-3 py-2.5 border border-primary text-primary rounded-xl text-label-md font-bold hover:bg-primary hover:text-on-primary transition-all no-underline" asp-controller="Doctors" asp-action="Details" asp-route-id="@doc.Id">Chi tiết</a>
+                            <a class="flex-1 text-center px-3 py-2.5 bg-primary text-on-primary rounded-xl text-label-md font-bold hover:bg-primary-container hover:text-on-primary-container transition-all no-underline" asp-controller="Appointments" asp-action="Create" asp-route-specialtyId="@doc.SpecialtyId" asp-route-doctorId="@doc.Id">Đặt lịch</a>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!-- Special CTA Card: Tìm hiểu thêm về bác sĩ -->
+            <div class="group bg-gradient-to-br from-[#1e40af] to-[#2563eb] rounded-2xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between p-8 text-white relative">
+                <!-- Decorative animated blobs -->
+                <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
+                <div class="absolute -left-10 -top-10 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none group-hover:scale-125 transition-transform duration-500"></div>
+                
+                <div class="relative z-10">
+                    <div class="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center mb-6 shadow-inner">
+                        <span class="material-symbols-outlined text-[30px] text-white">clinical_notes</span>
+                    </div>
+                    <span class="text-[12px] font-bold text-blue-200 uppercase tracking-widest block mb-2">Hội tụ tinh hoa y khoa</span>
+                    <h3 class="text-[22px] font-extrabold leading-snug mb-3">Bạn Chưa Tìm Thấy Chuyên Khoa Phù Hợp?</h3>
+                    <p class="text-[14px] text-blue-100/90 leading-relaxed mb-6">
+                        Chúng tôi sở hữu đội ngũ chuyên gia đầu ngành có trình độ chuyên môn cao (GS, PGS, TS, CKII) với hơn 20+ năm kinh nghiệm khám chữa bệnh lâm sàng.
+                    </p>
+                </div>
+                
+                <div class="relative z-10 mt-auto">
+                    <a asp-controller="Doctors" asp-action="Index" class="inline-flex items-center gap-2 w-full justify-center px-5 py-3.5 bg-white text-[#1e40af] rounded-xl font-bold text-[14px] shadow-sm hover:bg-blue-50 active:scale-[0.98] transition-all no-underline">
+                        Khám phá tất cả bác sĩ
+                        <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-24 bg-[#f8faff]">
+    <div class="max-w-[1280px] mx-auto px-4 md:px-8">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-14 gap-6">
+            <div class="max-w-2xl">
+                <span class="inline-flex items-center gap-2 px-4 py-2 bg-[#1e40af]/10 text-[#1e40af] rounded-full text-[13px] font-bold mb-4">
+                    <span class="material-symbols-outlined text-[16px]">precision_manufacturing</span> Công Nghệ Hàng Đầu
+                </span>
+                <h2 class="text-[32px] md:text-[38px] font-extrabold text-[#1e293b] mb-3">Hệ Thống Hạ Tầng Kỹ Thuật</h2>
+                <p class="text-[15px] text-[#64748b] leading-relaxed">Trang thiết bị y tế nhập khẩu nguyên chiếc, đồng bộ trực tiếp với các dịch vụ chẩn đoán chuyên sâu — đem lại kết quả chính xác nhất cho bệnh nhân.</p>
+            </div>
+            <a asp-controller="Home" asp-action="Services" class="shrink-0 inline-flex items-center gap-2 px-6 py-3 border-2 border-[#1e40af] text-[#1e40af] rounded-xl font-bold text-[14px] no-underline hover:bg-[#1e40af] hover:text-white transition-all duration-300">
+                Xem toàn bộ thiết bị <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="group bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col" onclick="openEquipModal('mri')">
+                <div class="aspect-[4/3] overflow-hidden relative">
+                    <img src="~/images/MRI.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="MRI 3.0 Tesla" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#1e40af]/70 to-transparent"></div>
+                    <span class="absolute bottom-4 left-4 px-2.5 py-1 bg-white/20 backdrop-blur text-white text-[11px] font-bold rounded-full border border-white/30">GE Healthcare · Mỹ</span>
+                </div>
+                <div class="p-5 flex flex-col flex-1">
+                    <h3 class="text-[16px] font-bold text-[#1e293b] mb-1.5 group-hover:text-[#1e40af] transition-colors">MRI 3.0 Tesla Silent Edition</h3>
+                    <p class="text-[13px] text-[#64748b] leading-relaxed mb-4 flex-1">Giảm tiếng ồn tối đa, hình ảnh não bộ & thần kinh siêu nét. Chứng nhận FDA & CE.</p>
+                    <button class="w-full py-2.5 rounded-xl border-2 border-[#1e40af] text-[#1e40af] text-[13px] font-bold hover:bg-[#1e40af] hover:text-white transition-all duration-300">Xem thông số & Ứng dụng</button>
+                </div>
+            </div>
+
+            <div class="group bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col" onclick="openEquipModal('ct')">
+                <div class="aspect-[4/3] overflow-hidden relative">
+                    <img src="~/images/CT.png" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="CT Scanner 512" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#7c3aed]/70 to-transparent"></div>
+                    <span class="absolute bottom-4 left-4 px-2.5 py-1 bg-white/20 backdrop-blur text-white text-[11px] font-bold rounded-full border border-white/30">Siemens Healthineers · Đức</span>
+                </div>
+                <div class="p-5 flex flex-col flex-1">
+                    <h3 class="text-[16px] font-bold text-[#1e293b] mb-1.5 group-hover:text-[#7c3aed] transition-colors">CT Scanner 512 Lát Cắt AI</h3>
+                    <p class="text-[13px] text-[#64748b] leading-relaxed mb-4 flex-1">AI phát hiện tổn thương < 1mm, tốc độ quét 0.28s, liều tia thấp hơn 80% thế hệ cũ.</p>
+                    <button class="w-full py-2.5 rounded-xl border-2 border-[#7c3aed] text-[#7c3aed] text-[13px] font-bold hover:bg-[#7c3aed] hover:text-white transition-all duration-300">Xem thông số & Ứng dụng</button>
+                </div>
+            </div>
+
+            <div class="group bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col" onclick="openEquipModal('nso')">
+                <div class="aspect-[4/3] overflow-hidden relative">
+                    <img src="~/images/noisoi.webp" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Nội soi NBI AI" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#059669]/70 to-transparent"></div>
+                    <span class="absolute bottom-4 left-4 px-2.5 py-1 bg-white/20 backdrop-blur text-white text-[11px] font-bold rounded-full border border-white/30">Olympus EVIS X1 · Nhật Bản</span>
+                </div>
+                <div class="p-5 flex flex-col flex-1">
+                    <h3 class="text-[16px] font-bold text-[#1e293b] mb-1.5 group-hover:text-[#059669] transition-colors">Nội Soi NBI/BLI tích hợp AI</h3>
+                    <p class="text-[13px] text-[#64748b] leading-relaxed mb-4 flex-1">Camera 4K thế hệ thứ 4, AI-CADe phát hiện polyp và ung thư giai đoạn sớm 0–I.</p>
+                    <button class="w-full py-2.5 rounded-xl border-2 border-[#059669] text-[#059669] text-[13px] font-bold hover:bg-[#059669] hover:text-white transition-all duration-300">Xem thông số & Ứng dụng</button>
+                </div>
+            </div>
+
+            <div class="group bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col" onclick="openEquipModal('sieu')">
+                <div class="aspect-[4/3] overflow-hidden relative">
+                    <img src="~/images/sieuam.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Siêu âm 5D Elastography" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#d97706]/70 to-transparent"></div>
+                    <span class="absolute bottom-4 left-4 px-2.5 py-1 bg-white/20 backdrop-blur text-white text-[11px] font-bold rounded-full border border-white/30">Philips EPIQ Elite · Hà Lan</span>
+                </div>
+                <div class="p-5 flex flex-col flex-1">
+                    <h3 class="text-[16px] font-bold text-[#1e293b] mb-1.5 group-hover:text-[#d97706] transition-colors">Siêu Âm 5D Elastography</h3>
+                    <p class="text-[13px] text-[#64748b] leading-relaxed mb-4 flex-1">Đo độ đàn hồi mô gan không cần sinh thiết, hình ảnh 5D thời gian thực, hoàn toàn không đau.</p>
+                    <button class="w-full py-2.5 rounded-xl border-2 border-[#d97706] text-[#d97706] text-[13px] font-bold hover:bg-[#d97706] hover:text-white transition-all duration-300">Xem thông số & Ứng dụng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div id="equipModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 backdrop-blur-sm px-4 py-8" onclick="if(arguments[0].target===this)closeEquipModal()">
+    <div class="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl relative">
+        <button onclick="closeEquipModal()" class="absolute top-5 right-5 w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors z-10">
+            <span class="material-symbols-outlined text-[#475569]">close</span>
+        </button>
+        <div id="equipModalContent" class="p-8"></div>
+    </div>
+</div>
+
+<script>
+var equipData = {
+    mri: {
+        color:'#1e40af', bg:'#eff6ff', icon:'radiology',
+        name:'MRI 3.0 Tesla Silent Edition',
+        brand:'GE Healthcare SIGNA Pioneer — Mỹ',
+        certs:'FDA Hoa Kỳ · CE Châu Âu · Bộ Y tế Việt Nam',
+        desc:'Hệ thống MRI mạnh nhất hiện tại tại phòng khám, tạo ra từ trường 3.0 Tesla — gấp đôi máy MRI thường (1.5T). Cho phép chụp chi tiết não bộ, tủy sống, tim mạch, cơ xương khớp với độ phân giải vượt trội.',
+        specs:[['Từ trường','3.0 Tesla (gấp đôi MRI thường)'],['Giảm tiếng ồn','Công nghệ Silent Suite — giảm 97% âm thanh'],['Tốc độ chụp','Nhanh hơn 30% so với thế hệ cũ'],['Đường kính bore','70cm — không gây cảm giác bí bách']],
+        uses:'Nội thần kinh (u não, đột quỵ, viêm não) · Nội tim mạch (cơ tim, van tim) · Cơ xương khớp · Tầm soát ung thư vú, gan',
+        patient:['Không tiếng ồn — không gây lo lắng, sợ hãi','Không bức xạ ion hóa — hoàn toàn an toàn','Thời gian chụp rút ngắn còn 15–20 phút','Đường kính rộng 70cm — phù hợp người cao tuổi và người sợ không gian hẹp'],
+        link:'/Appointments/Create?specialtyId=7'
+    },
+    ct: {
+        color:'#7c3aed', bg:'#f5f3ff', icon:'biotech',
+        name:'CT Scanner 512 Lát Cắt tích hợp AI',
+        brand:'Siemens Healthineers SOMATOM Force — Đức',
+        certs:'FDA Hoa Kỳ · CE Châu Âu · ISO 13485',
+        desc:'CT 512 lát cắt thế hệ mới nhất, tích hợp AI "AI-Rad Companion" phân tích hình ảnh tự động — phát hiện tổn thương < 1mm mà mắt thường khó nhận ra. Đây là thiết bị CT mạnh nhất hiện có trên thị trường.',
+        specs:[['Số lát cắt','512 lát cắt/vòng quay'],['Tốc độ quét','0.28 giây toàn bộ cơ thể'],['Liều tia xạ','Thấp hơn 80% so với CT 64 lát'],['Độ phân giải','Phát hiện tổn thương < 1mm']],
+        uses:'Nội tim mạch (CT mạch vành) · Nội thần kinh (xuất huyết não) · Nội hô hấp (CT phổi liều thấp) · Nội tiêu hóa (CT ổ bụng)',
+        patient:['Chụp toàn thân chỉ trong 0.28 giây — không cần nhịn thở lâu','Liều tia cực thấp — an toàn kể cả trẻ em','AI tự động cảnh báo bác sĩ về bất thường ngay lập tức','Không xâm lấn — không đau, không cần gây mê'],
+        link:'/Appointments/Create?specialtyId=9'
+    },
+    nso: {
+        color:'#059669', bg:'#ecfdf5', icon:'microscope',
+        name:'Nội Soi Tiêu Hóa NBI/BLI tích hợp AI',
+        brand:'Olympus EVIS X1 CV-1500 — Nhật Bản',
+        certs:'FDA Hoa Kỳ · CE Châu Âu · JIS (Tiêu chuẩn công nghiệp Nhật)',
+        desc:'Hệ thống nội soi ống mềm thế hệ thứ 4, ứng dụng công nghệ NBI (Narrow Band Imaging) và BLI (Blue Laser Imaging) cùng AI-CADe phát hiện tự động polyp và ung thư giai đoạn 0–I với độ nhạy > 98%.',
+        specs:[['Camera','4K Ultra HD — 8 triệu điểm ảnh'],['Công nghệ','NBI + BLI — phân biệt mô lành và mô ung thư'],['AI-CADe','Phát hiện polyp trong 0.3 giây'],['Độ nhạy','> 98% phát hiện ung thư giai đoạn sớm']],
+        uses:'Nội tiêu hóa (nội soi dạ dày, đại tràng) · Tầm soát ung thư dạ dày, đại tràng · Phát hiện & cắt polyp · Chẩn đoán H.Pylori',
+        patient:['Gây mê nhẹ — hoàn toàn không đau, không khó chịu','Thời gian nội soi chỉ 15–20 phút','AI phát hiện cả polyp < 1mm mà bác sĩ dễ bỏ sót','Kết quả chẩn đoán ngay sau 30 phút — không phải chờ đợi'],
+        link:'/Appointments/Create?specialtyId=10'
+    },
+    sieu: {
+        color:'#d97706', bg:'#fffbeb', icon:'sensors',
+        name:'Siêu Âm 5D Đo Đàn Hồi Mô (Elastography)',
+        brand:'Philips EPIQ Elite — Hà Lan',
+        certs:'FDA Hoa Kỳ · CE Châu Âu · ISO 13485',
+        desc:'Hệ thống siêu âm 5D tích hợp Elastography (đo độ cứng mô) — cho phép đánh giá mức độ xơ hóa gan, khối u vú, tuyến giáp chính xác như sinh thiết nhưng hoàn toàn không xâm lấn.',
+        specs:[['Hình ảnh','5D thời gian thực — góc nhìn toàn diện'],['Elastography','Đo độ cứng mô chính xác ±5%'],['Ứng dụng','Gan, vú, tuyến giáp, cơ xương khớp'],['Công nghệ','nSIGHT AI tự động nhận diện cơ quan']],
+        uses:'Nội tiêu hóa (xơ gan, viêm gan) · Da liễu (khối u mô mềm) · Sản phụ khoa (u buồng trứng, thai kỳ 5D) · Nội tổng hợp (tuyến giáp)',
+        patient:['Hoàn toàn không đau, không bức xạ','Thay thế sinh thiết trong 80% trường hợp xơ gan','Hình ảnh 5D giúp bệnh nhân hiểu rõ tình trạng sức khỏe','Kết quả ngay lập tức — không cần chờ xét nghiệm mô bệnh học'],
+        link:'/Appointments/Create?specialtyId=10'
+    }
+};
+function openEquipModal(id) {
+    var d = equipData[id];
+    var specs = d.specs.map(function(s){ return '<div class="flex justify-between items-center py-2.5 border-b border-gray-50 last:border-0"><span class="text-[13px] text-[#64748b] font-medium">'+s[0]+'</span><span class="text-[13px] font-bold text-[#1e293b] text-right ml-4">'+s[1]+'</span></div>'; }).join('');
+    var patient = d.patient.map(function(p){ return '<li class="flex items-start gap-2 text-[14px] text-[#475569]"><span class="text-[#059669] mt-0.5">✅</span>'+p+'</li>'; }).join('');
+    document.getElementById('equipModalContent').innerHTML =
+        '<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] font-bold mb-4" style="background:'+d.bg+';color:'+d.color+'"><span class="material-symbols-outlined text-[14px]">'+d.icon+'</span>'+d.brand+'</div>'+
+        '<h2 class="text-[24px] font-extrabold text-[#1e293b] mb-1">'+d.name+'</h2>'+
+        '<p class="text-[13px] text-[#059669] font-bold mb-4">🏅 Chứng nhận: '+d.certs+'</p>'+
+        '<p class="text-[15px] text-[#475569] leading-relaxed mb-6">'+d.desc+'</p>'+
+        '<div class="space-y-5">'+
+        '<div><h3 class="text-[14px] font-black uppercase tracking-wider mb-3" style="color:'+d.color+'">📊 Thông số kỹ thuật</h3><div class="bg-gray-50 rounded-2xl px-5 py-1">'+specs+'</div></div>'+
+        '<div><h3 class="text-[14px] font-black uppercase tracking-wider mb-3" style="color:'+d.color+'">🏥 Chuyên khoa áp dụng</h3><p class="text-[14px] text-[#475569] bg-gray-50 rounded-2xl px-5 py-3">'+d.uses+'</p></div>'+
+        '<div><h3 class="text-[14px] font-black uppercase tracking-wider mb-3" style="color:'+d.color+'">💚 Lợi ích cho bệnh nhân</h3><ul class="space-y-2">'+patient+'</ul></div>'+
+        '</div>'+
+        '<div class="mt-8 pt-6 border-t border-gray-100 flex flex-col sm:flex-row gap-3">'+
+        '<a href="'+d.link+'" class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-white font-bold text-[14px] no-underline transition-all" style="background:'+d.color+'"><span class="material-symbols-outlined text-[16px]">edit_calendar</span>Đặt lịch dịch vụ này</a>'+
+        '<button onclick="closeEquipModal()" class="px-6 py-3.5 rounded-xl border-2 border-gray-200 text-[#475569] font-bold text-[14px] hover:bg-gray-50 transition-colors">Đóng</button></div>';
+    var m = document.getElementById('equipModal');
+    m.classList.remove('hidden'); m.classList.add('flex');
+}
+function closeEquipModal() {
+    var m = document.getElementById('equipModal');
+    m.classList.add('hidden'); m.classList.remove('flex');
+}
+</script>
+
+<section class="py-24 bg-surface-container-lowest">
+    <div class="max-w-container-max mx-auto px-margin-desktop">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+            <div class="max-w-2xl">
+                <h2 class="text-headline-lg font-headline-lg text-primary mb-4">Trung Tâm Tri Thức Y Khoa</h2>
+                <p class="text-on-surface-variant flex items-center gap-2">
+                    <span class="material-symbols-outlined text-secondary">verified</span>
+                    Tất cả nội dung được kiểm duyệt bởi Hội đồng Y Khoa chuyên môn
+                </p>
+            </div>
+            <div class="flex items-center gap-3">
+                <a class="px-6 py-3 bg-primary/10 text-primary rounded-lg font-label-md text-label-md hover:bg-primary/20 transition-all no-underline" asp-controller="Home" asp-action="MedicalKnowledge" asp-fragment="tin-tuc-y-khoa">Tất cả bài viết</a>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            @foreach (var article in Model.Articles)
+            {
+                <a asp-controller="Home" asp-action="ArticleDetail" asp-route-id="@article.Id" class="group rounded-2xl overflow-hidden shadow-sm border border-outline-variant hover:shadow-xl hover:-translate-y-1 transition-all duration-300 no-underline block flex flex-col bg-white h-full">
+                    <div class="aspect-video relative overflow-hidden bg-surface-container-low">
+                        <img src="@article.ImageUrl" alt="@article.Title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <span class="absolute top-4 left-4 px-3 py-1 text-white text-[10px] font-bold rounded-full uppercase tracking-wider" style="background-color: @article.CategoryColor">@article.CategoryName</span>
+                    </div>
+                    <div class="p-6 flex flex-col justify-between flex-1">
+                        <div>
+                            <h3 class="font-headline-md text-[18px] leading-tight mb-3 text-on-surface group-hover:text-primary transition-colors line-clamp-2">@article.Title</h3>
+                            <p class="text-body-sm text-on-surface-variant line-clamp-3 mb-4">@article.Description</p>
+                        </div>
+                        <div class="flex items-center gap-2 text-label-sm font-bold text-outline uppercase tracking-wide mt-auto">
+                            <span class="material-symbols-outlined text-[16px]">schedule</span> @article.DateString
+                        </div>
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="py-24 bg-background">
+    <div class="max-w-container-max mx-auto px-margin-desktop grid grid-cols-1 lg:grid-cols-2 gap-20">
+        <div>
+            <h2 class="text-headline-lg font-headline-lg text-primary mb-12">Hệ Thống Chi Nhánh</h2>
+            <div class="space-y-8">
+                <!-- Chi nhánh Thủ Đức -->
+                <a href="https://maps.app.goo.gl/4m9eDZ2x4PDi9RJe8" target="_blank" class="p-8 bg-white rounded-2xl border border-outline-variant shadow-sm hover:border-primary hover:shadow-lg transition-all group no-underline block text-inherit">
+                    <div class="flex items-start gap-5">
+                        <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-on-primary transition-colors">
+                            <span class="material-symbols-outlined text-2xl">location_on</span>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-headline-md text-headline-md mb-2 text-[#00346f] group-hover:text-primary">Chi nhánh Thủ Đức</h4>
+                            <p class="text-body-md text-on-surface-variant mb-4">Số 129 Tây Hòa, P. Phước Long A, TP. Thủ Đức, TP. HCM</p>
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div class="bg-surface-container-low p-3 rounded-lg"><p class="text-[10px] font-bold text-outline uppercase mb-1">Thứ 2 - Thứ 7</p><p class="text-label-md font-bold text-primary">07:00 - 18:00</p></div>
+                                <div class="bg-surface-container-low p-3 rounded-lg"><p class="text-[10px] font-bold text-outline uppercase mb-1">Chủ Nhật</p><p class="text-label-md font-bold text-primary">07:00 - 18:00</p></div>
+                            </div>
+                            <span class="text-primary font-bold text-[13px] flex items-center gap-1 group-hover:underline">
+                                <span class="material-symbols-outlined text-[16px]">map</span> Bản đồ chỉ đường
+                            </span>
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- Chi nhánh Nhơn Trạch -->
+                <a href="https://maps.app.goo.gl/3X14NP2pmQsnBSj5A" target="_blank" class="p-8 bg-white rounded-2xl border border-outline-variant shadow-sm hover:border-primary hover:shadow-lg transition-all group no-underline block text-inherit">
+                    <div class="flex items-start gap-5">
+                        <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-on-primary transition-colors">
+                            <span class="material-symbols-outlined text-2xl">location_on</span>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-headline-md text-headline-md mb-2 text-[#00346f] group-hover:text-primary">Chi nhánh Nhơn Trạch</h4>
+                            <p class="text-body-md text-on-surface-variant mb-4">Đường Trần Thị Nhật, X. Phú Hội, H. Nhơn Trạch, T. Đồng Nai</p>
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div class="bg-surface-container-low p-3 rounded-lg"><p class="text-[10px] font-bold text-outline uppercase mb-1">Thứ 2 - Thứ 7</p><p class="text-label-md font-bold text-primary">07:00 - 18:00</p></div>
+                                <div class="bg-surface-container-low p-3 rounded-lg"><p class="text-[10px] font-bold text-outline uppercase mb-1">Chủ Nhật</p><p class="text-label-md font-bold text-primary">07:00 - 18:00</p></div>
+                            </div>
+                            <span class="text-primary font-bold text-[13px] flex items-center gap-1 group-hover:underline">
+                                <span class="material-symbols-outlined text-[16px]">map</span> Bản đồ chỉ đường
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Đánh giá của khách hàng -->
+        <div class="bg-primary p-12 rounded-[2.5rem] text-on-primary shadow-2xl relative overflow-hidden flex flex-col justify-between">
+            <div class="absolute top-10 right-10 text-white/10 pointer-events-none"><span class="material-symbols-outlined text-[160px]">format_quote</span></div>
+            <div class="relative z-10">
+                <h2 class="text-headline-lg font-headline-lg mb-12">Đánh Giá Của Khách Hàng</h2>
+                <div class="space-y-10">
+                    <div class="pb-6 border-b border-white/15">
+                        <p class="text-body-md mb-4 leading-relaxed italic">"Tôi đưa bé đi khám Tai Mũi Họng ở cơ sở Thủ Đức. Bác sĩ Giang rất nhẹ nhàng, khéo léo dỗ dành nên bé hợp tác lắm không khóc tí nào. Đăng ký lịch trực tuyến trước nên tới là vào khám luôn không phải chờ."</p>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center font-bold text-sm border border-white/30 shrink-0">MV</div>
+                            <div>
+                                <h5 class="font-bold text-[14px] text-white">Trần Thị Minh Vy</h5>
+                                <p class="text-[12px] text-white/60">Mẹ của bé Gia Bảo (4 tuổi) - Khám Nhi khoa</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pb-6 border-b border-white/15">
+                        <p class="text-body-md mb-4 leading-relaxed italic">"Bác sĩ chuyên khoa khám rất kỹ, giải thích kết quả xét nghiệm máu và siêu âm cặn kẽ chứ không qua loa. Cơ sở vật chất sạch sẽ, máy chụp X-quang và siêu âm 5D rất hiện đại. Đăng ký qua web tiện lợi."</p>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center font-bold text-sm border border-white/30 shrink-0">VĐ</div>
+                            <div>
+                                <h5 class="font-bold text-[14px] text-white">Phan Văn Đức</h5>
+                                <p class="text-[12px] text-white/60">Bệnh nhân khám sức khỏe tổng quát - Thủ Đức</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pb-6 border-b border-white/15">
+                        <p class="text-body-md mb-4 leading-relaxed italic">"Quy trình đặt lịch khám qua web cực kỳ nhanh, có tin nhắn xác nhận mã lịch hẹn rõ ràng. Khám sản phụ khoa ở đây rất riêng tư, phòng khám sạch sẽ vô trùng, bác sĩ tư vấn tận tình chu đáo khiến tôi rất an tâm."</p>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center font-bold text-sm border border-white/30 shrink-0">HY</div>
+                            <div>
+                                <h5 class="font-bold text-[14px] text-white">Lê Hoàng Yến</h5>
+                                <p class="text-[12px] text-white/60">Bệnh nhân Sản phụ khoa - Nhơn Trạch</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pb-2">
+                        <p class="text-body-md mb-4 leading-relaxed italic">"Đã khám tim mạch cho bố tôi tại đây. Bác sĩ hướng dẫn chế độ ăn uống giảm muối, cách theo dõi huyết áp tại nhà rất chi tiết. Nhân viên tiếp đón vô cùng lịch sự, tận tình dắt cụ đi từng phòng xét nghiệm."</p>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center font-bold text-sm border border-white/30 shrink-0">TĐ</div>
+                            <div>
+                                <h5 class="font-bold text-[14px] text-white">Nguyễn Tấn Đạt</h5>
+                                <p class="text-[12px] text-white/60">Người nhà bệnh nhân nội tim mạch</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

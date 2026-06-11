@@ -1,0 +1,78 @@
+@{
+    ViewData["Title"] = "Chính sách bảo mật";
+}
+
+<main class="font-sans bg-[#f8fafc] py-12">
+    <div class="max-w-[1000px] mx-auto px-4">
+        
+        <!-- Breadcrumbs -->
+        <nav class="flex items-center gap-2 text-[14px] text-gray-500 mb-8">
+            <a asp-controller="Home" asp-action="Index" class="hover:text-primary transition-colors no-underline">Trang chủ</a>
+            <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+            <span class="text-gray-800">Chính sách bảo mật</span>
+        </nav>
+
+        <div class="bg-white rounded-3xl border border-gray-100 p-8 md:p-12 shadow-sm">
+            <h1 class="text-[32px] md:text-[40px] font-extrabold text-[#00346f] mb-6 leading-tight">
+                Chính Sách Bảo Mật Thông Tin Bệnh Nhân
+            </h1>
+
+            <div class="prose max-w-none text-[#334155] text-[16px] leading-relaxed space-y-6">
+                <p>
+                    Hệ thống Phòng khám Đa khoa Duy Tâm cam kết bảo vệ tuyệt đối thông tin cá nhân và dữ liệu y khoa của quý khách hàng. Chính sách bảo mật này mô tả cách thức chúng tôi thu thập, xử lý, lưu trữ và bảo vệ dữ liệu cá nhân của người bệnh khi sử dụng dịch vụ đăng ký đặt lịch khám trực tuyến, tuân thủ nghiêm ngặt theo **Nghị định số 13/2023/NĐ-CP** của Chính phủ về bảo vệ dữ liệu cá nhân và Luật Khám bệnh, chữa bệnh Việt Nam.
+                </p>
+
+                <h3 class="text-[20px] font-bold text-[#00346f] mt-8 mb-4">1. Thu thập dữ liệu cá nhân</h3>
+                <p>
+                    Chúng tôi thu thập thông tin cá nhân của quý khách khi đăng ký lịch hẹn, bao gồm:
+                </p>
+                <ul class="list-disc pl-6 space-y-2 text-gray-600">
+                    <li><strong>Thông tin định danh cơ bản</strong>: Họ và tên, Ngày tháng năm sinh, Giới tính.</li>
+                    <li><strong>Thông tin liên lạc</strong>: Số điện thoại cá nhân, Địa chỉ Email, Địa chỉ thường trú.</li>
+                    <li><strong>Thông tin y khoa sơ bộ</strong>: Triệu chứng lâm sàng, Lý do thăm khám, Tiền sử bệnh lý (nếu có) do người bệnh tự cung cấp khi đăng ký lịch khám.</li>
+                </ul>
+
+                <h3 class="text-[20px] font-bold text-[#00346f] mt-8 mb-4">2. Mục đích xử lý dữ liệu</h3>
+                <p>
+                    Dữ liệu cá nhân thu thập được chỉ được xử lý nhằm các mục đích hợp pháp sau đây:
+                </p>
+                <ul class="list-disc pl-6 space-y-2 text-gray-600">
+                    <li>Thiết lập hồ sơ đăng ký khám chữa bệnh điện tử tại phòng khám.</li>
+                    <li>Gửi tin nhắn xác nhận lịch hẹn (SMS/Email) và mã lịch hẹn đến số điện thoại của người bệnh.</li>
+                    <li>Điều phối lịch làm việc của bác sĩ trực ca và chuẩn bị các trang thiết bị y tế tương ứng trước giờ khám.</li>
+                    <li>Hỗ trợ bệnh nhân tra cứu lịch sử thăm khám cá nhân trên hệ thống trực tuyến qua tính năng "Lịch của tôi".</li>
+                </ul>
+
+                <h3 class="text-[20px] font-bold text-[#00346f] mt-8 mb-4">3. Nguyên tắc bảo mật và lưu trữ</h3>
+                <p>
+                    Hồ sơ bệnh án điện tử và dữ liệu thông tin cá nhân được bảo mật theo các nguyên tắc an ninh y tế nghiêm ngặt:
+                </p>
+                <ul class="list-disc pl-6 space-y-2 text-gray-600">
+                    <li><strong>Mã hóa dữ liệu</strong>: Các dữ liệu truyền tải trên môi trường mạng đều được mã hóa bằng giao thức bảo mật SSL/TLS tiêu chuẩn cao.</li>
+                    <li><strong>Phân quyền truy cập</strong>: Chỉ có bác sĩ chủ trị và nhân viên y tế được giao nhiệm vụ tiếp đón trực tiếp mới có quyền xem thông tin hồ sơ của bệnh nhân.</li>
+                    <li><strong>Lưu trữ an toàn</strong>: Dữ liệu được lưu trữ trên hệ thống máy chủ đám mây an toàn, bảo vệ bằng tường lửa đa tầng và quét lỗ hổng định kỳ.</li>
+                </ul>
+
+                <h3 class="text-[20px] font-bold text-[#00346f] mt-8 mb-4">4. Quyền của chủ thể dữ liệu (Bệnh nhân)</h3>
+                <p>
+                    Quý khách hàng có đầy đủ các quyền hợp pháp đối với dữ liệu cá nhân của mình:
+                </p>
+                <ul class="list-disc pl-6 space-y-2 text-gray-600">
+                    <li>Quyền yêu cầu cung cấp bản sao thông tin cá nhân đang được lưu giữ.</li>
+                    <li>Quyền chỉnh sửa, bổ sung thông tin cá nhân chưa chính xác thông qua công cụ Tra cứu lịch hẹn hoặc liên hệ Hotline hỗ trợ.</li>
+                    <li>Quyền rút lại sự đồng ý hoặc yêu cầu xóa bỏ vĩnh viễn lịch sử đăng ký đặt lịch khi không còn nhu cầu khám bệnh tại hệ thống.</li>
+                </ul>
+
+                <h3 class="text-[20px] font-bold text-[#00346f] mt-8 mb-4">5. Thông tin liên hệ Ban Kiểm Soát Bảo Mật</h3>
+                <p>
+                    Mọi yêu cầu hoặc thắc mắc liên quan tới việc thu thập, xử lý và bảo vệ dữ liệu cá nhân, quý khách vui lòng gửi văn bản hoặc liên hệ trực tiếp với Bộ phận Chăm sóc khách hàng và Bảo mật dữ liệu của Phòng khám:
+                </p>
+                <p class="text-gray-600 pl-4 border-l-2 border-primary italic">
+                    - Địa chỉ: 129 Tây Hòa, P. Phước Long A, TP. Thủ Đức, TP. HCM.
+                    <br />- Hotline: 1900 1234
+                    <br />- Email: cskh@duytamclinic.vn
+                </p>
+            </div>
+        </div>
+    </div>
+</main>

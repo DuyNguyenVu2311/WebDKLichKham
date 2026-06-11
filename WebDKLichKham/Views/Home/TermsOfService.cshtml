@@ -1,0 +1,55 @@
+@{
+    ViewData["Title"] = "Điều khoản sử dụng";
+}
+
+<main class="font-sans bg-[#f8fafc] py-12">
+    <div class="max-w-[1000px] mx-auto px-4">
+        
+        <!-- Breadcrumbs -->
+        <nav class="flex items-center gap-2 text-[14px] text-gray-500 mb-8">
+            <a asp-controller="Home" asp-action="Index" class="hover:text-primary transition-colors no-underline">Trang chủ</a>
+            <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+            <span class="text-gray-800">Điều khoản dịch vụ</span>
+        </nav>
+
+        <div class="bg-white rounded-3xl border border-gray-100 p-8 md:p-12 shadow-sm">
+            <h1 class="text-[32px] md:text-[40px] font-extrabold text-[#00346f] mb-6 leading-tight">
+                Điều Khoản Sử Dụng Dịch Vụ Đăng Ký Khám Bệnh
+            </h1>
+
+            <div class="prose max-w-none text-[#334155] text-[16px] leading-relaxed space-y-6">
+                <p>
+                    Chào mừng quý khách đến với cổng đăng ký khám bệnh trực tuyến của **Hệ thống Phòng khám Đa khoa Duy Tâm**. Việc truy cập, sử dụng và thực hiện giao dịch đặt hẹn trên hệ thống đồng nghĩa với việc quý khách đã đọc, hiểu rõ và đồng ý tuân thủ các điều khoản sử dụng được quy định dưới đây.
+                </p>
+
+                <h3 class="text-[20px] font-bold text-[#00346f] mt-8 mb-4">1. Điều khoản đặt lịch hẹn trực tuyến</h3>
+                <ul class="list-disc pl-6 space-y-2 text-gray-600">
+                    <li>Quý khách có trách nhiệm cung cấp thông tin liên lạc chính xác (đặc biệt là Số điện thoại) để hệ thống gửi tin nhắn xác nhận lịch hẹn và hỗ trợ tra cứu lịch cá nhân.</li>
+                    <li>Mỗi số điện thoại chỉ được đăng ký một lịch hẹn khám trong cùng một khung giờ của một chuyên khoa để đảm bảo công bằng cho các người bệnh khác.</li>
+                    <li>Hệ thống đặt hẹn hỗ trợ đặt trước tối thiểu 04 giờ và tối đa 30 ngày so với thời điểm khám dự kiến.</li>
+                </ul>
+
+                <h3 class="text-[20px] font-bold text-[#00346f] mt-8 mb-4">2. Quy định tiếp đón tại phòng khám</h3>
+                <ul class="list-disc pl-6 space-y-2 text-gray-600">
+                    <li>Người bệnh đã đặt hẹn trực tuyến vui lòng đến trước giờ hẹn tối thiểu 10–15 phút, xuất trình Mã lịch hẹn tại quầy Tiếp đón (quầy dành riêng cho khách đặt hẹn online) để được hỗ trợ làm thủ tục nhanh.</li>
+                    <li>Trường hợp người bệnh đến trễ hơn 15 phút so với giờ hẹn đã đăng ký, hệ thống sẽ tự động hủy số thứ tự ưu tiên và sắp xếp khám theo lịch trống gần nhất của bác sĩ trực ca.</li>
+                </ul>
+
+                <h3 class="text-[20px] font-bold text-[#00346f] mt-8 mb-4">3. Tuyên bố miễn trừ trách nhiệm y khoa khẩn cấp</h3>
+                <p class="p-4 bg-red-50 text-red-800 rounded-2xl text-[14px] border border-red-100 font-medium">
+                    Cảnh báo y khoa: Hệ thống đặt lịch khám trực tuyến này chỉ phục vụ cho việc đăng ký khám bệnh định kỳ hoặc thăm khám ngoại trú có chuẩn bị trước. Trong trường hợp khẩn cấp hoặc các triệu chứng đe dọa trực tiếp tính mạng (như đau ngực dữ dội, khó thở cấp tính, mất ý thức, chấn thương nặng), quý khách vui lòng gọi ngay Trung tâm cấp cứu 115 hoặc di chuyển trực tiếp đến cơ sở y tế gần nhất.
+                </p>
+
+                <h3 class="text-[20px] font-bold text-[#00346f] mt-8 mb-4">4. Trách nhiệm của người sử dụng</h3>
+                <p>
+                    Quý khách cam kết không thực hiện bất kỳ hành vi nào phá hoại, gây gián đoạn hệ thống như: gửi yêu cầu rác (spam) tạo lịch ảo, sử dụng tài khoản giả mạo, hoặc can thiệp bất hợp pháp vào hệ thống bảo mật thông tin bệnh nhân của Duy Tâm.
+                </p>
+
+                <h3 class="text-[20px] font-bold text-[#00346f] mt-8 mb-4">5. Luật điều chỉnh và giải quyết tranh chấp</h3>
+                <p>
+                    Các điều khoản này được điều chỉnh và giải thích theo quy định của pháp luật nước Cộng hòa Xã hội Chủ nghĩa Việt Nam, đặc biệt là các văn bản quy phạm pháp luật liên quan tới lĩnh vực Y tế và Khám chữa bệnh. Mọi tranh chấp phát sinh (nếu có) sẽ được giải quyết trước tiên thông qua thương lượng hòa giải vì quyền lợi tối thượng của sức khỏe người bệnh.
+                </p>
+            </div>
+        </div>
+    </div>
+</main>

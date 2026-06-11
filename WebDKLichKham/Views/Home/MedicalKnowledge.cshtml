@@ -1,0 +1,587 @@
+@model WebDKLichKham.Models.ViewModels.MedicalKnowledgeViewModel
+@{
+    ViewData["Title"] = "Cổng Thông Tin Y Khoa Chuyên Sâu";
+}
+
+<style>
+    .mk-hero { background: linear-gradient(135deg, #00346f 0%, #005cb8 55%, #0077cc 100%); }
+    .tab-pill.active { background: #fff; color: #00346f; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .tab-pill { transition: all .25s; }
+    .disease-card:hover .disease-card-img { transform: scale(1.05); }
+    .disease-card-img { transition: transform .5s cubic-bezier(.4,0,.2,1); }
+    .article-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,52,111,.13); }
+    .article-card { transition: all .3s cubic-bezier(.4,0,.2,1); }
+    .sidebar-link { transition: all .2s; border-left: 4px solid transparent; }
+    .sidebar-link:hover, .sidebar-link.active { background: #eff6ff; color: #1a56db; border-left-color: #1a56db; }
+    .sidebar-link.active { font-weight: 700; }
+    .mk-badge { display:inline-flex; align-items:center; gap:4px; padding:4px 12px; border-radius:99px; font-size:11px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; }
+    .section-heading::before { content:''; display:inline-block; width:4px; height:22px; background:#00346f; border-radius:3px; margin-right:10px; vertical-align:middle; }
+</style>
+
+<main class="font-sans bg-[#f0f4f9] min-h-screen pb-16">
+
+    <!-- ===== HERO ===== -->
+    <section class="mk-hero relative overflow-hidden pt-16 pb-20">
+        <div class="absolute inset-0 pointer-events-none overflow-hidden">
+            <div class="absolute -top-20 -right-20 w-[420px] h-[420px] rounded-full bg-white/5"></div>
+            <div class="absolute -bottom-16 -left-16 w-[300px] h-[300px] rounded-full bg-white/5"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full border border-white/5"></div>
+        </div>
+
+        <div class="relative z-10 max-w-[860px] mx-auto px-4 text-center">
+            <!-- Breadcrumb -->
+            <nav class="flex items-center justify-center gap-2 text-[13px] text-blue-200 mb-6">
+                <a asp-controller="Home" asp-action="Index" class="hover:text-white transition-colors no-underline text-blue-200">Trang chủ</a>
+                <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+                <span class="text-white font-medium">Thông tin y khoa</span>
+            </nav>
+
+            <h1 class="text-[30px] md:text-[44px] font-extrabold text-white mb-4 leading-tight tracking-tight">
+                Cổng Thông Tin Bệnh Lý Chuyên Khoa
+            </h1>
+            <p class="text-[15px] md:text-[18px] text-blue-100/90 mb-8 max-w-[650px] mx-auto leading-relaxed">
+                Nền tảng tra cứu bệnh học lâm sàng và phác đồ điều trị chính thống, được kiểm duyệt trực tiếp bởi Hội đồng Chuyên môn Y khoa.
+            </p>
+
+            <!-- Stats bar -->
+            <div class="flex flex-wrap items-center justify-center gap-6 md:gap-8 mt-6 text-white/80 text-[13px]">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[18px] text-green-300">verified</span>
+                    <span>Hội đồng Y khoa Kiểm duyệt</span>
+                </div>
+                <div class="hidden md:block w-px h-4 bg-white/20"></div>
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[18px] text-yellow-300">update</span>
+                    <span>Cập nhật phác đồ 2026</span>
+                </div>
+                <div class="hidden md:block w-px h-4 bg-white/20"></div>
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[18px] text-blue-300">menu_book</span>
+                    <span>Chuẩn phác đồ Bộ Y tế</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div id="danh-muc" class="max-w-[1280px] mx-auto px-4 md:px-8 py-10">
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            <!-- LEFT SIDEBAR -->
+            <aside class="w-full lg:w-[280px] shrink-0 space-y-5">
+                <!-- Specialty list -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[#00346f] text-[20px]">category</span>
+                        <h3 class="font-bold text-[#1e293b] text-[15px] m-0">Chuyên khoa Lâm sàng</h3>
+                    </div>
+                    <nav class="py-2">
+                        @foreach (var cat in Model.Categories)
+                        {
+                            var isActive = Model.ActiveCategory == cat.Id;
+                            <a asp-controller="Home" asp-action="MedicalKnowledge" asp-route-categoryId="@cat.Id" asp-fragment="danh-muc"
+                               class="sidebar-link flex items-center gap-3 px-5 py-3 text-[14px] no-underline @(isActive ? "active text-[#1a56db] bg-[#eff6ff]" : "text-gray-700")">
+                                <span class="material-symbols-outlined text-[18px]">@cat.Icon</span>
+                                @cat.Name
+                            </a>
+                        }
+                    </nav>
+                </div>
+
+                <!-- Quick booking CTA -->
+                <div class="bg-gradient-to-br from-[#00346f] to-[#005cb8] rounded-2xl p-5 text-white shadow-sm">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 bg-white/15 rounded-full flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[22px]">edit_calendar</span>
+                        </div>
+                        <div>
+                            <p class="font-bold text-[14px] m-0">Đặt lịch hẹn nhanh</p>
+                            <p class="text-[12px] text-blue-100 m-0">Tiết kiệm thời gian</p>
+                        </div>
+                    </div>
+                    <p class="text-[13px] text-blue-100 leading-relaxed mb-4">Lựa chọn bác sĩ theo chuyên khoa và nhận lịch khám trực tuyến lập tức.</p>
+                    <a asp-controller="Appointments" asp-action="Create"
+                       class="block text-center py-2.5 bg-white text-[#00346f] font-bold rounded-xl text-[13px] no-underline hover:bg-blue-50 transition-colors shadow-sm">
+                        Đăng ký ngay
+                    </a>
+                </div>
+
+                <!-- Hotline -->
+                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                    <p class="text-[12px] font-bold uppercase tracking-wider text-gray-400 mb-3">Hotline tư vấn sức khỏe</p>
+                    <a href="tel:0775571311" class="flex items-center gap-3 no-underline group">
+                        <div class="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center shrink-0">
+                            <span class="material-symbols-outlined text-green-600 text-[20px]">phone_in_talk</span>
+                        </div>
+                        <div>
+                            <p class="font-bold text-[#00346f] text-[17px] m-0 group-hover:underline">0775 571 311</p>
+                            <p class="text-[12px] text-gray-400 m-0">Hỗ trợ 7:00 – 18:00</p>
+                        </div>
+                    </a>
+                    <div class="mt-3 pt-3 border-t border-gray-100 flex items-center gap-2 text-[11px] text-gray-500">
+                        <span class="material-symbols-outlined text-[13px] text-green-500">verified</span>
+                        Thông tin chuẩn y khoa thế giới
+                    </div>
+                </div>
+            </aside>
+
+            <!-- RIGHT MAIN PANEL -->
+            <div class="flex-1 min-w-0">
+                <!-- Suggested Diseases under active category -->
+                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="material-symbols-outlined text-[#00346f] text-[20px]">psychology</span>
+                        <h3 class="font-bold text-[#1e293b] text-[15px] m-0">Bệnh lý & Triệu chứng gợi ý:</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2.5">
+                        @foreach (var disease in Model.DiseasesInCategory)
+                        {
+                            var isSelected = Model.ActiveSymptom?.Id == disease.Id;
+                            <a asp-controller="Home" asp-action="MedicalKnowledge" asp-route-categoryId="@Model.ActiveCategory" asp-route-diseaseId="@disease.Id" asp-fragment="danh-muc"
+                               class="px-4 py-2.5 rounded-xl border text-[13px] font-semibold transition-all no-underline flex items-center gap-2 @(isSelected ? "bg-[#00346f] text-white border-transparent shadow-md scale-[1.02]" : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100 hover:border-gray-300")">
+                                <span class="material-symbols-outlined text-[16px]">healing</span>
+                                @disease.Name
+                            </a>
+                        }
+                    </div>
+                </div>
+
+                <!-- Detailed Pathology View -->
+                @if (Model.ActiveSymptom != null)
+                {
+                    var activeSym = Model.ActiveSymptom;
+                    <div class="space-y-6">
+                        <!-- Main Info Card (Hero of Disease) -->
+                        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col md:flex-row">
+                            @if (!string.IsNullOrEmpty(activeSym.ImageUrl))
+                            {
+                                <div class="md:w-1/3 relative min-h-[220px] md:min-h-auto bg-gray-100 shrink-0">
+                                    <img src="@activeSym.ImageUrl" alt="@activeSym.Name" class="w-full h-full object-cover" />
+                                    <div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-[#00346f]/60 to-transparent"></div>
+                                </div>
+                            }
+                            <div class="p-6 md:p-8 flex-1 flex flex-col justify-center bg-gradient-to-br from-white via-white to-blue-50/25">
+                                <span class="mk-badge bg-blue-100 text-[#00346f] mb-3 self-start">
+                                    <span class="material-symbols-outlined text-[13px]">local_hospital</span>
+                                    @activeSym.CategoryName
+                                </span>
+                                <h2 class="text-[24px] md:text-[30px] font-extrabold text-[#00346f] leading-tight tracking-tight">
+                                    @activeSym.Name
+                                </h2>
+                                <p class="text-[14px] text-gray-500 font-medium italic mt-1.5">
+                                    Tài liệu tra cứu lâm sàng và hướng dẫn điều trị nâng cao
+                                </p>
+                                <p class="text-[14.5px] text-gray-600 leading-relaxed mt-4 m-0 font-medium">
+                                    @activeSym.ShortDescription
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Pathology Overview -->
+                        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8">
+                            <h3 class="section-heading font-extrabold text-[#1e293b] text-[18px] mb-4">Tổng quan bệnh học</h3>
+                            <p class="text-[14.5px] text-gray-600 leading-relaxed m-0">
+                                @activeSym.Overview
+                            </p>
+                        </div>
+
+                        <!-- Symptoms and Causes Grid -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Symptoms (Red/Rose card) -->
+                            <div class="bg-rose-50/50 border border-rose-100 rounded-2xl p-6 md:p-8 shadow-sm">
+                                <div class="flex items-center gap-3 mb-5 pb-3 border-b border-rose-100">
+                                    <div class="w-9 h-9 bg-rose-100 rounded-xl flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-rose-600 text-[20px]">warning</span>
+                                    </div>
+                                    <h3 class="font-extrabold text-[#991b1b] text-[16px] m-0">Triệu chứng & Cảnh báo đỏ</h3>
+                                </div>
+                                <ul class="space-y-3.5 m-0 p-0">
+                                    @foreach (var symptom in activeSym.Symptoms)
+                                    {
+                                        <li class="flex items-start gap-3 text-[14px] text-gray-700">
+                                            <span class="material-symbols-outlined text-rose-600 text-[18px] shrink-0 mt-0.5">error_outline</span>
+                                            <span class="leading-relaxed">@symptom</span>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+
+                            <!-- Causes (Orange/Amber card) -->
+                            <div class="bg-amber-50/40 border border-amber-100 rounded-2xl p-6 md:p-8 shadow-sm">
+                                <div class="flex items-center gap-3 mb-5 pb-3 border-b border-amber-100">
+                                    <div class="w-9 h-9 bg-amber-100 rounded-xl flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-amber-600 text-[20px]">troubleshoot</span>
+                                    </div>
+                                    <h3 class="font-extrabold text-[#92400e] text-[16px] m-0">Nguyên nhân & Yếu tố nguy cơ</h3>
+                                </div>
+                                <ul class="space-y-3.5 m-0 p-0">
+                                    @foreach (var cause in activeSym.Causes)
+                                    {
+                                        <li class="flex items-start gap-3 text-[14px] text-gray-700">
+                                            <span class="material-symbols-outlined text-amber-500 text-[18px] shrink-0 mt-0.5">health_and_safety</span>
+                                            <span class="leading-relaxed">@cause</span>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Treatment and MOH guidelines (Green Card) -->
+                        <div class="bg-emerald-50/30 border border-emerald-100 rounded-2xl p-6 md:p-8 shadow-sm space-y-6">
+                            <div class="flex items-center gap-3 pb-3 border-b border-emerald-100">
+                                <div class="w-9 h-9 bg-emerald-100 rounded-xl flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-emerald-600 text-[20px]">prescriptions</span>
+                                </div>
+                                <h3 class="font-extrabold text-[#065f46] text-[16px] m-0">Giải pháp & Phác đồ điều trị</h3>
+                            </div>
+                            
+                            <div class="space-y-3">
+                                @foreach (var treatment in activeSym.Treatments)
+                                {
+                                    <div class="flex items-start gap-3 text-[14.5px] text-gray-700 bg-white rounded-xl px-4 py-3 border border-emerald-50 shadow-sm">
+                                        <span class="material-symbols-outlined text-emerald-600 text-[20px] shrink-0 mt-0.5">check_circle</span>
+                                        <span class="leading-relaxed">@treatment</span>
+                                    </div>
+                                }
+                            </div>
+
+                            @if (activeSym.MohGuidelines != null)
+                            {
+                                <!-- Ministry of Health official guidelines inside green box -->
+                                <div class="bg-emerald-600 text-white rounded-2xl p-5 md:p-6 shadow-md relative overflow-hidden">
+                                    <div class="absolute -right-6 -bottom-6 w-32 h-32 rounded-full bg-white/5 pointer-events-none"></div>
+                                    <div class="flex items-start gap-4">
+                                        <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                                            <span class="material-symbols-outlined text-[26px]">gavel</span>
+                                        </div>
+                                        <div class="space-y-3">
+                                            <div>
+                                                <span class="bg-white/20 text-[11px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                                                    Quyết định Y khoa: @activeSym.MohGuidelines.DocumentNumber
+                                                </span>
+                                                <h4 class="font-extrabold text-[16px] mt-2 mb-1">
+                                                    @activeSym.MohGuidelines.Title
+                                                </h4>
+                                                <p class="text-[12.5px] text-emerald-100">
+                                                    Hướng dẫn chuyên môn chính thức ban hành bởi Bộ Y tế Việt Nam.
+                                                </p>
+                                            </div>
+                                            <div class="w-full h-px bg-white/25"></div>
+                                            <ul class="space-y-2 m-0 p-0 text-[13.5px] text-emerald-50">
+                                                @foreach (var rec in activeSym.MohGuidelines.Recommendations)
+                                                {
+                                                    <li class="flex items-start gap-2">
+                                                        <span class="material-symbols-outlined text-[16px] text-emerald-200 mt-0.5 shrink-0">verified</span>
+                                                        <span class="leading-relaxed">@rec</span>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Prevention & Lifestyle adjustments -->
+                        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8">
+                            <h3 class="section-heading font-extrabold text-[#1e293b] text-[18px] mb-4">Phòng ngừa & Chế độ sinh hoạt</h3>
+                            <div class="p-4 bg-blue-50/40 border border-blue-100 rounded-xl flex gap-3.5">
+                                <span class="material-symbols-outlined text-blue-600 text-[24px] shrink-0 mt-0.5">spa</span>
+                                <p class="text-[14.5px] text-gray-700 leading-relaxed m-0">
+                                    @activeSym.Prevention
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Clinical Evidence (Blue Card) -->
+                        @if (activeSym.Evidences != null && activeSym.Evidences.Any())
+                        {
+                            <div class="bg-sky-50/50 border border-sky-100 rounded-2xl p-6 md:p-8 shadow-sm">
+                                <div class="flex items-center gap-3 mb-5 pb-3 border-b border-sky-100">
+                                    <div class="w-9 h-9 bg-sky-100 rounded-xl flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-sky-600 text-[20px]">science</span>
+                                    </div>
+                                    <h3 class="font-extrabold text-sky-900 text-[16px] m-0">Minh chứng lâm sàng & Nghiên cứu khoa học</h3>
+                                </div>
+                                <div class="space-y-4">
+                                    @foreach (var evidence in activeSym.Evidences)
+                                    {
+                                        <div class="bg-white border border-sky-100 rounded-xl p-4 md:p-5 shadow-sm">
+                                            <div class="flex items-center justify-between gap-4 mb-2 flex-wrap">
+                                                <span class="bg-sky-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">
+                                                    @evidence.Journal
+                                                </span>
+                                            </div>
+                                            <h4 class="font-extrabold text-sky-900 text-[14.5px] mb-2 leading-snug">
+                                                @evidence.Title
+                                            </h4>
+                                            <p class="text-[13.5px] text-gray-600 m-0 leading-relaxed">
+                                                @evidence.Summary
+                                            </p>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                        <!-- Related Diseases -->
+                        @if (activeSym.RelatedDiseases != null && activeSym.RelatedDiseases.Any())
+                        {
+                            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8">
+                                <h3 class="section-heading font-extrabold text-[#1e293b] text-[18px] mb-4">Các bệnh lý liên quan</h3>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    @foreach (var related in activeSym.RelatedDiseases)
+                                    {
+                                        if (!string.IsNullOrEmpty(related.DiseaseId))
+                                        {
+                                            <a asp-controller="Home" asp-action="MedicalKnowledge" asp-route-categoryId="@related.CategoryId" asp-route-diseaseId="@related.DiseaseId" asp-fragment="danh-muc"
+                                               class="p-4 bg-gray-50 border border-gray-100 rounded-xl hover:border-blue-300 hover:bg-white hover:shadow-sm transition-all duration-200 block no-underline group">
+                                                <p class="font-bold text-[#1e293b] text-[14.5px] mb-1 group-hover:text-[#00346f] transition-colors flex items-center gap-1.5">
+                                                    @related.Name
+                                                    <span class="material-symbols-outlined text-[14px] opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+                                                </p>
+                                                <p class="text-[13px] text-gray-500 m-0 leading-relaxed">
+                                                    @related.Description
+                                                </p>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <div class="p-4 bg-gray-50 border border-gray-100 rounded-xl">
+                                                <p class="font-bold text-[#1e293b] text-[14.5px] mb-1">
+                                                    @related.Name
+                                                </p>
+                                                <p class="text-[13px] text-gray-500 m-0 leading-relaxed">
+                                                    @related.Description
+                                                </p>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                        <!-- Recommended Specialist Doctors Widget -->
+                        @if (Model.Doctors != null && Model.Doctors.Any())
+                        {
+                            <div class="bg-gradient-to-br from-[#00346f] to-[#005cb8] text-white rounded-2xl p-6 md:p-8 shadow-md">
+                                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-4 border-b border-white/10">
+                                    <div>
+                                        <span class="bg-white/20 text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                                            Đội ngũ chuyên gia hỗ trợ
+                                        </span>
+                                        <h3 class="font-extrabold text-[20px] md:text-[22px] mt-2 mb-0">
+                                            Bác sĩ Chuyên khoa Khuyên dùng
+                                        </h3>
+                                    </div>
+                                    <span class="material-symbols-outlined text-[32px] text-white/25 hidden md:block">medical_services</span>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                    @foreach (var doc in Model.Doctors)
+                                    {
+                                        <div class="bg-white rounded-xl p-4 text-gray-800 flex flex-col justify-between shadow-sm hover:shadow-md transition-all duration-200">
+                                            <div>
+                                                <div class="flex items-center gap-3 mb-3">
+                                                    <div class="w-12 h-12 bg-blue-50 rounded-full overflow-hidden shrink-0 border border-gray-100">
+                                                        <img src="@(string.IsNullOrEmpty(doc.AvatarUrl) ? "/images/avatar_male.png" : doc.AvatarUrl)" 
+                                                             alt="@doc.FullName" class="w-full h-full object-cover" />
+                                                    </div>
+                                                    <div>
+                                                        <h4 class="font-extrabold text-[#00346f] text-[14px] leading-tight m-0">@doc.FullName</h4>
+                                                        <p class="text-[11.5px] text-gray-500 font-semibold m-0 mt-0.5">@doc.Qualification</p>
+                                                    </div>
+                                                </div>
+                                                <div class="space-y-1.5 text-[12.5px] text-gray-600 mb-4">
+                                                    <div class="flex items-center gap-1.5">
+                                                        <span class="material-symbols-outlined text-[14px] text-blue-600">military_tech</span>
+                                                        <span>Kinh nghiệm: <strong>@doc.ExperienceYears năm</strong></span>
+                                                    </div>
+                                                    <div class="flex items-center gap-1.5">
+                                                        <span class="material-symbols-outlined text-[14px] text-blue-600">pin_drop</span>
+                                                        <span class="truncate">@doc.Workplace</span>
+                                                    </div>
+                                                    <div class="flex items-center gap-1.5">
+                                                        <span class="material-symbols-outlined text-[14px] text-blue-600">payments</span>
+                                                        <span>Phí khám: <strong class="text-amber-600">@doc.Fee.ToString("N0")đ</strong></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <a href="/Appointments/Create?specialtyId=@doc.SpecialtyId&doctorId=@doc.Id" 
+                                               class="block w-full text-center py-2 bg-[#00346f] hover:bg-[#002855] text-white font-bold rounded-lg text-[12.5px] no-underline transition-colors shadow-sm">
+                                                Đặt lịch khám
+                                            </a>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                        <!-- Emergency Warning Banner -->
+                        <div class="flex flex-col sm:flex-row items-center gap-5 bg-red-50 border border-red-200 rounded-2xl p-6 shadow-sm">
+                            <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center shrink-0">
+                                <span class="material-symbols-outlined text-red-600 text-[28px] animate-pulse">emergency</span>
+                            </div>
+                            <div class="flex-1 text-center sm:text-left">
+                                <p class="font-extrabold text-red-700 text-[16px] mb-1">Cảnh báo khẩn cấp!</p>
+                                <p class="text-[13px] text-red-600 m-0">
+                                    Nếu có dấu hiệu đột quỵ (méo miệng, yếu liệt tay chân, nói khó), đau ngực dữ dội hoặc khó thở nghiêm trọng, xin vui lòng gọi ngay cấp cứu hoặc đến cơ sở y tế gần nhất.
+                                </p>
+                            </div>
+                            <div class="flex gap-2.5 shrink-0">
+                                <a href="tel:115" class="px-5 py-2.5 bg-red-600 text-white font-bold rounded-xl text-[14px] no-underline hover:bg-red-700 transition-colors shadow-md">
+                                    Gọi 115
+                                </a>
+                                <a href="/Appointments/Create" class="px-5 py-2.5 bg-white text-red-600 border border-red-200 font-bold rounded-xl text-[14px] no-underline hover:bg-red-50 transition-colors">
+                                    Đặt lịch khám
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 text-center">
+                        <span class="material-symbols-outlined text-[64px] text-gray-300 mb-4">clinical_notes</span>
+                        <h3 class="font-extrabold text-[#1e293b] text-[18px] mb-2">Vui lòng chọn một bệnh lý để xem chi tiết</h3>
+                        <p class="text-gray-500 text-[14px] max-w-[400px] mx-auto leading-relaxed">
+                            Lựa chọn các chuyên khoa bên trái hoặc bấm vào các gợi ý bệnh lý ở trên để bắt đầu tra cứu thông tin y khoa chính thống.
+                        </p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== CẨM NANG BÀI VIẾT (Link to real pathologies) ===== -->
+    <section id="cam-nang-suc-khoe" class="bg-white border-t border-gray-100 py-14 md:py-20 mt-10">
+        <div class="max-w-[1280px] mx-auto px-4 md:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+                <div>
+                    <span class="mk-badge bg-[#00346f]/10 text-[#00346f] mb-3">
+                        <span class="material-symbols-outlined text-[12px]">auto_stories</span>
+                        Cẩm nang sức khỏe
+                    </span>
+                    <h2 class="text-[26px] md:text-[32px] font-extrabold text-[#1e293b] m-0 mt-1">Các bệnh thường gặp tại Việt Nam</h2>
+                    <p class="text-gray-500 text-[15px] mt-1 mb-0">Cổng thông tin chuyên sâu giúp hiểu rõ bản chất bệnh lý và tự bảo vệ sức khỏe gia đình.</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                @{
+                    var handbookCards = new[]
+                    {
+                        new { Id="dot-quy-nao", CatId="neuro", Cat="Nội Thần kinh", Color="#7c3aed", Title="Đột quỵ não (Tai biến)",
+                              Desc="Nguyên nhân tử vong và tàn phế hàng đầu. Nhận biết trong \"giờ vàng\" 4,5 giờ quyết định tính mạng.",
+                              Img="/images/stroke.jpg" },
+                        new { Id="viem-loet-da-day", CatId="digestive", Cat="Nội Tiêu hóa", Color="#d97706", Title="Viêm loét dạ dày - tá tràng",
+                              Desc="Bệnh lý tiêu hóa phổ biến nhất, gây đau thượng vị rát bỏng và nhiều biến chứng nguy hiểm.",
+                              Img="/images/gastric_ulcer.png" },
+                        new { Id="tang-huyet-ap", CatId="cardio", Cat="Nội Tim mạch", Color="#ef4444", Title="Tăng huyết áp",
+                              Desc="\"Kẻ giết người thầm lặng\" nguy hiểm — có thể gây nhồi máu cơ tim, đột quỵ bất cứ lúc nào.",
+                              Img="/images/hypertension.jpg" },
+                        new { Id="dai-thao-duong", CatId="endocrine", Cat="Nội tiết & Chuyển hóa", Color="#059669", Title="Đái tháo đường Type 2",
+                              Desc="Bệnh mạn tính nguy hiểm có dấu hiệu âm thầm và biến chứng tim, thận, mắt khó lường.",
+                              Img="/images/diabetes.png" },
+                        new { Id="hen-phe-quan", CatId="respiratory", Cat="Nội Hô hấp", Color="#0284c7", Title="Hen phế quản (Suyễn)",
+                              Desc="Tình trạng viêm đường thở mạn tính, gây co thắt khò khè, khó thở cấp tính về đêm.",
+                              Img="/images/asthma.png" },
+                        new { Id="trao-nguoc-gerd", CatId="digestive", Cat="Nội Tiêu hóa", Color="#eab308", Title="Trào ngược thực quản (GERD)",
+                              Desc="Ợ chua nóng rát do acid trào ngược, gây viêm đau thanh quản và biến chứng Barrett nguy hiểm.",
+                              Img="/images/gerd.jpg" }
+                    };
+                }
+                @foreach (var card in handbookCards)
+                {
+                    <a asp-controller="Home" asp-action="MedicalKnowledge" asp-route-categoryId="@card.CatId" asp-route-diseaseId="@card.Id" asp-fragment="danh-muc"
+                       class="disease-card bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm cursor-pointer no-underline block hover:shadow-xl hover:border-gray-200 transition-all duration-300 group">
+                        <div class="relative h-[180px] overflow-hidden bg-gray-100">
+                            <img src="@card.Img" alt="@card.Title" class="disease-card-img w-full h-full object-cover" />
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent"></div>
+                            <span class="absolute top-3 left-3 text-[11px] font-bold text-white px-2.5 py-1 rounded-full" style="background:@card.Color">@card.Cat</span>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="font-extrabold text-[#1e293b] text-[15.5px] mb-1.5 leading-snug group-hover:text-[#00346f] transition-colors">@card.Title</h3>
+                            <p class="text-[13px] text-gray-500 leading-relaxed mb-4 line-clamp-2">@card.Desc</p>
+                            <div class="flex items-center gap-1 text-[13px] font-bold text-[#00346f]">
+                                Tra cứu bệnh lý <span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                            </div>
+                        </div>
+                    </a>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TIN TỨC Y KHOA ===== -->
+    <section id="tin-tuc-y-khoa" class="py-14 md:py-20 bg-[#f0f4f9]">
+        <div class="max-w-[1280px] mx-auto px-4 md:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+                <div>
+                    <span class="mk-badge bg-[#00346f]/10 text-[#00346f] mb-3">
+                        <span class="material-symbols-outlined text-[12px]">newspaper</span>
+                        Kiến thức y khoa
+                    </span>
+                    <h2 class="text-[26px] md:text-[32px] font-extrabold text-[#1e293b] m-0 mt-1">Bài viết chuyên sâu</h2>
+                    <p class="text-gray-500 text-[15px] mt-1 mb-0">Được biên soạn và kiểm duyệt bởi đội ngũ bác sĩ chuyên khoa phòng khám.</p>
+                </div>
+            </div>
+
+            <!-- Featured article -->
+            @if (Model.FeaturedArticles.Any())
+            {
+                var firstArt = Model.FeaturedArticles.First();
+                <a asp-controller="Home" asp-action="ArticleDetail" asp-route-id="@firstArt.Id"
+                   class="article-card flex flex-col md:flex-row bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm mb-6 no-underline group block">
+                    <div class="md:w-[420px] h-[240px] md:h-auto shrink-0 overflow-hidden">
+                        <img src="@firstArt.ImageUrl" alt="@firstArt.Title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                    </div>
+                    <div class="p-7 flex flex-col justify-between flex-1 bg-white">
+                        <div>
+                            <span class="text-[11px] font-bold px-2.5 py-1 rounded-full text-white" style="background-color:@firstArt.CategoryColor">@firstArt.CategoryName</span>
+                            <h3 class="text-[22px] font-extrabold text-[#1e293b] mt-3 mb-2 leading-snug group-hover:text-[#00346f] transition-colors">@firstArt.Title</h3>
+                            <p class="text-[14px] text-gray-500 leading-relaxed line-clamp-3">@firstArt.Description</p>
+                        </div>
+                        <div class="flex items-center justify-between mt-5">
+                            <div class="flex items-center gap-2 text-[12px] text-gray-400">
+                                <span class="material-symbols-outlined text-[14px]">calendar_today</span> @firstArt.DateString
+                            </div>
+                            <span class="flex items-center gap-1 text-[13px] font-bold text-[#00346f] group-hover:gap-2 transition-all">
+                                Đọc tiếp <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Other articles -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    @foreach (var article in Model.FeaturedArticles.Skip(1).Take(6))
+                    {
+                        <a asp-controller="Home" asp-action="ArticleDetail" asp-route-id="@article.Id"
+                           class="article-card bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm flex flex-col no-underline group">
+                            <div class="h-[180px] overflow-hidden bg-gray-100 relative">
+                                <img src="@article.ImageUrl" alt="@article.Title" class="disease-card-img w-full h-full object-cover" />
+                                <span class="absolute top-3 left-3 text-[10px] font-bold text-white px-2.5 py-1 rounded-full" style="background:@article.CategoryColor">@article.CategoryName</span>
+                            </div>
+                            <div class="p-5 flex flex-col flex-1 bg-white">
+                                <h3 class="font-bold text-[#1e293b] text-[15px] leading-snug mb-2 line-clamp-2 group-hover:text-[#00346f] transition-colors flex-1">@article.Title</h3>
+                                <p class="text-[13px] text-gray-500 mb-3 line-clamp-2 leading-relaxed">@article.Description</p>
+                                <div class="flex items-center justify-between mt-auto pt-3 border-t border-gray-100">
+                                    <span class="text-[12px] text-gray-400 flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-[13px]">calendar_today</span> @article.DateString
+                                    </span>
+                                    <span class="text-[12px] font-bold text-[#00346f] flex items-center gap-0.5 group-hover:gap-1 transition-all">
+                                        Đọc <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    }
+                </div>
+            }
+        </div>
+    </section>
+
+</main>

@@ -23,5 +23,32 @@ public class PatientProfile
 
     public DateTime? DateOfBirth { get; set; }
 
+    [StringLength(20)]
+    public string? Gender { get; set; }
+
+    [StringLength(50)]
+    public string? IdentityCard { get; set; }
+
+    [StringLength(50)]
+    public string? InsuranceCode { get; set; }
+
+    [StringLength(100)]
+    public string? Occupation { get; set; }
+
+    [StringLength(100)]
+    public string? Country { get; set; }
+
+    [StringLength(100)]
+    public string? Province { get; set; }
+
+    [StringLength(100)]
+    public string? District { get; set; }
+
+    [StringLength(100)]
+    public string? Ward { get; set; }
+
+    [StringLength(255)]
+    public string? StreetAddress { get; set; }
+
     public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 }

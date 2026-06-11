@@ -1,0 +1,120 @@
+@model WebDKLichKham.Models.ViewModels.AppointmentConfirmationViewModel
+@{
+    ViewData["Title"] = "Đặt lịch thành công";
+}
+
+<div class="min-h-[80vh] bg-[#f8fafc] py-12 font-sans text-slate-800 flex items-center">
+    <div class="max-w-[700px] w-full mx-auto px-4">
+        
+        <!-- Steps -->
+        <div class="mb-10">
+            <partial name="_BookingSteps" model="5" />
+        </div>
+        
+        <!-- Header -->
+        <div class="text-center mb-10">
+            <div class="w-20 h-20 bg-[#a7f3d0] rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm">
+                <span class="material-symbols-outlined text-[#065f46] text-[40px] font-bold">check_circle</span>
+            </div>
+            <h1 class="text-[36px] font-bold text-[#00346f] mb-4 tracking-tight">Đặt lịch thành công</h1>
+            <p class="text-[15px] text-slate-500 max-w-md mx-auto leading-relaxed">
+                Cảm ơn bạn đã tin tưởng Phòng Khám Đa Khoa Duy Tâm. Lịch hẹn của bạn đã được ghi nhận thành công. Vui lòng lưu lại Mã số khám và thông tin bên dưới.
+            </p>
+        </div>
+
+        <!-- Card -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-10">
+            <!-- Card Header -->
+            <div class="px-8 py-5 border-b border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <h2 class="text-[20px] font-bold text-[#00346f]">Thông tin tóm tắt</h2>
+                <div class="bg-[#e0e7ff] text-[#3730a3] px-4 py-1.5 rounded-full text-[13px] font-bold">
+                    ID: #@Model.AppointmentCode
+                </div>
+            </div>
+
+            <!-- Card Body -->
+            <div class="p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
+                    
+                    <!-- Doctor -->
+                    <div class="flex items-start gap-4">
+                        <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=150&auto=format&fit=crop" class="w-12 h-12 rounded-lg object-cover border border-slate-200 shadow-sm" alt="Doctor" />
+                        <div>
+                            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">BÁC SĨ PHỤ TRÁCH</p>
+                            <p class="text-[16px] font-bold text-slate-800 mb-0.5">@Model.DoctorName</p>
+                            <p class="text-[13px] text-slate-500">@Model.SpecialtyName</p>
+                        </div>
+                    </div>
+
+                    <!-- Time -->
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-lg bg-[#f0f4fa] flex items-center justify-center shrink-0">
+                            <span class="material-symbols-outlined text-[#00346f] text-[24px]">calendar_today</span>
+                        </div>
+                        <div>
+                            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">THỜI GIAN</p>
+                            <p class="text-[16px] font-bold text-slate-800 mb-0.5">@DateTime.Today.Add(@Model.StartTime).ToString("hh:mm tt", new System.Globalization.CultureInfo("en-US"))</p>
+                            <p class="text-[13px] text-slate-500">@Model.AppointmentDate.ToString("dddd, dd 'Tháng' MM, yyyy", new System.Globalization.CultureInfo("vi-VN"))</p>
+                        </div>
+                    </div>
+
+                    <!-- Location -->
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-lg bg-[#f0f4fa] flex items-center justify-center shrink-0">
+                            <span class="material-symbols-outlined text-[#00346f] text-[24px]">location_on</span>
+                        </div>
+                        <div>
+                            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">ĐỊA ĐIỂM</p>
+                            <p class="text-[15px] font-semibold text-slate-800 mb-0.5">@Model.FacilityName</p>
+                            <p class="text-[13px] text-slate-500">@Model.FacilityAddress</p>
+                        </div>
+                    </div>
+
+                    <!-- Service -->
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-lg bg-[#f0f4fa] flex items-center justify-center shrink-0">
+                            <span class="material-symbols-outlined text-[#00346f] text-[24px]">medical_services</span>
+                        </div>
+                        <div>
+                            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">DỊCH VỤ Y TẾ</p>
+                            <p class="text-[15px] font-semibold text-slate-800 mb-0.5">@(string.IsNullOrEmpty(Model.MedicalService) ? "Khám chuyên khoa" : Model.MedicalService)</p>
+                            <p class="text-[13px] text-slate-500">Dịch vụ đã chọn khi đăng ký</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Info Box -->
+                <div class="mt-8 bg-[#f0f4fa] border border-[#dbe6f5] rounded-lg p-5 flex items-start gap-3">
+                    <span class="material-symbols-outlined text-[#00346f] text-[24px] mt-0.5">info</span>
+                    <div class="text-[14px] text-[#1e293b] leading-relaxed font-medium">
+                        <p class="mb-2">Vui lòng đến trước 15 phút để làm thủ tục check-in. Mang theo thẻ BHYT và CMND/CCCD bản gốc khi đến khám.</p>
+                        <p class="text-amber-700 font-bold m-0 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[18px]">lock</span> 
+                            Mã xác nhận tra cứu lịch khám của bạn là: <span class="bg-amber-100 border border-amber-200 px-2 py-0.5 rounded tracking-widest text-[15px] font-black text-amber-900">@Model.Passcode</span> (Hãy nhớ mã này để tra cứu lịch khám).
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+            <a asp-controller="Appointments" asp-action="Lookup" class="w-full sm:w-auto px-8 py-3.5 bg-[#00346f] text-white rounded-lg font-bold text-[15px] hover:bg-[#002244] transition-colors flex items-center justify-center gap-2 no-underline shadow-md">
+                <span class="material-symbols-outlined text-[20px]">event_note</span> Xem lịch cá nhân
+            </a>
+            <a asp-controller="Home" asp-action="Index" class="w-full sm:w-auto px-8 py-3.5 bg-white text-slate-700 border border-slate-300 rounded-lg font-bold text-[15px] hover:bg-slate-50 transition-colors flex items-center justify-center gap-2 no-underline shadow-sm">
+                <span class="material-symbols-outlined text-[20px]">home</span> Về trang chủ
+            </a>
+        </div>
+
+        <!-- Footer Contact -->
+        <div class="text-center pt-8 border-t border-slate-200">
+            <p class="text-[14px] text-slate-500">
+                Bạn cần hỗ trợ thêm? Gọi ngay <span class="font-bold text-[#00346f]">1900 1234</span> hoặc gửi email tới <span class="font-bold text-[#00346f]">support@phongkhamquocte.vn</span>
+            </p>
+        </div>
+
+    </div>
+</div>

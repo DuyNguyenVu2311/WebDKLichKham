@@ -1,0 +1,102 @@
+@{
+    ViewData["Title"] = "Về chúng tôi";
+}
+
+<main class="font-sans bg-[#f8fafc] py-12">
+    <div class="max-w-[1000px] mx-auto px-4">
+        
+        <!-- Breadcrumbs -->
+        <nav class="flex items-center gap-2 text-[14px] text-gray-500 mb-8">
+            <a asp-controller="Home" asp-action="Index" class="hover:text-primary transition-colors no-underline">Trang chủ</a>
+            <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+            <span class="text-gray-800">Giới thiệu</span>
+        </nav>
+
+        <div class="bg-white rounded-3xl border border-gray-100 p-8 md:p-12 shadow-sm">
+            <h1 class="text-[32px] md:text-[40px] font-extrabold text-[#00346f] mb-6 leading-tight">
+                Về Hệ Thống Phòng Khám Đa Khoa Duy Tâm
+            </h1>
+
+            <div class="prose max-w-none text-[#334155] text-[16px] leading-relaxed space-y-6">
+                <p>
+                    Được thành lập với sứ mệnh mang lại dịch vụ chăm sóc sức khỏe toàn diện, an toàn và chuẩn y khoa, <strong>Hệ thống Phòng khám Đa khoa Duy Tâm</strong> tự hào là điểm tựa sức khỏe tin cậy cho hàng ngàn gia đình tại khu vực TP. Hồ Chí Minh (cơ sở TP. Thủ Đức) và tỉnh Đồng Nai (cơ sở Nhơn Trạch).
+                </p>
+
+                <p>
+                    Tại Duy Tâm, chúng tôi đặt triết lý <strong>"Khám bệnh từ Tâm - Chăm sóc tận tụy"</strong> làm kim chỉ nam cho mọi hoạt động chuyên môn. Toàn bộ đội ngũ bác sĩ, điều dưỡng và nhân viên y tế luôn nỗ lực không ngừng để đem lại trải nghiệm y tế nhẹ nhàng, nhanh chóng và hiệu quả tối ưu cho người bệnh.
+                </p>
+
+                <h3 class="text-[22px] font-bold text-[#00346f] mt-8 mb-4">Tầm nhìn & Sứ mệnh</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+                    <div class="p-6 bg-[#f4f7fc] rounded-2xl border border-gray-100">
+                        <h4 class="font-bold text-[#00346f] mb-3 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[24px] text-primary">visibility</span>
+                            Tầm nhìn chiến lược
+                        </h4>
+                        <p class="text-[14px] text-gray-600">Trở thành chuỗi phòng khám đa khoa hàng đầu tại khu vực phía Nam, tiên phong áp dụng công nghệ số hóa vào quy trình quản lý y tế và chăm sóc sức khỏe chủ động.</p>
+                    </div>
+                    <div class="p-6 bg-[#f4f7fc] rounded-2xl border border-gray-100">
+                        <h4 class="font-bold text-[#00346f] mb-3 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[24px] text-[#008a7b]">assignment_turned_in</span>
+                            Sứ mệnh lịch sử
+                        </h4>
+                        <p class="text-[14px] text-gray-600">Cung cấp giải pháp y tế chất lượng cao với chi phí hợp lý. Giúp người dân dễ dàng tiếp cận dịch vụ khám chữa bệnh nhanh chóng, không phải xếp hàng chờ đợi.</p>
+                    </div>
+                </div>
+
+                <h3 class="text-[22px] font-bold text-[#00346f] mt-8 mb-4">Thế mạnh chuyên môn nổi bật</h3>
+                <p>
+                    Hệ thống Phòng khám Đa khoa Duy Tâm được cấp phép hoạt động bởi Sở Y tế với các chuyên khoa mũi nhọn:
+                </p>
+
+                <ul class="list-disc pl-6 space-y-2 text-gray-600">
+                    <li><strong>Sản phụ khoa & Kế hoạch hóa gia đình</strong>: Tầm soát ung thư cổ tử cung, theo dõi thai kỳ toàn diện với hệ thống siêu âm 5D tiên tiến nhất.</li>
+                    <li><strong>Nhi khoa & Tiêm chủng</strong>: Chẩn đoán và điều trị các bệnh lý trẻ em, tư vấn dinh dưỡng học đường và chủng ngừa vắc-xin an toàn.</li>
+                    <li><strong>Nội tổng quát & Tim mạch</strong>: Khám, tầm soát và quản lý các bệnh lý mạn tính như tăng huyết áp, đái tháo đường, rối loạn nhịp tim.</li>
+                    <li><strong>Chẩn đoán hình ảnh & Xét nghiệm</strong>: Hệ thống xét nghiệm tự động, siêu âm màu, X-quang kỹ thuật số cho kết quả chính xác chỉ sau 1-2 giờ.</li>
+                </ul>
+
+                <h3 class="text-[22px] font-bold text-[#00346f] mt-8 mb-4">Giá trị cốt lõi</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 my-6">
+                    <div class="p-5 text-center bg-white rounded-2xl border border-gray-100 shadow-sm">
+                        <div class="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-3">
+                            <span class="material-symbols-outlined text-2xl">favorite</span>
+                        </div>
+                        <h5 class="font-bold text-[#00346f] mb-2">TẬN TÂM</h5>
+                        <p class="text-[12px] text-gray-500">Lắng nghe và chia sẻ nỗi lo của người bệnh như người thân trong gia đình.</p>
+                    </div>
+                    <div class="p-5 text-center bg-white rounded-2xl border border-gray-100 shadow-sm">
+                        <div class="w-12 h-12 rounded-full bg-[#e6f4f2] text-[#008a7b] flex items-center justify-center mx-auto mb-3">
+                            <span class="material-symbols-outlined text-2xl">workspace_premium</span>
+                        </div>
+                        <h5 class="font-bold text-[#008a7b] mb-2">UY TÍN</h5>
+                        <p class="text-[12px] text-gray-500">Tuân thủ nghiêm ngặt phác đồ điều trị chuẩn y khoa của Bộ Y tế.</p>
+                    </div>
+                    <div class="p-5 text-center bg-white rounded-2xl border border-gray-100 shadow-sm">
+                        <div class="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-3">
+                            <span class="material-symbols-outlined text-2xl">bolt</span>
+                        </div>
+                        <h5 class="font-bold text-[#00346f] mb-2">ĐỔI MỚI</h5>
+                        <p class="text-[12px] text-gray-500">Ứng dụng công nghệ đặt lịch trực tuyến nâng cao trải nghiệm khách hàng.</p>
+                    </div>
+                </div>
+
+                <h3 class="text-[22px] font-bold text-[#00346f] mt-8 mb-4">Cam kết dịch vụ</h3>
+                <p>
+                    Chúng tôi cam kết không ngừng nâng cao chất lượng dịch vụ, đầu tư trang thiết bị y khoa hiện đại hàng đầu thế giới từ các hãng danh tiếng (GE, Siemens, Roche) và đào tạo đội ngũ nhân sự chuyên nghiệp để xứng đáng với sự gửi gắm sức khỏe của quý khách.
+                </p>
+
+                <div class="mt-8 p-6 bg-primary/5 rounded-2xl border border-primary/10 flex items-center justify-between flex-wrap gap-4">
+                    <div>
+                        <p class="text-[15px] font-bold text-[#00346f] mb-1">Cần tư vấn trực tiếp từ Chuyên gia Y khoa?</p>
+                        <p class="text-[13px] text-gray-500">Liên hệ Tổng đài CSKH hoạt động 24/7 để nhận hỗ trợ kịp thời.</p>
+                    </div>
+                    <a href="tel:19001234" class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-xl text-[14px] font-bold shadow-md hover:bg-[#002244] transition-colors no-underline">
+                        <span class="material-symbols-outlined text-[18px]">call</span>
+                        1900 1234
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

@@ -1,0 +1,990 @@
+@model WebDKLichKham.Models.PatientProfile
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hồ sơ sức khỏe cá nhân - Phòng Khám Đa Khoa Duy Tâm</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-[1280px] mx-auto px-4 md:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2 text-[#00346f]">
+                <span class="material-symbols-outlined text-[28px]">health_and_safety</span>
+                <span class="font-bold text-[18px] hidden md:inline">Phòng Khám Đa Khoa Duy Tâm</span>
+                <span class="font-bold text-[18px] md:hidden">PK Duy Tâm</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="relative">
+                    <button onclick="toggleNotifications()" id="notif-btn" class="relative text-slate-500 hover:text-[#00346f] p-1 rounded-full hover:bg-slate-100 transition-colors focus:outline-none">
+                        <span class="material-symbols-outlined">notifications</span>
+                        <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
+                    </button>
+                    
+                    <!-- Notification Dropdown -->
+                    <div id="notif-dropdown" class="hidden absolute right-[-40px] md:right-0 mt-2 w-[320px] bg-white rounded-xl shadow-xl border border-slate-200 z-[100] overflow-hidden origin-top-right transition-all">
+                        <div class="p-3 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
+                            <h3 class="font-bold text-slate-800 text-[14px]">Thông báo</h3>
+                            <span class="text-[11px] text-[#00346f] font-semibold bg-blue-100 px-2 py-0.5 rounded-full">3 mới</span>
+                        </div>
+                        <div class="max-h-[350px] overflow-y-auto">
+                            <!-- Lịch hẹn sắp tới -->
+                            <a href="#upcoming-appt" onclick="toggleNotifications()" class="block p-3 border-b border-slate-50 hover:bg-slate-50 transition-colors bg-blue-50/40">
+                                <div class="flex gap-3">
+                                    <div class="w-9 h-9 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center shrink-0 mt-0.5 shadow-sm border border-orange-200/50">
+                                        <span class="material-symbols-outlined text-[18px]">event</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-[13px] font-bold text-slate-800 mb-0.5">Lịch hẹn sắp tới</p>
+                                        <p class="text-[12px] text-slate-600 leading-snug">Bạn có lịch Khám Tiêu hóa vào 09:30 AM ngày 26/05/2026. Vui lòng đến đúng giờ.</p>
+                                        <p class="text-[10px] text-slate-400 mt-1 font-medium">10 phút trước</p>
+                                    </div>
+                                </div>
+                            </a>
+                            <!-- Kết quả cận lâm sàng -->
+                            <a href="#" onclick="viewLabResult(); toggleNotifications();" class="block p-3 border-b border-slate-50 hover:bg-slate-50 transition-colors bg-blue-50/40">
+                                <div class="flex gap-3">
+                                    <div class="w-9 h-9 rounded-full bg-green-100 text-green-600 flex items-center justify-center shrink-0 mt-0.5 shadow-sm border border-green-200/50">
+                                        <span class="material-symbols-outlined text-[18px]">science</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-[13px] font-bold text-slate-800 mb-0.5">Kết quả cận lâm sàng</p>
+                                        <p class="text-[12px] text-slate-600 leading-snug">Phiếu kết quả Nội soi dạ dày (NS-260501) đã được cập nhật vào hồ sơ bệnh án.</p>
+                                        <p class="text-[10px] text-slate-400 mt-1 font-medium">1 giờ trước</p>
+                                    </div>
+                                </div>
+                            </a>
+                            <!-- Đơn thuốc -->
+                            <a href="#" onclick="viewPrescription('recent'); toggleNotifications();" class="block p-3 border-b border-slate-50 hover:bg-slate-50 transition-colors bg-blue-50/40">
+                                <div class="flex gap-3">
+                                    <div class="w-9 h-9 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 mt-0.5 shadow-sm border border-blue-200/50">
+                                        <span class="material-symbols-outlined text-[18px]">prescriptions</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-[13px] font-bold text-slate-800 mb-0.5">Đơn thuốc mới</p>
+                                        <p class="text-[12px] text-slate-600 leading-snug">BS. Nguyễn Văn An vừa kê đơn thuốc mới. Vui lòng thanh toán viện phí để nhận thuốc.</p>
+                                        <p class="text-[10px] text-slate-400 mt-1 font-medium">2 giờ trước</p>
+                                    </div>
+                                </div>
+                            </a>
+                            <!-- Đã khám (Read) -->
+                            <a href="#" class="block p-3 hover:bg-slate-50 transition-colors opacity-60">
+                                <div class="flex gap-3">
+                                    <div class="w-9 h-9 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center shrink-0 mt-0.5 shadow-sm border border-slate-300/50">
+                                        <span class="material-symbols-outlined text-[18px]">check_circle</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-[13px] font-bold text-slate-800 mb-0.5">Hoàn thành khám bệnh</p>
+                                        <p class="text-[12px] text-slate-600 leading-snug">Buổi khám Nội tổng hợp ngày 10/11/2025 đã hoàn tất.</p>
+                                        <p class="text-[10px] text-slate-400 mt-1 font-medium">10/11/2025</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="p-2 border-t border-slate-100 text-center bg-slate-50">
+                            <button onclick="toggleNotifications()" class="text-[12px] font-bold text-[#00346f] hover:underline bg-transparent border-none cursor-pointer">Đóng thông báo</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 border-l border-slate-200 pl-4">
+                    <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-[14px]">@(string.IsNullOrEmpty(Model.FullName) ? "K" : Model.FullName.Substring(0, 1).ToUpper())</div>
+                    <div class="hidden md:block">
+                        <p class="text-[13px] font-bold text-slate-700 leading-none mb-0.5">@Model.FullName</p>
+                        <p class="text-[11px] text-slate-500 leading-none">Khách hàng thành viên</p>
+                    </div>
+                </div>
+                <a href="/" class="text-[#00346f] hover:bg-blue-50 px-3 py-2 rounded-lg font-semibold text-[14px] transition-colors flex items-center gap-1"><span class="material-symbols-outlined text-[20px]">home</span> Trang chủ</a>
+                <a href="/Home/LogoutPortal" class="text-red-500 hover:bg-red-50 p-2 rounded-lg ml-2" title="Đăng xuất"><span class="material-symbols-outlined text-[20px]">logout</span></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-[1280px] mx-auto px-4 md:px-8 py-8">
+        <!-- Patient Banner -->
+        <div class="bg-gradient-to-r from-[#00346f] to-[#0052a3] rounded-2xl p-6 md:p-8 text-white shadow-md flex flex-col md:flex-row justify-between items-center gap-6 mb-8 relative overflow-hidden">
+            <span class="material-symbols-outlined absolute -right-10 -bottom-10 text-[180px] text-white/10 select-none">ecg_heart</span>
+            <div class="flex items-center gap-5 z-10 w-full">
+                <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center font-bold text-[36px] backdrop-blur-sm border-2 border-white/40">@(string.IsNullOrEmpty(Model.FullName) ? "K" : Model.FullName.Substring(0, 1).ToUpper())</div>
+                <div>
+                    <h1 class="text-[26px] font-bold mb-1">@Model.FullName</h1>
+                    <div class="flex flex-wrap gap-x-6 gap-y-1 text-blue-100 text-[14px]">
+                        <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">pin</span> Mã BN: BN-@(Model.Id.ToString("D6"))</span>
+                        @{
+                            var age = 0;
+                            if (Model.DateOfBirth.HasValue)
+                            {
+                                age = DateTime.Today.Year - Model.DateOfBirth.Value.Year;
+                                if (Model.DateOfBirth.Value.Date > DateTime.Today.AddYears(-age)) age--;
+                            }
+                        }
+                        <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">@(Model.Gender == "Nữ" ? "female" : "male")</span> Giới tính: @Model.Gender@(Model.DateOfBirth.HasValue ? $", {age} tuổi" : "")</span>
+                        <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">badge</span> CCCD: <b class="text-white">@(Model.IdentityCard ?? "Chưa cập nhật")</b></span>
+                    </div>
+                </div>
+            </div>
+            <div class="z-10 shrink-0 w-full md:w-auto">
+                <a href="/Home/Index#booking-form" class="w-full md:w-auto bg-white text-[#00346f] px-6 py-3 rounded-xl font-bold text-[14px] hover:bg-blue-50 transition-colors flex items-center justify-center gap-2 shadow-sm">
+                    <span class="material-symbols-outlined text-[20px]">calendar_add_on</span> Đặt lịch khám mới
+                </a>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Cột trái: Timeline & Lịch sử khám -->
+            <div class="lg:col-span-2 space-y-8">
+                
+                <!-- Lịch hẹn sắp tới -->
+                <div id="upcoming-appt" class="transition-opacity duration-300">
+                    <h2 class="flex items-center gap-2 text-[18px] font-bold text-slate-800 mb-4">
+                        <span class="material-symbols-outlined text-orange-500">event_upcoming</span> Lịch hẹn sắp tới
+                    </h2>
+                    
+                    @{
+                        var upcomingAppointments = Model.Appointments
+                            .Where(a => a.AppointmentDate >= DateTime.Today && a.Status != AppointmentStatus.Cancelled && a.Status != AppointmentStatus.Completed)
+                            .OrderBy(a => a.AppointmentDate)
+                            .ThenBy(a => a.StartTime)
+                            .ToList();
+                    }
+
+                    @if (upcomingAppointments.Any())
+                    {
+                        @foreach (var appt in upcomingAppointments)
+                        {
+                            var days = new[] { "Chủ Nhật", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7" };
+                            var dayOfWeekStr = days[(int)appt.AppointmentDate.DayOfWeek];
+                            
+                            <div class="bg-white border border-orange-200 rounded-2xl p-5 shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow mb-4">
+                                <div class="absolute top-0 left-0 w-1.5 h-full bg-orange-500"></div>
+                                <div class="flex flex-col md:flex-row items-center gap-6 justify-between">
+                                    <div class="flex items-center gap-5 w-full">
+                                        <div class="w-16 h-16 bg-orange-50 rounded-xl border border-orange-100 flex flex-col items-center justify-center text-orange-600 shrink-0">
+                                            <span class="text-[11px] font-bold uppercase">@dayOfWeekStr</span>
+                                            <span class="text-[24px] font-black leading-none mt-0.5">@appt.AppointmentDate.Day</span>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-bold text-slate-800 text-[16px] mb-1">@(appt.MedicalService ?? (appt.Doctor?.SpecialtyInfo?.Name ?? appt.Doctor?.Specialty ?? "Khám bệnh"))</h3>
+                                            <p class="text-[13px] text-slate-500 mb-1">
+                                                Bác sĩ: @(appt.Doctor?.FullName ?? "Bác sĩ Duy Tâm") • @(string.IsNullOrWhiteSpace(appt.Notes) || !appt.Notes.StartsWith("[") ? "Cơ sở 1" : appt.Notes.Substring(appt.Notes.IndexOf("[") + 1, appt.Notes.IndexOf("]") - appt.Notes.IndexOf("[") - 1))
+                                            </p>
+                                            <div class="flex items-center gap-2 text-[13px] font-semibold text-orange-600">
+                                                <span class="material-symbols-outlined text-[16px]">schedule</span> @appt.StartTime.ToString(@"hh\:mm")
+                                                <span class="text-slate-300">•</span>
+                                                <span class="text-slate-500 font-normal">@(appt.Status == AppointmentStatus.Pending ? "Chờ xác nhận" : "Đã xác nhận")</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-2 w-full md:w-auto shrink-0 justify-end mt-4 md:mt-0">
+                                        <a href="/Home/Index#booking-form" class="px-4 py-2 bg-white border border-slate-300 rounded-lg text-[13px] font-bold text-slate-600 hover:bg-slate-50 transition-colors no-underline">Dời lịch</a>
+                                        <button onclick="alert('Vui lòng liên hệ hotline 1900 1234 để hủy lịch hẹn đã đặt.')" class="px-4 py-2 bg-white border border-red-200 rounded-lg text-[13px] font-bold text-red-600 hover:bg-red-50 transition-colors">Hủy</button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="bg-white border border-slate-200 rounded-2xl p-6 text-center shadow-sm mb-6">
+                            <span class="material-symbols-outlined text-slate-300 text-[48px] mb-2">calendar_today</span>
+                            <p class="text-[14px] text-slate-500 font-medium">Bạn chưa có lịch hẹn sắp tới nào.</p>
+                            <a href="/Home/Index#booking-form" class="inline-flex items-center gap-1.5 text-[13px] font-bold text-[#00346f] hover:underline mt-2">Đặt lịch ngay <span class="material-symbols-outlined text-[16px]">arrow_forward</span></a>
+                        </div>
+                    }
+                </div>
+
+                <!-- Dòng thời gian Khám chữa bệnh -->
+                <div>
+                    <h2 class="flex items-center gap-2 text-[18px] font-bold text-slate-800 mb-4">
+                        <span class="material-symbols-outlined text-blue-600">history_edu</span> Hồ sơ Bệnh án Điện tử (EMR)
+                    </h2>
+                    
+                    <div class="relative pl-6 space-y-8 before:absolute before:inset-0 before:ml-[11px] before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-blue-500 before:to-slate-200">
+                        
+                        @{
+                            var pastAppointments = Model.Appointments
+                                .Where(a => a.Status == AppointmentStatus.Completed || a.AppointmentDate < DateTime.Today)
+                                .OrderByDescending(a => a.AppointmentDate)
+                                .ThenByDescending(a => a.StartTime)
+                                .ToList();
+                        }
+
+                        @if (pastAppointments.Any())
+                        {
+                            @foreach (var appt in pastAppointments)
+                            {
+                                <div class="relative">
+                                    <div class="absolute -left-[31px] w-5 h-5 bg-blue-500 rounded-full border-4 border-[#f1f5f9] shadow flex items-center justify-center">
+                                        <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
+                                    </div>
+                                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:border-blue-300 transition-colors">
+                                        <div class="p-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
+                                            <div class="flex flex-col">
+                                                <span class="text-[12px] font-bold text-blue-600 mb-0.5">@appt.AppointmentDate.ToString("dd/MM/yyyy")</span>
+                                                <h3 class="font-bold text-[15px] text-slate-800">@(appt.MedicalService ?? (appt.Doctor?.SpecialtyInfo?.Name ?? appt.Doctor?.Specialty ?? "Khám bệnh"))</h3>
+                                            </div>
+                                            <span class="bg-green-100 text-green-700 font-bold text-[11px] px-2.5 py-1 rounded-md">Đã hoàn thành</span>
+                                        </div>
+                                        <div class="p-5">
+                                            <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100 mb-4">
+                                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-[13px]">
+                                                    <div>
+                                                        <p class="text-slate-500 font-medium mb-0.5">Bác sĩ khám:</p>
+                                                        <p class="font-bold text-slate-800">@(appt.Doctor?.FullName ?? "Bác sĩ Duy Tâm")</p>
+                                                    </div>
+                                                    <div>
+                                                        <p class="text-slate-500 font-medium mb-0.5">Chẩn đoán (ICD-10):</p>
+                                                        <p class="font-bold text-red-600">@(appt.ReasonForVisit ?? "Khám sức khỏe tổng quát")</p>
+                                                    </div>
+                                                    <div class="md:col-span-2 mt-2 pt-2 border-t border-blue-200">
+                                                        <p class="text-slate-500 font-medium mb-0.5">Lời dặn của Bác sĩ:</p>
+                                                        <p class="text-slate-700 italic">"Uống thuốc đúng giờ theo đơn, uống nhiều nước, tái khám khi có dấu hiệu bất thường."</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Khối chỉ định Tái khám Y khoa -->
+                                            <div class="mt-4 pt-4 border-t border-slate-200 mb-4">
+                                                <div class="bg-[#f0f9ff] border border-blue-200 p-4 rounded-xl">
+                                                    <div class="flex items-start gap-3">
+                                                        <span class="material-symbols-outlined text-[#0284c7] shrink-0 mt-0.5">clinical_notes</span>
+                                                        <div class="w-full">
+                                                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+                                                                <h4 class="text-[14px] font-bold text-[#0369a1]">Kế hoạch điều trị: Tái khám định kỳ</h4>
+                                                                <span class="bg-[#0284c7]/10 text-[#0284c7] font-bold text-[10px] px-2 py-0.5 rounded">Hẹn sau 7 ngày</span>
+                                                            </div>
+                                                            <p class="text-[12.5px] text-slate-600 mb-4">
+                                                                Thời gian tái khám đề xuất: <strong>@appt.AppointmentDate.AddDays(7).ToString("dd/MM/yyyy")</strong>. Bác sĩ cần đánh giá tiến triển của chẩn đoán: <em>@(appt.ReasonForVisit ?? "Viêm dạ dày cấp tính")</em>.
+                                                            </p>
+                                                            
+                                                            <div class="space-y-2 mb-4">
+                                                                <div class="text-[12.5px] font-semibold text-slate-700">Đánh giá tình trạng triệu chứng hiện tại của bạn:</div>
+                                                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                                    <button type="button" onclick="setFollowUpStatus(@appt.Id, 'Giảm nhiều')" id="btn-giam-@appt.Id" class="symptom-btn-@appt.Id flex items-center justify-between px-4 py-2.5 rounded-xl border text-[13px] font-medium transition-all @(appt.FollowUpSymptoms == "Giảm nhiều" ? "border-emerald-500 bg-emerald-50/30 text-emerald-700" : "border-slate-200 text-slate-700 bg-white hover:bg-slate-50")">
+                                                                        <span>Triệu chứng đã giảm nhiều</span>
+                                                                        <span class="material-symbols-outlined text-emerald-600 text-[18px] @(appt.FollowUpSymptoms == "Giảm nhiều" ? "" : "hidden")" id="icon-giam-@appt.Id">check_circle</span>
+                                                                    </button>
+                                                                    <button type="button" onclick="setFollowUpStatus(@appt.Id, 'Chưa giảm')" id="btn-chuagiam-@appt.Id" class="symptom-btn-@appt.Id flex items-center justify-between px-4 py-2.5 rounded-xl border text-[13px] font-medium transition-all @(appt.FollowUpSymptoms == "Chưa giảm" ? "border-amber-500 bg-amber-50/30 text-amber-700" : "border-slate-200 text-slate-700 bg-white hover:bg-slate-50")">
+                                                                        <span>Chưa giảm / Cần theo dõi thêm</span>
+                                                                        <span class="material-symbols-outlined text-amber-600 text-[18px] @(appt.FollowUpSymptoms == "Chưa giảm" ? "" : "hidden")" id="icon-chuagiam-@appt.Id">warning</span>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Phác đồ y khoa động dựa theo lựa chọn -->
+                                                            <div id="phacdo-giamphe-@appt.Id" class="p-3 bg-emerald-50/50 border border-emerald-100 text-emerald-800 rounded-xl text-[12.5px] leading-relaxed mb-4 @(appt.FollowUpSymptoms == "Giảm nhiều" ? "" : "hidden")">
+                                                                <div class="flex gap-2 font-bold mb-1"><span class="material-symbols-outlined text-[18px]">verified</span> Khuyến cáo phục hồi (Phác đồ 1):</div>
+                                                                Triệu chứng phục hồi tốt. Bạn chỉ cần thực hiện <strong>tái khám 1 lần</strong> vào ngày hẹn để bác sĩ kiểm tra lâm sàng lần cuối, xác nhận dứt điểm bệnh lý và hoàn tất phác đồ điều trị.
+                                                            </div>
+
+                                                            <div id="phacdo-chuagiam-@appt.Id" class="p-3 bg-amber-50/50 border border-amber-100 text-amber-800 rounded-xl text-[12.5px] leading-relaxed mb-4 @(appt.FollowUpSymptoms == "Chưa giảm" ? "" : "hidden")">
+                                                                <div class="flex gap-2 font-bold mb-1"><span class="material-symbols-outlined text-[18px]">report</span> Khuyến cáo điều trị (Phác đồ 2):</div>
+                                                                Bệnh tình chưa thuyên giảm hoặc có nguy cơ trở nặng. Bạn bắt buộc phải thực hiện <strong>tái khám</strong> để bác sĩ điều chỉnh liều lượng thuốc hoặc thực hiện các kỹ thuật thăm dò cận lâm sàng sâu hơn. Sau lần khám này, bác sĩ sẽ chỉ định thêm các lịch hẹn theo dõi tiếp theo cho đến khi hoàn toàn hồi phục.
+                                                            </div>
+
+                                                            <div class="flex justify-between items-center pt-2">
+                                                                <span class="text-[11px] text-slate-400 font-medium">Bác sĩ phụ trách: @(appt.Doctor?.FullName ?? "BS. Nguyễn Văn An")</span>
+                                                                <a href="/Appointments/Create?specialtyId=@(appt.Doctor?.SpecialtyId)&doctorId=@appt.DoctorId&fullName=@(System.Uri.EscapeDataString(Model.FullName))&phoneNumber=@Model.PhoneNumber&medicalService=Tái+khám+chuyên+khoa" class="inline-flex items-center gap-1.5 bg-[#0369a1] hover:bg-[#0284c7] text-white font-bold px-4 py-2 rounded-xl text-[12px] no-underline shadow-sm hover:shadow transition-all">
+                                                                    <span class="material-symbols-outlined text-[16px]">calendar_add_on</span> Đăng ký Tái Khám ngay
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-wrap gap-3">
+                                                <button onclick="viewPrescription('recent')" class="flex-1 md:flex-none flex items-center justify-center gap-2 py-2 px-4 rounded-lg bg-[#00346f] text-white hover:bg-[#002244] transition-colors text-[13px] font-bold shadow-sm">
+                                                    <span class="material-symbols-outlined text-[16px]">prescriptions</span> Xem Toa Thuốc
+                                                </button>
+                                                <button onclick="viewLabResult()" class="flex-1 md:flex-none flex items-center justify-center gap-2 py-2 px-4 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 transition-colors text-[13px] font-bold shadow-sm">
+                                                    <span class="material-symbols-outlined text-[16px]">science</span> Xem Kết quả
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="relative">
+                                <div class="absolute -left-[31px] w-5 h-5 bg-slate-300 rounded-full border-4 border-[#f1f5f9] flex items-center justify-center"></div>
+                                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 text-center">
+                                    <p class="text-[14px] text-slate-500 font-medium">Bạn chưa có lịch sử khám chữa bệnh nào trước đây.</p>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Cột phải: Health Metrics & Bills -->
+            <div class="space-y-6">
+                
+                <!-- Chỉ số sinh hiệu MỚI NHẤT -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="flex items-center gap-2 text-[16px] font-bold text-[#00346f]">
+                            <span class="material-symbols-outlined">monitor_heart</span> Chỉ số sinh hiệu
+                        </h2>
+                        <span class="bg-teal-100 text-teal-700 text-[10px] font-bold px-2 py-0.5 rounded uppercase">Mới nhất</span>
+                    </div>
+                    
+                    <p class="text-[12px] text-slate-500 mb-4 bg-slate-50 p-2 rounded-lg border border-slate-100 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[16px]">info</span>
+                        Ghi nhận lúc: 09:15 AM - Hôm nay<br>Tại: Quầy Điều dưỡng Tầng 1
+                    </p>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-red-50/50 border border-red-100 rounded-xl p-3">
+                            <div class="flex items-center gap-2 text-red-500 mb-1">
+                                <span class="material-symbols-outlined text-[18px]">blood_pressure</span>
+                                <span class="text-[12px] font-semibold">Huyết áp</span>
+                            </div>
+                            <p class="text-[20px] font-bold text-slate-800">120/80 <span class="text-[11px] text-slate-500 font-normal">mmHg</span></p>
+                        </div>
+                        <div class="bg-blue-50/50 border border-blue-100 rounded-xl p-3">
+                            <div class="flex items-center gap-2 text-blue-500 mb-1">
+                                <span class="material-symbols-outlined text-[18px]">favorite</span>
+                                <span class="text-[12px] font-semibold">Nhịp tim</span>
+                            </div>
+                            <p class="text-[20px] font-bold text-slate-800">80 <span class="text-[11px] text-slate-500 font-normal">l/phút</span></p>
+                        </div>
+                        <div class="bg-orange-50/50 border border-orange-100 rounded-xl p-3">
+                            <div class="flex items-center gap-2 text-orange-500 mb-1">
+                                <span class="material-symbols-outlined text-[18px]">thermometer</span>
+                                <span class="text-[12px] font-semibold">Nhiệt độ</span>
+                            </div>
+                            <p class="text-[20px] font-bold text-slate-800">37.0 <span class="text-[11px] text-slate-500 font-normal">°C</span></p>
+                        </div>
+                        <div class="bg-emerald-50/50 border border-emerald-100 rounded-xl p-3">
+                            <div class="flex items-center gap-2 text-emerald-500 mb-1">
+                                <span class="material-symbols-outlined text-[18px]">scale</span>
+                                <span class="text-[12px] font-semibold">Cân nặng</span>
+                            </div>
+                            <p class="text-[20px] font-bold text-slate-800">65 <span class="text-[11px] text-slate-500 font-normal">kg</span></p>
+                        </div>
+                    </div>
+                    
+                    <!-- SVG Chart Huyết áp -->
+                    <div class="mt-4 pt-4 border-t border-slate-100">
+                        <p class="text-[12px] font-semibold text-slate-600 mb-2">Biểu đồ Huyết áp Tâm thu (3 tháng)</p>
+                        <div class="h-16 w-full flex items-end justify-between relative px-2">
+                            <div class="absolute inset-0 flex flex-col justify-between py-1">
+                                <div class="w-full border-t border-dashed border-slate-200"></div>
+                                <div class="w-full border-t border-dashed border-slate-200"></div>
+                                <div class="w-full border-t border-slate-200"></div>
+                            </div>
+                            <!-- Bars -->
+                            <div class="w-6 h-[80%] bg-blue-200 rounded-t-sm z-10 relative group"><span class="absolute -top-6 -left-2 bg-slate-800 text-white text-[10px] px-1.5 py-0.5 rounded hidden group-hover:block">115</span></div>
+                            <div class="w-6 h-[90%] bg-blue-300 rounded-t-sm z-10 relative group"><span class="absolute -top-6 -left-2 bg-slate-800 text-white text-[10px] px-1.5 py-0.5 rounded hidden group-hover:block">125</span></div>
+                            <div class="w-6 h-[75%] bg-blue-200 rounded-t-sm z-10 relative group"><span class="absolute -top-6 -left-2 bg-slate-800 text-white text-[10px] px-1.5 py-0.5 rounded hidden group-hover:block">110</span></div>
+                            <div class="w-6 h-[85%] bg-red-400 rounded-t-sm z-10 relative group shadow-[0_0_8px_rgba(248,113,113,0.5)]"><span class="absolute -top-6 -left-2 bg-red-600 text-white text-[10px] px-1.5 py-0.5 rounded hidden group-hover:block z-20">120</span></div>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-slate-400 font-medium px-2 mt-1">
+                            <span>T2</span><span>T3</span><span>T4</span><span class="text-slate-700 font-bold">Hiện tại</span>
+                        </div>
+                    </div>
+
+                    <!-- BMI Alert -->
+                    <div class="mt-4 flex items-center justify-between border-t border-slate-100 pt-4">
+                        <span class="text-[13px] text-slate-600 font-medium">Chỉ số BMI: <b class="text-slate-800">22.5</b></span>
+                        <span class="text-[11px] font-bold text-green-700 bg-green-100 px-2.5 py-1 rounded-md">Bình thường</span>
+                    </div>
+                </div>
+
+                <!-- Viện phí & Hóa đơn -->
+                <div class="bg-white rounded-2xl shadow-sm border border-red-200 overflow-hidden relative" id="billing-card">
+                    <div class="absolute top-0 right-0 w-16 h-16 bg-red-500 transform translate-x-8 -translate-y-8 rotate-45"></div>
+                    <div class="p-6">
+                        <h2 class="flex items-center gap-2 text-[16px] font-bold text-slate-800 mb-4">
+                            <span class="material-symbols-outlined text-red-500">receipt_long</span> Viện phí cần thanh toán
+                        </h2>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center text-[13px]">
+                                <span class="text-slate-600">Tiền khám chuyên khoa</span>
+                                <span class="font-semibold text-slate-800">150.000 đ</span>
+                            </div>
+                            <div class="flex justify-between items-center text-[13px]">
+                                <span class="text-slate-600">Tiền thuốc (Toa số #T284)</span>
+                                <span class="font-semibold text-slate-800">450.000 đ</span>
+                            </div>
+                            <div class="w-full h-px border-t border-dashed border-slate-300 my-2"></div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-[14px] font-bold text-slate-800">Tổng cộng</span>
+                                <span class="text-[18px] font-black text-red-600">600.000 đ</span>
+                            </div>
+                        </div>
+                        <button onclick="payBill()" class="w-full mt-5 bg-red-500 text-white font-bold py-2.5 rounded-lg hover:bg-red-600 transition-colors shadow-sm flex justify-center items-center gap-2 text-[14px]">
+                            <span class="material-symbols-outlined text-[18px]">credit_card</span> Thanh toán Online ngay
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Hỗ trợ y tế -->
+                <div class="bg-gradient-to-br from-teal-500 to-teal-700 rounded-2xl p-6 text-white shadow-md relative overflow-hidden">
+                    <span class="material-symbols-outlined absolute -bottom-4 -right-4 text-[100px] text-white/10">support_agent</span>
+                    <h3 class="font-bold text-[16px] mb-2 relative z-10 flex items-center gap-2">
+                        <span class="material-symbols-outlined">forum</span> Bác sĩ tư vấn 24/7
+                    </h3>
+                    <p class="text-[13px] text-teal-50 mb-4 relative z-10 leading-relaxed">Có thắc mắc về tác dụng phụ của đơn thuốc? Hãy nhắn tin trực tiếp với Bác sĩ điều trị.</p>
+                    <button onclick="chatDoctor()" class="bg-white text-teal-700 font-bold text-[13px] px-5 py-2.5 rounded-lg relative z-10 hover:bg-teal-50 transition-colors shadow-sm w-full">
+                        Mở hộp thư chat
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- MODAL: XEM TOA THUỐC -->
+    <div id="prescription-modal" class="fixed inset-0 bg-slate-900/60 z-50 hidden items-center justify-center backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden scale-95 opacity-0 transition-all duration-200" id="rx-modal-content">
+            <div class="px-6 py-4 border-b border-slate-200 bg-slate-50 flex justify-between items-center shrink-0">
+                <h2 class="font-bold text-[18px] text-[#00346f] flex items-center gap-2">
+                    <span class="material-symbols-outlined text-blue-600">prescriptions</span> Chi tiết Đơn thuốc
+                </h2>
+                <button onclick="closeModal('prescription-modal', 'rx-modal-content')" class="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 flex items-center justify-center transition-colors">
+                    <span class="material-symbols-outlined text-[20px]">close</span>
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-6 bg-white" id="rx-content">
+                <!-- JS will render this -->
+            </div>
+            <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex justify-end shrink-0 gap-3">
+                <button onclick="closeModal('prescription-modal', 'rx-modal-content')" class="px-5 py-2 border border-slate-300 rounded-lg text-slate-700 font-bold text-[14px] hover:bg-white transition-colors">Đóng</button>
+                <button onclick="showToast('Đang tải PDF xuống máy...', 'success')" class="px-5 py-2 bg-[#00346f] text-white rounded-lg font-bold text-[14px] hover:bg-[#002244] flex items-center gap-2 transition-colors">
+                    <span class="material-symbols-outlined text-[18px]">download</span> Tải PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: KẾT QUẢ CẬN LÂM SÀNG -->
+    <div id="lab-result-modal" class="fixed inset-0 bg-slate-900/60 z-50 hidden items-center justify-center backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-[900px] max-h-[90vh] flex flex-col overflow-hidden scale-95 opacity-0 transition-all duration-200" id="lab-result-content">
+            <div class="px-6 py-4 border-b border-slate-200 bg-slate-50 flex justify-between items-center shrink-0">
+                <h2 class="font-bold text-[18px] text-teal-700 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-teal-600">science</span> Phiếu Kết quả Nội soi
+                </h2>
+                <button onclick="closeModal('lab-result-modal', 'lab-result-content')" class="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 flex items-center justify-center transition-colors">
+                    <span class="material-symbols-outlined text-[20px]">close</span>
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-6 bg-slate-100">
+                <div class="bg-white p-8 shadow-md border border-slate-200 relative mx-auto max-w-[210mm] min-h-[297mm]">
+                    <!-- Header -->
+                    <div class="flex justify-between items-start mb-6 border-b-2 border-slate-800 pb-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-16 h-16 bg-blue-700 text-white rounded-full flex items-center justify-center font-black text-2xl">DT</div>
+                            <div>
+                                <h3 class="font-black text-[18px] text-blue-900 uppercase tracking-wide">PHÒNG KHÁM ĐA KHOA DUY TÂM</h3>
+                                <p class="text-[12px] text-slate-600 mt-1">129 Tây Hòa, Phước Long A, TP. Thủ Đức, TP.HCM</p>
+                                <p class="text-[12px] text-slate-600 font-semibold">Hotline: 1900 1234 - CSKH: 0909.123.456</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[13px] font-bold text-slate-600">Mã phiếu: <span class="text-slate-900 text-[15px]">NS-260501</span></p>
+                            <div class="inline-block mt-2 px-2 py-1 bg-slate-100 border border-slate-300">
+                                <span class="material-symbols-outlined text-slate-800 text-[32px] block">barcode</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Title -->
+                    <div class="text-center mb-8">
+                        <h3 class="font-black text-[24px] text-slate-900 uppercase">PHIẾU KẾT QUẢ NỘI SOI</h3>
+                        <p class="text-slate-700 font-bold text-[16px]">DẠ DÀY - TÁ TRÀNG</p>
+                    </div>
+
+                    <!-- Patient Info -->
+                    <div class="grid grid-cols-2 gap-x-8 gap-y-3 text-[14px] text-slate-800 mb-8 p-5 bg-slate-50 border border-slate-200 rounded-xl">
+                        <div>
+                            <p class="mb-2"><span class="text-slate-500 inline-block w-20">Họ và tên:</span> <b class="text-[16px] uppercase">@Model.FullName</b></p>
+                            <p class="mb-2"><span class="text-slate-500 inline-block w-20">Năm sinh:</span> @(Model.DateOfBirth?.Year.ToString() ?? "1979") (@(Model.DateOfBirth.HasValue ? (DateTime.Today.Year - Model.DateOfBirth.Value.Year).ToString() : "45") tuổi) &nbsp;&nbsp;|&nbsp;&nbsp; <span class="text-slate-500">Giới tính:</span> @(Model.Gender ?? "Nam")</p>
+                            <p><span class="text-slate-500 inline-block w-20">Địa chỉ:</span> @(Model.Address ?? "Quận 1, TP.HCM")</p>
+                        </div>
+                        <div>
+                            <p class="mb-2"><span class="text-slate-500 inline-block w-24">Mã BN:</span> <b class="text-slate-900">BN-@(Model.Id.ToString("D6"))</b></p>
+                            <p class="mb-2"><span class="text-slate-500 inline-block w-24">BS chỉ định:</span> PGS.TS Nguyễn Văn An</p>
+                            <p class="mb-2"><span class="text-slate-500 inline-block w-24">BS nội soi:</span> ThS.BS Lê Tuấn</p>
+                            <p><span class="text-slate-500 inline-block w-24">Thiết bị:</span> Hệ thống Olympus EVIS EXERA III CV-190</p>
+                        </div>
+                    </div>
+
+                    <!-- Findings -->
+                    <div class="space-y-5 text-[14px] text-slate-800 mb-8">
+                        <h4 class="font-bold text-[16px] uppercase border-b-2 border-slate-800 pb-1 inline-block">I. MÔ TẢ TỔN THƯƠNG</h4>
+                        <div class="pl-2 space-y-3">
+                            <p><b class="text-slate-900">1. Thực quản:</b> Niêm mạc trơn láng, tâm vị cách cung răng 40cm, đóng mở tốt. Không thấy trào ngược dịch dạ dày.</p>
+                            <p><b class="text-slate-900">2. Dạ dày:</b>
+                                <br><span class="inline-block ml-4 mt-1">- Phình vị và thân vị:</span> Chứa nhiều dịch nhầy trong. Niêm mạc sung huyết nhẹ.
+                                <br><span class="inline-block ml-4 mt-1">- Góc bờ cong nhỏ:</span> Trơn láng, không loét.
+                                <br><span class="inline-block ml-4 mt-1">- Hang vị:</span> Niêm mạc viêm đỏ, phù nề, sung huyết mạnh thành vệt. Rải rác có vài nốt trợt nông, rỉ máu ít.
+                                <br><span class="inline-block ml-4 mt-1">- Môn vị:</span> Tròn, lưu thông tốt.
+                            </p>
+                            <p><b class="text-slate-900">3. Tá tràng:</b> Hành tá tràng và D2 tá tràng niêm mạc bình thường.</p>
+                            <p><b class="text-slate-900">4. CLO Test (Tìm vi khuẩn HP):</b> <span class="text-red-600 font-bold bg-red-50 px-2 py-0.5 rounded">Dương tính (++)</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Images (Mock) -->
+                    <div class="mb-8">
+                        <h4 class="font-bold text-[16px] uppercase border-b-2 border-slate-800 pb-1 inline-block mb-4">II. HÌNH ẢNH NỘI SOI</h4>
+                        <div class="grid grid-cols-3 gap-4">
+                            <div class="aspect-video bg-slate-800 rounded-md flex items-center justify-center text-slate-500 text-[11px] font-medium border-4 border-slate-100 shadow-sm relative overflow-hidden">
+                                <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-900/40 via-slate-900 to-black"></div>
+                                <span class="relative z-10 text-white/70">Hình 1: Thực quản bình thường</span>
+                            </div>
+                            <div class="aspect-video bg-slate-800 rounded-md flex items-center justify-center text-slate-500 text-[11px] font-medium border-4 border-slate-100 shadow-sm relative overflow-hidden">
+                                <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-600/50 via-red-900/80 to-black"></div>
+                                <span class="relative z-10 text-white/90">Hình 2: Viêm trợt hang vị rỉ máu</span>
+                            </div>
+                            <div class="aspect-video bg-slate-800 rounded-md flex items-center justify-center text-slate-500 text-[11px] font-medium border-4 border-slate-100 shadow-sm relative overflow-hidden">
+                                <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-900/40 via-slate-900 to-black"></div>
+                                <span class="relative z-10 text-white/70">Hình 3: Hành tá tràng bình thường</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Conclusion -->
+                    <div class="border-t-2 border-slate-800 pt-4 mb-10">
+                        <h4 class="font-black text-[16px] uppercase text-blue-800 mb-3">III. KẾT LUẬN</h4>
+                        <div class="bg-red-50/50 p-4 rounded-xl border border-red-100">
+                            <p class="font-bold text-[18px] text-red-600 mb-1">- VIÊM SUNG HUYẾT HANG VỊ DẠ DÀY</p>
+                            <p class="font-bold text-[18px] text-red-600">- NHIỄM HELICOBACTER PYLORI (HP++)</p>
+                        </div>
+                    </div>
+
+                    <!-- Signatures -->
+                    <div class="flex justify-between text-[14px] text-center mt-8">
+                        <div></div>
+                        <div class="pr-12">
+                            <p class="italic text-slate-600 mb-2">TP.HCM, ngày 23 tháng 05 năm 2026</p>
+                            <p class="font-black text-slate-800 mb-20 text-[15px]">Bác sĩ thực hiện nội soi</p>
+                            
+                            <p class="font-bold text-slate-900 uppercase text-[15px]">ThS.BS Lê Tuấn</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: HÓA ĐƠN ĐIỆN TỬ -->
+    <div id="invoice-modal" class="fixed inset-0 bg-slate-900/60 z-50 hidden items-center justify-center backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-[900px] max-h-[90vh] flex flex-col overflow-hidden scale-95 opacity-0 transition-all duration-200" id="invoice-content">
+            <div class="px-6 py-4 border-b border-slate-200 bg-slate-50 flex justify-between items-center shrink-0">
+                <h2 class="font-bold text-[18px] text-slate-800 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-red-500">receipt_long</span> Hóa đơn Điện tử
+                </h2>
+                <button onclick="closeModal('invoice-modal', 'invoice-content')" class="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 flex items-center justify-center transition-colors">
+                    <span class="material-symbols-outlined text-[20px]">close</span>
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-8 bg-slate-200">
+                <div class="bg-white p-10 shadow-lg border border-slate-200 relative mx-auto max-w-[210mm] min-h-[297mm]">
+                    <!-- Header Info -->
+                    <div class="flex justify-between items-start mb-8 border-b-2 border-slate-800 pb-6">
+                        <div class="w-1/3">
+                            <div class="w-20 h-20 bg-red-700 text-white rounded-xl flex items-center justify-center font-black text-3xl mb-2 shadow-sm">DT</div>
+                        </div>
+                        <div class="w-1/3 text-center">
+                            <h3 class="font-black text-[22px] text-red-700 uppercase mb-2">HÓA ĐƠN ĐIỆN TỬ</h3>
+                            <p class="text-[13px] italic text-slate-600 font-medium">(Bản thể hiện của hóa đơn điện tử)</p>
+                            <p class="text-[13px] mt-2 font-medium">Ngày 23 tháng 05 năm 2026</p>
+                        </div>
+                        <div class="w-1/3 text-right text-[13px] text-slate-800 space-y-1.5">
+                            <p>Mẫu số: <b class="text-slate-900">02GTTT0/001</b></p>
+                            <p>Ký hiệu: <b class="text-slate-900">DT/26E</b></p>
+                            <p>Số: <b class="text-red-600 text-[18px] font-black tracking-widest">0012345</b></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Seller Info -->
+                    <div class="text-[14px] text-slate-800 mb-6 space-y-2">
+                        <p>Đơn vị bán hàng: <b class="uppercase text-[16px] text-blue-900">PHÒNG KHÁM ĐA KHOA DUY TÂM</b></p>
+                        <p>Mã số thuế: <b class="text-[15px] tracking-wider">0123456789</b></p>
+                        <p>Địa chỉ: 129 Tây Hòa, Phường Phước Long A, TP. Thủ Đức, TP. Hồ Chí Minh</p>
+                        <p>Điện thoại: 1900 1234 - Số tài khoản: 123456789 tại Ngân hàng Vietcombank</p>
+                    </div>
+
+                    <div class="w-full border-t border-dashed border-slate-400 my-6"></div>
+
+                    <!-- Buyer Info -->
+                    <div class="text-[14px] text-slate-800 mb-8 space-y-2 bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <p>Họ tên người mua hàng: <b class="uppercase text-[15px]">@Model.FullName</b></p>
+                        <p>Mã bệnh nhân: <b class="text-[15px]">BN-@(Model.Id.ToString("D6"))</b></p>
+                        <p>Tên đơn vị: Khách lẻ</p>
+                        <p>Mã số thuế: Không có</p>
+                        <p>Địa chỉ: @(Model.Address ?? "Quận 1, TP. Hồ Chí Minh")</p>
+                        <p>Hình thức thanh toán: <b>Chuyển khoản (VNPay)</b></p>
+                    </div>
+
+                    <!-- Table -->
+                    <table class="w-full text-left text-[14px] border-2 border-slate-800 mb-6">
+                        <thead class="bg-slate-100 font-bold text-center border-b-2 border-slate-800">
+                            <tr>
+                                <th class="border-r border-slate-300 py-3 px-2 w-10">STT</th>
+                                <th class="border-r border-slate-300 py-3 px-3">Tên hàng hóa, dịch vụ</th>
+                                <th class="border-r border-slate-300 py-3 px-2 w-20">ĐVT</th>
+                                <th class="border-r border-slate-300 py-3 px-2 w-16">SL</th>
+                                <th class="border-r border-slate-300 py-3 px-3 w-28">Đơn giá</th>
+                                <th class="py-3 px-3 w-32">Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-slate-800">
+                            <tr class="border-b border-slate-200">
+                                <td class="border-r border-slate-300 py-3 px-2 text-center">1</td>
+                                <td class="border-r border-slate-300 py-3 px-3 font-semibold text-blue-900">Phí khám chuyên khoa Tiêu hóa</td>
+                                <td class="border-r border-slate-300 py-3 px-2 text-center">Lần</td>
+                                <td class="border-r border-slate-300 py-3 px-2 text-center">1</td>
+                                <td class="border-r border-slate-300 py-3 px-3 text-right font-medium">150.000</td>
+                                <td class="py-3 px-3 text-right font-bold">150.000</td>
+                            </tr>
+                            <tr class="border-b border-slate-200">
+                                <td class="border-r border-slate-300 py-3 px-2 text-center">2</td>
+                                <td class="border-r border-slate-300 py-3 px-3 font-semibold text-blue-900">Thuốc điều trị theo đơn số #T284</td>
+                                <td class="border-r border-slate-300 py-3 px-2 text-center">Đơn</td>
+                                <td class="border-r border-slate-300 py-3 px-2 text-center">1</td>
+                                <td class="border-r border-slate-300 py-3 px-3 text-right font-medium">450.000</td>
+                                <td class="py-3 px-3 text-right font-bold">450.000</td>
+                            </tr>
+                            <tr class="h-20 align-top">
+                                <td class="border-r border-slate-300 py-3 px-2 text-center"></td>
+                                <td class="border-r border-slate-300 py-3 px-3"></td>
+                                <td class="border-r border-slate-300 py-3 px-2 text-center"></td>
+                                <td class="border-r border-slate-300 py-3 px-2 text-center"></td>
+                                <td class="border-r border-slate-300 py-3 px-3 text-right"></td>
+                                <td class="py-3 px-3 text-right"></td>
+                            </tr>
+                        </tbody>
+                        <tfoot class="text-[14px] border-t-2 border-slate-800">
+                            <tr class="border-b border-slate-200">
+                                <td colspan="5" class="border-r border-slate-300 py-3 px-4 text-right font-bold">Cộng tiền dịch vụ khám bệnh, chữa bệnh:</td>
+                                <td class="py-3 px-3 text-right font-bold">600.000</td>
+                            </tr>
+                            <tr class="border-b border-slate-200 bg-slate-50">
+                                <td colspan="2" class="border-r border-slate-300 py-3 px-4 text-right">Thuế suất GTGT: <b>Không chịu thuế</b> (Dịch vụ Y tế)</td>
+                                <td colspan="3" class="border-r border-slate-300 py-3 px-4 text-right font-bold">Tiền thuế GTGT:</td>
+                                <td class="py-3 px-3 text-right font-bold">0</td>
+                            </tr>
+                            <tr class="bg-red-50/50">
+                                <td colspan="5" class="border-r border-slate-300 py-4 px-4 text-right font-black text-red-700 uppercase text-[15px]">Tổng cộng tiền thanh toán:</td>
+                                <td class="py-4 px-3 text-right font-black text-red-700 text-[16px]">600.000</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    
+                    <div class="text-[14px] text-slate-800 mb-12">
+                        <p class="mb-1">Số tiền viết bằng chữ: <b class="italic text-[15px]">Sáu trăm nghìn đồng chẵn./.</b></p>
+                    </div>
+
+                    <!-- Digital Signature -->
+                    <div class="grid grid-cols-2 text-center text-[14px] text-slate-800">
+                        <div>
+                            <p class="font-bold mb-1 text-[15px]">Người mua hàng</p>
+                            <p class="italic text-slate-500">(Ký, ghi rõ họ tên)</p>
+                        </div>
+                        <div class="relative flex flex-col items-center">
+                            <p class="font-bold mb-1 text-[15px]">Người bán hàng</p>
+                            <p class="italic text-slate-500 mb-4">(Chữ ký số)</p>
+                            
+                            <div class="border-2 border-green-600 text-green-800 bg-green-50/80 px-6 py-3 inline-block text-left text-[13px] rounded-xl shadow-md border-dashed transform rotate-[-2deg]">
+                                <div class="flex items-center gap-2 mb-2 border-b border-green-200 pb-2">
+                                    <span class="material-symbols-outlined text-[24px] text-green-600">verified</span> 
+                                    <p class="font-black text-[15px]">Ký bởi: PHÒNG KHÁM ĐA KHOA DUY TÂM</p>
+                                </div>
+                                <p class="font-medium">Ký ngày: 23/05/2026 10:15:32</p>
+                                <p class="text-[11px] text-green-700 mt-1">Chứng thư số: VNPT-CA 2026</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-slate-200 bg-white flex justify-end shrink-0 gap-3">
+                <button onclick="closeModal('invoice-modal', 'invoice-content')" class="px-5 py-2 border border-slate-300 rounded-lg text-slate-700 font-bold text-[14px] hover:bg-slate-50 transition-colors">Đóng</button>
+                <button onclick="showToast('Đã tải Hóa đơn (PDF) xuống máy!', 'success')" class="px-5 py-2 bg-red-500 text-white rounded-lg font-bold text-[14px] hover:bg-red-600 flex items-center gap-2 transition-colors">
+                    <span class="material-symbols-outlined text-[18px]">file_download</span> Tải PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST CONTAINER -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-[100] flex flex-col gap-3 pointer-events-none"></div>
+
+    <script>
+        // Hiển thị thông báo (Toast)
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const icon = type === 'success' ? 'check_circle' : (type === 'error' ? 'error' : 'info');
+            const bgColor = type === 'success' ? 'bg-green-50 text-green-700 border-green-200' : 
+                           (type === 'error' ? 'bg-red-50 text-red-700 border-red-200' : 'bg-blue-50 text-blue-700 border-blue-200');
+            
+            const toast = document.createElement('div');
+            toast.className = `flex items-center gap-2 p-4 rounded-xl shadow-md border ${bgColor} transition-opacity duration-300 opacity-0 pointer-events-auto`;
+            toast.innerHTML = `<span class="material-symbols-outlined">${icon}</span> <span class="text-[14px] font-semibold">${message}</span>`;
+            
+            container.appendChild(toast);
+            
+            requestAnimationFrame(() => {
+                toast.style.opacity = '1';
+            });
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Đóng/Mở Modal dùng chung
+        function openModal(modalId, contentId, renderFunc = null) {
+            const modal = document.getElementById(modalId);
+            const content = document.getElementById(contentId);
+            
+            if(renderFunc) renderFunc();
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeModal(modalId, contentId) {
+            const modal = document.getElementById(modalId);
+            const content = document.getElementById(contentId);
+            
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 200);
+        }
+
+        // Tính năng: Xem Toa Thuốc
+        function viewPrescription(type) {
+            openModal('prescription-modal', 'rx-modal-content', () => {
+                const rxContent = document.getElementById('rx-content');
+                if(type === 'recent') {
+                    rxContent.innerHTML = `
+                        <div class="text-center mb-6">
+                            <h3 class="font-bold text-[18px] text-slate-800 uppercase">Đơn Thuốc Mới Nhất</h3>
+                            <p class="text-slate-500 text-[13px]">Ngày kê: 23/05/2026 - BS. Nguyễn Văn An</p>
+                        </div>
+                        <table class="w-full text-left text-[13px]">
+                            <thead class="bg-slate-100 border-b border-slate-200 text-slate-600 font-semibold">
+                                <tr>
+                                    <th class="px-4 py-3">Tên thuốc</th>
+                                    <th class="px-4 py-3 text-center">SL</th>
+                                    <th class="px-4 py-3">Liều dùng</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 text-slate-800 font-medium">
+                                <tr>
+                                    <td class="px-4 py-3 text-blue-700">1. Nexium Mups 40mg</td>
+                                    <td class="px-4 py-3 text-center">28 Viên</td>
+                                    <td class="px-4 py-3 text-slate-600 italic text-[12px]">Ngày 2 viên, sáng 1 viên, tối 1 viên trước ăn 30p</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 text-blue-700">2. Amoxicillin 500mg</td>
+                                    <td class="px-4 py-3 text-center">56 Viên</td>
+                                    <td class="px-4 py-3 text-slate-600 italic text-[12px]">Ngày 4 viên chia 2 lần sau ăn</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 text-blue-700">3. Clarithromycin 500mg</td>
+                                    <td class="px-4 py-3 text-center">28 Viên</td>
+                                    <td class="px-4 py-3 text-slate-600 italic text-[12px]">Ngày 2 viên chia 2 lần sau ăn</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    `;
+                } else {
+                    rxContent.innerHTML = `
+                        <div class="text-center mb-6">
+                            <h3 class="font-bold text-[18px] text-slate-800 uppercase">Đơn Thuốc Cũ</h3>
+                            <p class="text-slate-500 text-[13px]">Ngày kê: 10/11/2025 - BS. Lê Tuấn</p>
+                        </div>
+                        <table class="w-full text-left text-[13px]">
+                            <thead class="bg-slate-100 border-b border-slate-200 text-slate-600 font-semibold">
+                                <tr>
+                                    <th class="px-4 py-3">Tên thuốc</th>
+                                    <th class="px-4 py-3 text-center">SL</th>
+                                    <th class="px-4 py-3">Liều dùng</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 text-slate-800 font-medium">
+                                <tr>
+                                    <td class="px-4 py-3 text-blue-700">1. Panadol Extra 500mg</td>
+                                    <td class="px-4 py-3 text-center">10 Viên</td>
+                                    <td class="px-4 py-3 text-slate-600 italic text-[12px]">Uống khi sốt trên 38.5 độ</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 text-blue-700">2. Alpha Choay</td>
+                                    <td class="px-4 py-3 text-center">20 Viên</td>
+                                    <td class="px-4 py-3 text-slate-600 italic text-[12px]">Ngậm dưới lưỡi ngày 4 viên chia 2 lần</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    `;
+                }
+            });
+        }
+
+        // Tính năng: Xem KQ Nội soi
+        function viewLabResult() {
+            openModal('lab-result-modal', 'lab-result-content');
+        }
+
+        function downloadInvoice() {
+            openModal('invoice-modal', 'invoice-content');
+        }
+
+        // Tính năng: Thanh toán Viện phí
+        function payBill() {
+            showToast('Đang kết nối cổng thanh toán VNPay...', 'info');
+            setTimeout(() => {
+                showToast('Thanh toán thành công 600.000đ!', 'success');
+                // Chuyển UI box thanh toán thành trạng thái hoàn tất
+                document.getElementById('billing-card').innerHTML = `
+                    <div class="p-6 flex flex-col items-center text-center">
+                        <span class="material-symbols-outlined text-[64px] text-green-500 mb-2">check_circle</span>
+                        <h3 class="font-bold text-[16px] text-slate-800 mb-1">Không có nợ viện phí</h3>
+                        <p class="text-[13px] text-slate-500">Bạn đã thanh toán đầy đủ các khoản chi phí hiện tại.</p>
+                        <button onclick="downloadInvoice()" class="mt-4 px-4 py-2 border border-slate-200 rounded-lg text-[13px] font-bold text-slate-600 hover:bg-slate-50 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[16px] text-red-500">picture_as_pdf</span> Tải hóa đơn điện tử
+                        </button>
+                    </div>
+                `;
+            }, 1500);
+        }
+
+        // Tính năng: Dời / Hủy lịch
+        // Logic thực tế: Hôm nay là 23/05, lịch khám là 26/05 (còn đúng 3 ngày) -> Được dời! Nhưng giả sử còn 2 ngày thì từ chối.
+        function validateReschedulePolicy() {
+            const today = new Date('2026-05-23');
+            const apptDate = new Date('2026-05-26');
+            const diffTime = Math.abs(apptDate - today);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+            
+            if(diffDays < 3) {
+                showToast('Chỉ được dời/hủy lịch trước ít nhất 3 ngày. Vui lòng gọi Hotline để hỗ trợ gấp!', 'error');
+                return false;
+            }
+            return true;
+        }
+
+        function rescheduleAppt() {
+            if(!validateReschedulePolicy()) return;
+            showToast('Vui lòng chọn ngày giờ mới trên hệ thống', 'info');
+            setTimeout(() => {
+                window.location.href = "/Home/Index#booking-form";
+            }, 1500);
+        }
+
+        function cancelAppt() {
+            if(!validateReschedulePolicy()) return;
+            if(confirm("Bạn có chắc chắn muốn hủy lịch hẹn khám Tiêu hóa ngày 26/05/2026 không?")) {
+                showToast('Đã hủy lịch hẹn thành công', 'success');
+                const apptBox = document.getElementById('upcoming-appt');
+                apptBox.style.opacity = '0.5';
+                apptBox.style.pointerEvents = 'none';
+                apptBox.innerHTML = `
+                    <div class="text-center p-6 border border-dashed border-slate-300 rounded-2xl bg-slate-50">
+                        <span class="material-symbols-outlined text-[48px] text-slate-400 mb-2">event_busy</span>
+                        <p class="font-bold text-slate-600 text-[14px]">Đã hủy lịch hẹn</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Tính năng: Chat Bác sĩ
+        function chatDoctor() {
+            showToast('Đang khởi tạo kết nối mã hóa với Bác sĩ điều trị...', 'info');
+        }
+
+        // Toggle Notifications
+        function toggleNotifications() {
+            const dropdown = document.getElementById('notif-dropdown');
+            if (dropdown.classList.contains('hidden')) {
+                dropdown.classList.remove('hidden');
+            } else {
+                dropdown.classList.add('hidden');
+            }
+        }
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('notif-dropdown');
+            const btn = document.getElementById('notif-btn');
+            if (!btn.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        // Tái khám: Cập nhật tình trạng triệu chứng và phác đồ
+        function setFollowUpStatus(apptId, status) {
+            fetch('/Portal/UpdateSymptomStatus', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'appointmentId=' + apptId + '&status=' + encodeURIComponent(status)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const giamBtn = document.getElementById('btn-giam-' + apptId);
+                    const chuagiamBtn = document.getElementById('btn-chuagiam-' + apptId);
+                    const giamIcon = document.getElementById('icon-giam-' + apptId);
+                    const chuagiamIcon = document.getElementById('icon-chuagiam-' + apptId);
+                    const giamPhacdo = document.getElementById('phacdo-giamphe-' + apptId);
+                    const chuagiamPhacdo = document.getElementById('phacdo-chuagiam-' + apptId);
+
+                    // Reset styling
+                    giamBtn.className = 'symptom-btn-' + apptId + ' flex items-center justify-between px-4 py-2.5 rounded-xl border text-[13px] font-medium transition-all bg-white hover:bg-slate-50 border-slate-200 text-slate-700';
+                    chuagiamBtn.className = 'symptom-btn-' + apptId + ' flex items-center justify-between px-4 py-2.5 rounded-xl border text-[13px] font-medium transition-all bg-white hover:bg-slate-50 border-slate-200 text-slate-700';
+                    giamIcon.classList.add('hidden');
+                    chuagiamIcon.classList.add('hidden');
+                    giamPhacdo.classList.add('hidden');
+                    chuagiamPhacdo.classList.add('hidden');
+
+                    if (status === 'Giảm nhiều') {
+                        giamBtn.className = 'symptom-btn-' + apptId + ' flex items-center justify-between px-4 py-2.5 rounded-xl border text-[13px] font-medium transition-all border-emerald-500 bg-emerald-50/30 text-emerald-700';
+                        giamIcon.classList.remove('hidden');
+                        giamPhacdo.classList.remove('hidden');
+                        showToast('Đã ghi nhận triệu chứng: Giảm nhiều', 'success');
+                    } else if (status === 'Chưa giảm') {
+                        chuagiamBtn.className = 'symptom-btn-' + apptId + ' flex items-center justify-between px-4 py-2.5 rounded-xl border text-[13px] font-medium transition-all border-amber-500 bg-amber-50/30 text-amber-700';
+                        chuagiamIcon.classList.remove('hidden');
+                        chuagiamPhacdo.classList.remove('hidden');
+                        showToast('Đã ghi nhận triệu chứng: Chưa giảm', 'warning');
+                    }
+                } else {
+                    showToast(data.message || 'Lỗi cập nhật trạng thái', 'error');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                showToast('Không thể kết nối đến máy chủ', 'error');
+            });
+        }
+    </script>
+</body>
+</html>

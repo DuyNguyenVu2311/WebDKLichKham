@@ -6,6 +6,8 @@ public class Doctor
 {
     public int Id { get; set; }
 
+    public int? SpecialtyId { get; set; }
+
     [Required, StringLength(120)]
     public string FullName { get; set; } = string.Empty;
 
@@ -30,7 +32,17 @@ public class Doctor
     [StringLength(1000)]
     public string? Biography { get; set; }
 
+    [StringLength(255)]
+    public string? Workplace { get; set; }
+
+    [StringLength(255)]
+    public string? AvatarUrl { get; set; }
+
+    public bool IsFeatured { get; set; }
+
     public bool IsActive { get; set; } = true;
+
+    public Specialty? SpecialtyInfo { get; set; }
 
     public ICollection<DoctorSchedule> Schedules { get; set; } = new List<DoctorSchedule>();
 

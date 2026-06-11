@@ -1,58 +1,601 @@
 @model WebDKLichKham.Models.Doctor
 @{
-    ViewData["Title"] = "Chi tiết bác sĩ";
+    ViewData["Title"] = Model.FullName;
+    var sn = Model.SpecialtyInfo?.Name ?? Model.Specialty;
+
+    var cleanName = Model.FullName.Replace("BS. ", "").Replace("ThS. ", "").Replace("GS. ", "").Replace("TS. ", "").Trim();
+    var isMale = !Model.AvatarUrl?.Contains("female") ?? true;
+    
+    // Choose beautiful avatar path
+    var avatarSrc = string.IsNullOrEmpty(Model.AvatarUrl) 
+        ? $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(cleanName)}&background=e2e8f0&color=475569&size=256&font-size=0.35&bold=true"
+        : Model.AvatarUrl;
+
+    // Week navigation calculation
+    var today = DateTime.Today;
+    var weekOffset = 0;
+    if (int.TryParse(Context.Request.Query["week"], out var wo)) weekOffset = Math.Max(-1, Math.Min(wo, 2));
+
+    var daysToMonday = ((int)today.DayOfWeek - (int)DayOfWeek.Monday + 7) % 7;
+    var monday = today.AddDays(-daysToMonday + weekOffset * 7);
+    var weekDays = Enumerable.Range(0, 7).Select(i => monday.AddDays(i)).ToList();
+    var weekLabel = monday.ToString("dd/MM") + " – " + monday.AddDays(6).ToString("dd/MM/yyyy");
+
+    var weekMode = weekOffset;
+
+    var scheduleByDate = Model.Schedules
+        .OrderBy(s => s.WorkDate).ThenBy(s => s.Shift)
+        .GroupBy(s => s.WorkDate.Date)
+        .ToDictionary(g => g.Key, g => g.ToList());
+
+    // Clean format Clinical Title matching Vietnamese medical practices
+    var displayTitle = "Bác sĩ";
+    if (Model.Qualification == "Thạc sĩ Y học" || Model.FullName.Contains("ThS."))
+    {
+        displayTitle = "Thạc sĩ, Bác sĩ";
+    }
+    else if (Model.Qualification == "Bác sĩ chuyên khoa I")
+    {
+        displayTitle = "BS. CKI";
+    }
+    else if (Model.Qualification == "Bác sĩ chuyên khoa II")
+    {
+        displayTitle = "BS. CKII";
+    }
+    else if (Model.FullName.Contains("GS. TS."))
+    {
+        displayTitle = "GS. TS. BS";
+    }
+    else if (Model.FullName.Contains("TS."))
+    {
+        displayTitle = "TS. BS";
+    }
+
+    var fullFormattedName = $"{displayTitle} {cleanName}";
+
+    // Medically accurate specialty focus areas in Vietnam
+    var specialtyFocus = new Dictionary<string, string>
+    {
+        { "Nội tổng hợp", "Nội khoa, Tăng huyết áp, Đái tháo đường, Tim mạch, Tiêu hóa..." },
+        { "Da liễu", "Bệnh lý da liễu, Chàm, Vảy nến, Mụn trứng cá, Thẩm mỹ da..." },
+        { "Nhi khoa", "Sốt, Ho, Viêm phế quản, Dinh dưỡng nhi, Theo dõi phát triển..." },
+        { "Tai Mũi Họng", "Viêm xoang, Viêm amidan, Viêm mũi dị ứng, Nội soi TMH..." },
+        { "Sản phụ khoa", "Khám thai định kỳ, Khám phụ khoa, Tầm soát ung thư cổ tử cung..." },
+        { "Răng Hàm Mặt", "Khám răng miệng, Điều trị tủy, Hàn răng, Răng sứ thẩm mỹ..." },
+        { "Nội thần kinh", "Đau đầu, Chóng mặt, Mất ngủ, Rối loạn tiền đình, Đau dây thần kinh..." }
+    };
+    var focusText = specialtyFocus.ContainsKey(sn) ? specialtyFocus[sn] : "Khám và điều trị chuyên sâu";
 }
 
-<div class="row g-4">
-    <div class="col-lg-5">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body p-4">
-                <span class="badge text-bg-primary-subtle text-primary-emphasis mb-3">@Model.Specialty</span>
-                <h1 class="h3">@Model.FullName</h1>
-                <p class="text-secondary">@Model.Qualification</p>
-                <p>@Model.Biography</p>
-                <dl class="row small mb-0">
-                    <dt class="col-sm-4">Kinh nghiệm</dt>
-                    <dd class="col-sm-8">@Model.ExperienceYears năm</dd>
-                    <dt class="col-sm-4">Liên hệ</dt>
-                    <dd class="col-sm-8">@Model.PhoneNumber</dd>
-                    <dt class="col-sm-4">Phí khám</dt>
-                    <dd class="col-sm-8">@Model.Fee.ToString("N0") VND</dd>
-                </dl>
+<style>
+    /* ===== SCHEDULE CALENDAR ===== */
+    .schedule-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 6px;
+    }
+    @@media (max-width: 768px) {
+        .schedule-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    @@media (max-width: 480px) {
+        .schedule-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .day-card {
+        border-radius: 12px;
+        padding: 10px 8px;
+        text-align: center;
+        border: 1.5px solid transparent;
+        transition: box-shadow .2s;
+    }
+    .day-card.has-shift {
+        border-color: #c2d6f5; background: #f4f8ff;
+        cursor: pointer;
+        transition: all .18s;
+    }
+    .day-card.has-shift:hover {
+        border-color: #0d8a72;
+        background: #e8faf5;
+        box-shadow: 0 4px 14px rgba(13,138,114,0.15);
+        transform: translateY(-2px);
+    }
+    .day-card.has-shift.day-selected {
+        border-color: #0d8a72 !important;
+        background: #e6f7f5 !important;
+        box-shadow: 0 0 0 3px #0d8a7240;
+    }
+    .day-card.is-off {
+        border-color: #f0f0f0; background: #fafafa;
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+    .day-card.is-off .day-num { color: #b0b7c3; }
+    .day-card.is-today { border-color: #0d8a72 !important; box-shadow: 0 0 0 2px #0d8a7230; }
+    .day-name { font-size: 11px; font-weight: 700; color: #6b7280; text-transform: uppercase; margin-bottom: 4px; }
+    .day-num { font-size: 18px; font-weight: 800; color: #1e293b; line-height: 1; margin-bottom: 6px; }
+    .shift-tag { display: block; font-size: 10px; font-weight: 700; padding: 2px 5px; border-radius: 5px; margin-bottom: 3px; line-height: 1.5; }
+    .shift-sang { background: #fef3c7; color: #92400e; }
+    .shift-chieu { background: #dbeafe; color: #1e40af; }
+    .shift-ca3 { background: #ede9fe; color: #5b21b6; }
+    .off-label { font-size: 10px; color: #c0c8d8; font-weight: 600; margin-top: 4px; }
+    .legend-dot { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+
+    /* Shift detail rows */
+    .shift-row { transition: background .15s; }
+    .shift-row.hidden-row { display: none; }
+
+    .btn-book-ca {
+        display: inline-flex; align-items: center; gap: 5px;
+        font-size: 11px; font-weight: 700;
+        color: #fff; background: #0d8a72;
+        padding: 6px 14px; border-radius: 8px;
+        text-decoration: none; white-space: nowrap;
+        transition: background .15s;
+    }
+    .btn-book-ca:hover { background: #0b7762; color: #fff; text-decoration: none; }
+    .btn-book-ca.disabled-ca {
+        background: #e2e8f0; color: #94a3b8;
+        cursor: not-allowed; pointer-events: none;
+    }
+    .day-card.past-shift {
+        background: #f8f8f8 !important;
+        border-color: #e0e0e0 !important;
+        cursor: default !important;
+        opacity: 0.85;
+    }
+    .day-card.past-shift:hover {
+        transform: none !important;
+        box-shadow: none !important;
+    }
+    .past-badge {
+        font-size: 10px; font-weight: 700;
+        color: #9ca3af;
+        padding: 2px 6px;
+        background: #f3f4f6;
+        border-radius: 4px;
+        display: inline-block;
+        margin-top: 3px;
+    }
+</style>
+
+<main class="max-w-[1280px] mx-auto px-4 md:px-8 py-8 font-sans">
+    <!-- Breadcrumbs -->
+    <nav class="flex items-center gap-2 text-[13px] text-gray-500 mb-6 select-none">
+        <a class="hover:text-[#0d8a72] no-underline text-gray-500 transition-colors" asp-controller="Home" asp-action="Index">Trang chủ</a>
+        <span class="material-symbols-outlined text-[16px] text-gray-400">chevron_right</span>
+        <a class="hover:text-[#0d8a72] no-underline text-gray-500 transition-colors" asp-controller="Doctors" asp-action="Index">Bác sĩ</a>
+        <span class="material-symbols-outlined text-[16px] text-gray-400">chevron_right</span>
+        <span class="text-gray-800 font-semibold">@cleanName</span>
+    </nav>
+
+    <!-- Main Profile Card Container -->
+    <section class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8 mb-6">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Left Column: Photo with Overlay Info -->
+            <div class="w-full lg:w-[320px] shrink-0">
+                <div class="relative w-full rounded-2xl overflow-hidden border border-gray-100 shadow-sm bg-gray-50">
+                    <img src="@avatarSrc" alt="@Model.FullName" class="w-full object-cover aspect-[4/5] object-top" />
+                    <!-- Photo Overlay Banner -->
+                    <div class="absolute bottom-0 left-0 right-0 bg-[#e0f2fe]/95 border-t border-sky-200 p-4 text-center">
+                        <h4 class="font-extrabold text-[13px] text-[#00346f] uppercase tracking-wider mb-1 leading-snug">
+                            @(Model.Qualification?.ToUpper() ?? "BÁC SĨ CHUYÊN KHOA")
+                        </h4>
+                        <p class="text-[11px] text-sky-800 font-semibold leading-tight uppercase">
+                            @(Model.Workplace?.ToUpper() ?? "CƠ SỞ Y TẾ BCARE")
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Clinical details and Practicing units -->
+            <div class="flex-1 flex flex-col justify-between">
+                <div>
+                    <!-- Title & Name -->
+                    <h1 class="text-[28px] md:text-[32px] font-bold text-gray-900 leading-tight mb-2">
+                        @fullFormattedName
+                    </h1>
+
+                    <!-- Specialty Focus -->
+                    <div class="flex items-center gap-1.5 text-[#0d8a72] font-semibold text-[14px] mb-4">
+                        <span class="material-symbols-outlined text-[18px]">stethoscope</span>
+                        <span>@sn: @focusText</span>
+                    </div>
+
+                    <!-- Biography Description -->
+                    <p class="text-[14px] text-gray-600 leading-relaxed mb-6">
+                        @if (!string.IsNullOrEmpty(Model.Biography))
+                        {
+                            @Html.Raw(Model.Biography)
+                        }
+                        else
+                        {
+                            @:Bác sĩ @cleanName là một chuyên gia có kiến thức vững vàng và kinh nghiệm sâu rộng trong lĩnh vực Y khoa, đặc biệt là chuyên khoa @sn. Hiện tại bác sĩ đang công tác tại @(Model.Workplace ?? "Phòng khám đa khoa") và nhận được nhiều phản hồi tích cực từ phía người bệnh nhờ sự tận tâm, chuyên nghiệp trong điều trị.
+                        }
+                    </p>
+
+                    <!-- Profile properties list -->
+                    <div class="space-y-3 mb-6">
+                        <div class="flex items-center gap-3 text-[14px] text-gray-600">
+                            <span class="material-symbols-outlined text-[20px] text-gray-400">badge</span>
+                            <span>Chức vụ: <strong class="text-gray-800">@(Model.Qualification ?? "Bác sĩ điều trị") - @(Model.Workplace ?? "Cơ sở y tế")</strong></span>
+                        </div>
+                        <div class="flex items-center gap-3 text-[14px] text-gray-600">
+                            <span class="material-symbols-outlined text-[20px] text-gray-400">translate</span>
+                            <span>Ngôn ngữ: <strong class="text-gray-800">Tiếng Việt, Tiếng Anh</strong></span>
+                        </div>
+                    </div>
+
+                    <!-- Practicing workplaces (Lịch khám tại cơ sở) -->
+                    <div class="border-t border-gray-100 pt-6 mt-6">
+                        <h4 class="text-[14px] font-bold text-gray-800 flex items-center gap-2 mb-4">
+                            <span class="material-symbols-outlined text-[20px] text-gray-500">schedule</span>
+                            Lịch khám tại cơ sở
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Primary Facility Card -->
+                            <div class="bg-[#fafbff] border border-gray-100 rounded-xl p-4 flex flex-col justify-between hover:shadow-sm transition-shadow">
+                                <div>
+                                    <h5 class="font-bold text-[#0d8a72] text-[14px] leading-tight mb-1.5">
+                                        @(Model.Workplace ?? "Cơ sở khám bệnh chính")
+                                    </h5>
+                                    <p class="text-[12px] text-gray-500 leading-snug mb-2 flex items-start gap-1">
+                                        <span class="material-symbols-outlined text-[14px] text-gray-400 shrink-0 mt-0.5">location_on</span>
+                                        <span>
+                                            @if (Model.Workplace?.Contains("Thủ Đức") == true)
+                                            {
+                                                @:18 Đường 22, Phường Linh Chiểu, TP. Thủ Đức, TP. HCM
+                                            }
+                                            else if (Model.Workplace?.Contains("Nhơn Trạch") == true)
+                                            {
+                                                @:Đường Tôn Đức Thắng, Phú Hội, Nhơn Trạch, Đồng Nai
+                                            }
+                                            else
+                                            {
+                                                @:18 Định Công Thượng, Phường Định Công, Quận Hoàng Mai, Hà Nội
+                                            }
+                                        </span>
+                                    </p>
+                                    <p class="text-[12px] text-gray-600 leading-normal mb-3 flex items-start gap-1">
+                                        <span class="material-symbols-outlined text-[14px] text-gray-400 shrink-0 mt-0.5">query_builder</span>
+                                        <span>Thứ 2 - Thứ 6: 08:00 - 11:30, 13:30 - 17:00</span>
+                                    </p>
+                                </div>
+                                <div class="border-t border-gray-100 pt-2 flex items-baseline justify-between mt-2">
+                                    <span class="text-[11px] text-gray-400 font-semibold uppercase">Phí khám</span>
+                                    <span class="text-[15px] font-bold text-emerald-600">@Model.Fee.ToString("N0")đ</span>
+                                </div>
+                            </div>
+
+                            <!-- Telehealth Option Card -->
+                            <div class="bg-[#fafbff] border border-gray-100 rounded-xl p-4 flex flex-col justify-between hover:shadow-sm transition-shadow">
+                                <div>
+                                    <h5 class="font-bold text-[#0d8a72] text-[14px] leading-tight mb-1.5">
+                                        Tư vấn sức khỏe trực tuyến (Telehealth)
+                                    </h5>
+                                    <p class="text-[12px] text-gray-500 leading-snug mb-2 flex items-start gap-1">
+                                        <span class="material-symbols-outlined text-[14px] text-gray-400 shrink-0 mt-0.5">videocam</span>
+                                        <span>Tư vấn từ xa qua cuộc gọi thoại / cuộc gọi video trên Zalo</span>
+                                    </p>
+                                    <p class="text-[12px] text-gray-600 leading-normal mb-3 flex items-start gap-1">
+                                        <span class="material-symbols-outlined text-[14px] text-gray-400 shrink-0 mt-0.5">query_builder</span>
+                                        <span>Thứ 2 - Thứ 6: 18:00 - 20:00 | Thứ 7: 13:30 - 17:00</span>
+                                    </p>
+                                </div>
+                                <div class="border-t border-gray-100 pt-2 flex items-baseline justify-between mt-2">
+                                    <span class="text-[11px] text-gray-400 font-semibold uppercase">Phí tư vấn</span>
+                                    <span class="text-[15px] font-bold text-emerald-600">@((Model.Fee * 0.8m).ToString("N0"))đ</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bookmark and Share Buttons -->
+                <div class="flex items-center gap-3 mt-6 border-t border-gray-100 pt-6">
+                    <button type="button" class="flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl px-4 py-2.5 text-[13px] font-semibold text-gray-700 transition-colors cursor-pointer select-none">
+                        <span class="material-symbols-outlined text-[18px] text-rose-500">favorite</span> Ghi nhớ
+                    </button>
+                    <button type="button" class="flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl px-4 py-2.5 text-[13px] font-semibold text-gray-700 transition-colors cursor-pointer select-none">
+                        <span class="material-symbols-outlined text-[18px] text-blue-500">share</span> Chia sẻ
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-lg-7">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body p-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h2 class="h4 mb-0">Lịch làm việc dự kiến</h2>
-                    <a class="btn btn-primary btn-sm" asp-controller="Appointments" asp-action="Create">Đặt lịch với bác sĩ này</a>
+    </section>
+
+    <!-- ========== BOOKING SCHEDULE SECTION ========== -->
+    <section id="schedule" class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 md:p-8">
+        <div class="flex items-center gap-2 pb-4 mb-6 border-b border-gray-100">
+            <span class="material-symbols-outlined text-[#0d8a72] text-[24px]">calendar_today</span>
+            <h3 class="text-[18px] font-bold text-gray-800">Đặt lịch khám & Lịch làm việc</h3>
+        </div>
+
+        <!-- Header + Legend -->
+        <div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
+            <div class="flex-1">
+                <p class="text-[13px] text-gray-500">Tuần làm việc hiện tại: <strong>@weekLabel</strong></p>
+            </div>
+            <div class="flex flex-wrap gap-3 text-[11px] font-semibold shrink-0">
+                <span class="flex items-center gap-1.5"><span class="legend-dot shift-sang"></span> Ca sáng</span>
+                <span class="flex items-center gap-1.5"><span class="legend-dot shift-chieu"></span> Ca chiều</span>
+                <span class="flex items-center gap-1.5"><span class="legend-dot bg-gray-200"></span> Ngày nghỉ</span>
+            </div>
+        </div>
+
+        <!-- Week Navigation Buttons -->
+        <div class="flex items-center gap-2 mb-6">
+            @if (weekOffset > -1)
+            {
+                <a href="?week=@(weekOffset - 1)#schedule"
+                   class="flex items-center gap-1 px-4 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-[13px] font-bold hover:bg-gray-50 no-underline transition-all">
+                    <span class="material-symbols-outlined text-[16px]">chevron_left</span> Tuần trước
+                </a>
+            }
+            else
+            {
+                <span class="flex items-center gap-1 px-4 py-2.5 rounded-xl border border-gray-100 text-gray-300 text-[13px] font-bold cursor-not-allowed">
+                    <span class="material-symbols-outlined text-[16px]">chevron_left</span> Tuần trước
+                </span>
+            }
+            <span class="flex-1 text-center text-[13px] font-bold text-[#1e293b]">@weekLabel</span>
+            @if (weekOffset < 2)
+            {
+                <a href="?week=@(weekOffset + 1)#schedule"
+                   class="flex items-center gap-1 px-4 py-2.5 rounded-xl border border-gray-200 text-gray-700 text-[13px] font-bold hover:bg-gray-50 no-underline transition-all">
+                    Tuần sau <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+                </a>
+            }
+            else
+            {
+                <span class="flex items-center gap-1 px-4 py-2.5 rounded-xl border border-gray-100 text-gray-300 text-[13px] font-bold cursor-not-allowed">
+                    Tuần sau <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+                </span>
+            }
+        </div>
+
+        <!-- Week State Alerts -->
+        @if (weekMode == -1)
+        {
+            <div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 mb-6">
+                <span class="material-symbols-outlined text-[22px] text-gray-500">history</span>
+                <div>
+                    <div class="text-[13px] font-bold text-gray-600">Đã hoàn thành công việc</div>
+                    <div class="text-[11px] text-gray-400">Lịch khám tuần qua — chỉ xem, không thể đặt lịch mới.</div>
                 </div>
-                <div class="table-responsive">
-                    <table class="table align-middle">
+            </div>
+        }
+        else if (weekMode == 1)
+        {
+            <div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#e6f7f5] border border-[#b2dfdb] mb-6">
+                <span class="material-symbols-outlined text-[22px] text-[#0d8a72]">update</span>
+                <div>
+                    <div class="text-[13px] font-bold text-[#0d8a72]">Lịch dự kiến — có thể thay đổi</div>
+                    <div class="text-[11px] text-[#0b7762]">Bạn có thể đặt trước. Lịch khám có thể điều chỉnh tùy thuộc vào tình hình thực tế của bác sĩ.</div>
+                </div>
+            </div>
+        }
+
+        @if (weekMode >= 2)
+        {
+            <div class="py-12 rounded-2xl border-2 border-dashed border-gray-200 text-center">
+                <span class="material-symbols-outlined text-[48px] text-gray-300 block mb-2">calendar_add_on</span>
+                <div class="text-[15px] font-bold text-gray-400 mb-1">Chưa có lịch đăng ký cụ thể</div>
+                <div class="text-[12px] text-gray-400">Lịch khám của tuần này sẽ được cập nhật sớm nhất. Vui lòng quay lại sau.</div>
+            </div>
+        }
+        else
+        {
+            <!-- 7-day calendar grid -->
+            <div class="schedule-grid" id="weekCalendar">
+                @foreach (var day in weekDays)
+                {
+                    var daySchedules = scheduleByDate.ContainsKey(day.Date) ? scheduleByDate[day.Date] : null;
+                    var isToday = day.Date == today;
+                    var hasWork = daySchedules != null && daySchedules.Any();
+
+                    var cardClass = hasWork ? "has-shift" : "is-off";
+                    if (isToday) cardClass += " is-today";
+                    if (weekMode == -1 && hasWork) cardClass += " past-shift";
+
+                    var dayOfWeekVi = day.DayOfWeek switch {
+                        DayOfWeek.Monday    => "Thứ 2",
+                        DayOfWeek.Tuesday   => "Thứ 3",
+                        DayOfWeek.Wednesday => "Thứ 4",
+                        DayOfWeek.Thursday  => "Thứ 5",
+                        DayOfWeek.Friday    => "Thứ 6",
+                        DayOfWeek.Saturday  => "Thứ 7",
+                        DayOfWeek.Sunday    => "CN",
+                        _                   => ""
+                    };
+
+                    var dateStr = day.ToString("yyyy-MM-dd");
+
+                    if (hasWork)
+                    {
+                        var isPast = weekMode == -1;
+                        <div class="day-card @cardClass"
+                             data-date="@dateStr"
+                             @if(!isPast) { <text>onclick="selectDay('@dateStr', this)"</text> }
+                             title="@(isPast ? "Tuần đã qua" : $"Xem lịch {dayOfWeekVi}, {day.Day}")">
+                            <div class="day-name">@dayOfWeekVi</div>
+                            <div class="day-num">@day.Day</div>
+                            @if (isPast)
+                            {
+                                <span class="past-badge">✓ Đã khám</span>
+                            }
+                            else
+                            {
+                                foreach (var s in daySchedules!)
+                                {
+                                    var sl = s.Shift.GetDisplayName();
+                                    var sc = sl == "Ca sáng" ? "shift-sang" : sl == "Ca chiều" ? "shift-chieu" : "shift-ca3";
+                                    <span class="shift-tag @sc">@s.StartTime.ToString(@"hh\:mm")–@s.EndTime.ToString(@"hh\:mm")</span>
+                                }
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="day-card @cardClass" title="Ngày nghỉ">
+                            <div class="day-name">@dayOfWeekVi</div>
+                            <div class="day-num">@day.Day</div>
+                            <div class="off-label">
+                                <span class="material-symbols-outlined" style="font-size:14px;color:#c0c8d8">bed</span><br>Nghỉ
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+
+            <!-- Interactivity Help Text -->
+            <p id="scheduleHint" class="text-[12px] text-[#0d8a72] mt-4 text-center font-semibold animate-pulse">
+                <span class="material-symbols-outlined text-[14px] align-middle">touch_app</span>
+                Bấm vào các ngày làm việc ở trên để hiển thị giờ khám chi tiết và đặt lịch
+            </p>
+
+            <!-- Detailed Shift Booking Panel (hidden until a day is selected) -->
+            <div id="dayDetailPanel" class="mt-6 hidden animate-fadeIn">
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="material-symbols-outlined text-[18px] text-gray-800">event</span>
+                    <h4 class="text-[14px] font-extrabold text-gray-800 uppercase tracking-wider" id="dayDetailTitle">Chi tiết ngày khám</h4>
+                </div>
+
+                <div class="overflow-x-auto rounded-xl border border-gray-200">
+                    <table class="w-full text-[13px] border-collapse">
                         <thead>
-                            <tr>
-                                <th>Ngày</th>
-                                <th>Ca</th>
-                                <th>Khung giờ</th>
-                                <th>Tối đa</th>
+                            <tr class="bg-gray-50 border-b border-gray-200">
+                                <th class="text-left px-4 py-3 font-bold text-gray-600 text-[11px] uppercase w-[180px]">Ca khám</th>
+                                <th class="text-left px-4 py-3 font-bold text-gray-600 text-[11px] uppercase">Giờ khám chi tiết</th>
+                                <th class="text-center px-4 py-3 font-bold text-gray-600 text-[11px] uppercase w-[150px]">Trạng thái</th>
+                                <th class="px-4 py-3 w-[150px]"></th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @foreach (var schedule in Model.Schedules.OrderBy(s => s.WorkDate))
+                        <tbody id="dayDetailBody">
+                            @foreach (var day in weekDays)
                             {
-                                <tr>
-                                    <td>@schedule.WorkDate.ToString("dd/MM/yyyy")</td>
-                                    <td>@schedule.Shift.GetDisplayName()</td>
-                                    <td>@schedule.StartTime.ToString(@"hh\:mm") - @schedule.EndTime.ToString(@"hh\:mm")</td>
-                                    <td>@schedule.MaxAppointments</td>
-                                </tr>
+                                if (!scheduleByDate.ContainsKey(day.Date)) continue;
+                                var shifts = scheduleByDate[day.Date];
+                                var isFirst = true;
+                                foreach (var s in shifts)
+                                {
+                                    var shiftLabel = s.Shift.GetDisplayName();
+                                    var shiftClass = shiftLabel == "Ca sáng" ? "shift-sang"
+                                                   : shiftLabel == "Ca chiều" ? "shift-chieu"
+                                                   : "shift-ca3";
+                                    var isToday2 = day.Date == today;
+                                    var bgRow = isToday2 ? "bg-emerald-50/20" : (isFirst ? "bg-white" : "bg-gray-50/30");
+
+                                    var bookedCount = Model.Appointments
+                                        .Count(a => a.AppointmentDate.Date == day.Date
+                                                 && a.StartTime >= s.StartTime
+                                                 && a.StartTime < s.EndTime);
+                                    var ratio = s.MaxAppointments > 0 ? (double)bookedCount / s.MaxAppointments : 0;
+
+                                    var isPast = weekMode == -1 || day.Date.Add(s.StartTime) < DateTime.Now;
+                                    var (statusText, statusBg, statusIcon) = isPast
+                                        ? ("Đã qua", "bg-gray-100 text-gray-400 border border-gray-200", "history")
+                                        : ratio >= 1.0
+                                        ? ("Kín lịch", "bg-red-50 text-red-700 border border-red-200", "event_busy")
+                                        : ratio >= 0.7
+                                        ? ("Sắp đầy", "bg-amber-50 text-amber-700 border border-amber-200", "hourglass_top")
+                                        : ("Còn chỗ", "bg-green-50 text-green-700 border border-green-200", "check_circle");
+
+                                    var bookUrl = Url.Action("Create", "Appointments", new {
+                                        specialtyId     = Model.SpecialtyId,
+                                        doctorId        = Model.Id,
+                                        appointmentDate = day.ToString("yyyy-MM-dd"),
+                                        startTime       = s.StartTime.ToString(@"hh\:mm")
+                                    });
+
+                                    <tr class="shift-row @bgRow border-b border-gray-100 hover:bg-gray-50/80 transition-colors"
+                                        data-date="@day.ToString("yyyy-MM-dd")"
+                                        style="display:none">
+                                        <td class="px-4 py-3">
+                                            <span class="shift-tag @shiftClass" style="display:inline-block;">@shiftLabel</span>
+                                        </td>
+                                        <td class="px-4 py-3 font-semibold text-gray-800">
+                                            @s.StartTime.ToString(@"hh\:mm") – @s.EndTime.ToString(@"hh\:mm")
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold @statusBg">
+                                                <span class="material-symbols-outlined text-[13px]">@statusIcon</span>
+                                                @statusText
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 text-right">
+                                            @if (isPast)
+                                            {
+                                                <span class="text-[11px] text-gray-400 italic font-medium">Chỉ xem</span>
+                                            }
+                                            else if (ratio < 1.0)
+                                            {
+                                                <a href="@bookUrl" class="btn-book-ca select-none">
+                                                    <span class="material-symbols-outlined text-[14px]">add_circle</span>
+                                                    Đặt ca này
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <span class="btn-book-ca disabled-ca select-none">
+                                                    <span class="material-symbols-outlined text-[14px]">block</span>
+                                                    Hết chỗ
+                                                </span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    isFirst = false;
+                                }
                             }
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+        }
+    </section>
+</main>
+
+<script>
+(function () {
+    var selectedCard = null;
+
+    window.selectDay = function (dateStr, card) {
+        if (selectedCard) selectedCard.classList.remove('day-selected');
+
+        card.classList.add('day-selected');
+        selectedCard = card;
+
+        var d = new Date(dateStr + 'T00:00:00');
+        var days = ['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
+        var dayName = days[d.getDay()];
+        var dd = String(d.getDate()).padStart(2,'0');
+        var mm = String(d.getMonth()+1).padStart(2,'0');
+        document.getElementById('dayDetailTitle').textContent =
+            'Lịch khám ' + dayName + ' — ' + dd + '/' + mm;
+
+        var panel = document.getElementById('dayDetailPanel');
+        panel.classList.remove('hidden');
+
+        var hint = document.getElementById('scheduleHint');
+        if (hint) hint.style.display = 'none';
+
+        var rows = document.querySelectorAll('#dayDetailBody .shift-row');
+        rows.forEach(function (row) {
+            if (row.getAttribute('data-date') === dateStr) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        setTimeout(function() {
+            panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 80);
+    };
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var todayCard = document.querySelector('.day-card.has-shift.is-today');
+        if (todayCard) {
+            todayCard.click();
+        }
+    });
+})();
+</script>

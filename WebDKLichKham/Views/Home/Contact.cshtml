@@ -1,0 +1,172 @@
+@{
+    ViewData["Title"] = "Liên Hệ & Hỗ Trợ";
+}
+
+<div class="bg-gray-50 pb-16">
+    <!-- HERO SECTION -->
+    <section class="bg-gradient-to-r from-[#00346f] to-[#255dad] text-white pt-16 pb-24 relative overflow-hidden">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white/10 to-transparent opacity-60"></div>
+        <div class="max-w-[1280px] mx-auto px-4 md:px-8 relative z-10 text-center">
+            <h1 class="text-[36px] md:text-[48px] font-bold mb-4 tracking-tight">Liên Hệ Phòng Khám Đa Khoa Duy Tâm</h1>
+            <p class="text-[16px] md:text-[18px] text-blue-100 max-w-2xl mx-auto leading-relaxed">
+                Chúng tôi luôn sẵn sàng lắng nghe và hỗ trợ bạn. Đội ngũ y bác sĩ và chuyên viên chăm sóc khách hàng trực 24/7 đối với các trường hợp khẩn cấp.
+            </p>
+        </div>
+    </section>
+
+    <div class="max-w-[1280px] mx-auto px-4 md:px-8 -mt-12 relative z-20">
+        <!-- EMERGENCY CARDS -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <!-- Card Cấp cứu -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 border-t-4 border-red-500 flex flex-col items-center text-center transform transition-transform hover:-translate-y-1">
+                <div class="w-14 h-14 bg-red-50 text-red-500 rounded-full flex items-center justify-center mb-4">
+                    <span class="material-symbols-outlined text-[28px]">emergency</span>
+                </div>
+                <h3 class="text-[18px] font-bold text-gray-900 mb-2">Cấp Cứu 24/7</h3>
+                <p class="text-gray-500 text-[14px] mb-4">Phục vụ các trường hợp nguy hiểm cần can thiệp y tế ngay lập tức.</p>
+                <a href="tel:115" class="text-red-600 font-bold text-[22px] no-underline hover:text-red-700">115</a>
+            </div>
+            
+            <!-- Card Tổng đài -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 border-t-4 border-[#00346f] flex flex-col items-center text-center transform transition-transform hover:-translate-y-1">
+                <div class="w-14 h-14 bg-blue-50 text-[#00346f] rounded-full flex items-center justify-center mb-4">
+                    <span class="material-symbols-outlined text-[28px]">support_agent</span>
+                </div>
+                <h3 class="text-[18px] font-bold text-gray-900 mb-2">Tổng Đài Tư Vấn</h3>
+                <p class="text-gray-500 text-[14px] mb-4">Hỗ trợ đặt lịch khám, hỏi đáp thông tin dịch vụ, bảo hiểm y tế.</p>
+                <a href="tel:19001234" class="text-[#00346f] font-bold text-[22px] no-underline hover:text-blue-800">1900 1234</a>
+            </div>
+
+            <!-- Card Giờ làm việc -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 border-t-4 border-green-500 flex flex-col items-center text-center transform transition-transform hover:-translate-y-1">
+                <div class="w-14 h-14 bg-green-50 text-green-600 rounded-full flex items-center justify-center mb-4">
+                    <span class="material-symbols-outlined text-[28px]">schedule</span>
+                </div>
+                <h3 class="text-[18px] font-bold text-gray-900 mb-2">Giờ Làm Việc</h3>
+                <p class="text-gray-500 text-[14px] mb-4">Khám ngoại trú và cận lâm sàng phục vụ xuyên suốt trong tuần.</p>
+                <div class="text-green-700 font-bold text-[16px]">Thứ 2 - Chủ Nhật<br/>07:00 - 18:00</div>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT (FORM & MAP) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            
+            <!-- LEFT: CONTACT FORM -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                <h2 class="text-[24px] font-bold text-gray-900 mb-2">Gửi Câu Hỏi / Ý Kiến</h2>
+                <p class="text-[14px] text-gray-500 mb-6">
+                    Vui lòng điền thông tin chi tiết để chúng tôi có thể hỗ trợ bạn tốt nhất. Chuyên viên y tế sẽ phản hồi trong vòng 24 giờ làm việc.
+                </p>
+
+                <form asp-controller="Home" asp-action="SubmitContact" method="post" class="space-y-5" onsubmit="return validateContactForm()">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-[13px] font-semibold text-gray-700 mb-1">Họ và tên *</label>
+                            <input type="text" name="FullName" id="contactName" placeholder="Nguyễn Văn A" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] focus:outline-none focus:border-[#00346f] focus:ring-1 focus:ring-[#00346f] bg-gray-50 focus:bg-white transition-colors" required>
+                        </div>
+                        <div>
+                            <label class="block text-[13px] font-semibold text-gray-700 mb-1">Số điện thoại *</label>
+                            <input type="tel" name="Phone" id="contactPhone" placeholder="0901234567" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] focus:outline-none focus:border-[#00346f] focus:ring-1 focus:ring-[#00346f] bg-gray-50 focus:bg-white transition-colors" required>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-[13px] font-semibold text-gray-700 mb-1">Địa chỉ Email</label>
+                            <input type="email" name="Email" placeholder="email@example.com" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] focus:outline-none focus:border-[#00346f] focus:ring-1 focus:ring-[#00346f] bg-gray-50 focus:bg-white transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-[13px] font-semibold text-gray-700 mb-1">Chuyên khoa cần hỗ trợ</label>
+                            <select name="Department" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] focus:outline-none focus:border-[#00346f] focus:ring-1 focus:ring-[#00346f] bg-gray-50 focus:bg-white transition-colors">
+                                <option value="Tư vấn chung">Tư vấn chung</option>
+                                <option value="Nội khoa">Khám Nội chung</option>
+                                <option value="Ngoại khoa">Khám Ngoại</option>
+                                <option value="Sản Phụ khoa">Sản Phụ khoa</option>
+                                <option value="Nhi khoa">Nhi khoa</option>
+                                <option value="Bảo hiểm / Viện phí">Bảo hiểm & Viện phí</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[13px] font-semibold text-gray-700 mb-1">Nội dung hỗ trợ *</label>
+                        <textarea name="Message" id="contactMessage" rows="4" placeholder="Mô tả triệu chứng bệnh, thắc mắc về dịch vụ, hoặc ý kiến đóng góp của bạn..." class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] focus:outline-none focus:border-[#00346f] focus:ring-1 focus:ring-[#00346f] bg-gray-50 focus:bg-white transition-colors resize-none" required></textarea>
+                    </div>
+
+                    <div class="flex items-start gap-2 bg-yellow-50 p-3 rounded-lg border border-yellow-100">
+                        <span class="material-symbols-outlined text-yellow-600 text-[18px] mt-0.5">warning</span>
+                        <p class="text-[12px] text-yellow-800 leading-tight m-0">
+                            <strong>Lưu ý:</strong> Biểu mẫu này không dành cho các trường hợp cấp cứu y tế. Nếu bạn hoặc người nhà có các triệu chứng nguy hiểm tới tính mạng, vui lòng gọi ngay 115 hoặc đến cơ sở y tế gần nhất.
+                        </p>
+                    </div>
+
+                    <button type="submit" class="w-full bg-[#00346f] hover:bg-[#002244] text-white font-bold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined text-[20px]">send</span> Gửi Yêu Cầu Hỗ Trợ
+                    </button>
+                </form>
+            </div>
+
+            <!-- RIGHT: BRANCHES & MAPS -->
+            <div class="space-y-6">
+                
+                <!-- Cơ sở 1 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-5 border-b border-gray-100 flex items-start gap-4">
+                        <div class="w-12 h-12 bg-blue-50 text-[#00346f] rounded-xl flex items-center justify-center shrink-0">
+                            <span class="material-symbols-outlined">location_city</span>
+                        </div>
+                        <div>
+                            <h3 class="text-[16px] font-bold text-gray-900">Cơ sở 1: TP. Thủ Đức</h3>
+                            <p class="text-[13px] text-gray-500 mt-1">129 Tây Hòa, Phường Phước Long A, TP. Thủ Đức, TP. Hồ Chí Minh</p>
+                            <a href="https://maps.app.goo.gl/4m9eDZ2x4PDi9RJe8" target="_blank" class="inline-flex items-center gap-1 text-[13px] font-semibold text-[#00346f] hover:underline mt-2">
+                                <span class="material-symbols-outlined text-[16px]">directions</span> Chỉ đường
+                            </a>
+                        </div>
+                    </div>
+                    <div class="h-48 w-full bg-gray-200 relative">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.730386221146!2d106.762193515334!3d10.825227361131102!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752701a34a5d5f%3A0x30056b2fdf668565!2s129%20T%C3%A2y%20H%C3%B2a%2C%20Ph%C6%B0%E1%BB%9Bc%20Long%20A%2C%20Qu%E1%BA%ADn%209%2C%20H%E1%BB%93%20Ch%C3%AD%20Minh!5e0!3m2!1svi!2s!4v1700000000000!5m2!1svi!2s" 
+                                width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="absolute inset-0"></iframe>
+                    </div>
+                </div>
+
+                <!-- Cơ sở 2 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-5 border-b border-gray-100 flex items-start gap-4">
+                        <div class="w-12 h-12 bg-blue-50 text-[#00346f] rounded-xl flex items-center justify-center shrink-0">
+                            <span class="material-symbols-outlined">local_hospital</span>
+                        </div>
+                        <div>
+                            <h3 class="text-[16px] font-bold text-gray-900">Cơ sở 2: Đồng Nai</h3>
+                            <p class="text-[13px] text-gray-500 mt-1">Đường Trần Thị Nhật, Xã Phú Hội, Huyện Nhơn Trạch, Tỉnh Đồng Nai</p>
+                            <a href="https://maps.app.goo.gl/3X14NP2pmQsnBSj5A" target="_blank" class="inline-flex items-center gap-1 text-[13px] font-semibold text-[#00346f] hover:underline mt-2">
+                                <span class="material-symbols-outlined text-[16px]">directions</span> Chỉ đường
+                            </a>
+                        </div>
+                    </div>
+                    <div class="h-48 w-full bg-gray-200 relative">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.7892180806456!2d106.945809!3d10.7513813!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3175249f0592c30b%3A0xabc123456789!2zxJDGsOG7nW5nIFRyw6jDrG5oIFRo4buLIE5o4bqtdCwgUGjDuiBI4buZaSwgTmjGoW4gVHLhuqFjaCwgxJDhu5NuZyBOYWk!5e0!3m2!1svi!2s!4v1700000000000!5m2!1svi!2s" 
+                                width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="absolute inset-0"></iframe>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function validateContactForm() {
+            const phone = document.getElementById('contactPhone').value;
+            // Simple Vietnamese phone validation (10 digits starting with 0)
+            const phoneRegex = /^(0[3|5|7|8|9])+([0-9]{8})\b$/;
+            
+            if (!phoneRegex.test(phone)) {
+                alert("Vui lòng nhập số điện thoại hợp lệ (Ví dụ: 0901234567).");
+                document.getElementById('contactPhone').focus();
+                return false;
+            }
+            return true;
+        }
+    </script>
+}

@@ -1,78 +1,1296 @@
 @model WebDKLichKham.Models.ViewModels.AppointmentBookingViewModel
 @{
-    ViewData["Title"] = "Đặt lịch khám";
+    ViewData["Title"] = "Dịch Vụ & Đặt Lịch";
 }
 
-<div class="row justify-content-center">
-    <div class="col-xl-8">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body p-4 p-lg-5">
-                <h1 class="h2 mb-2">Đặt lịch khám online</h1>
-                <p class="text-secondary mb-4">Bộ form này là khung nghiệp vụ cho use case đặt lịch khám trong tài liệu.</p>
+<main class="font-sans bg-white">
+        <section class="bg-[#f4f7fc] py-16 border-b border-gray-100">
+        <div class="max-w-[800px] mx-auto px-4 text-center">
+            <h1 class="text-[36px] font-bold text-[#00346f] mb-4">Dịch vụ y tế &<br/>Đặt lịch khám</h1>
+            <p class="text-[16px] text-gray-500 mb-2">Trải nghiệm dịch vụ chăm sóc sức khỏe chất lượng cao với quy trình đặt lịch trực tuyến nhanh chóng và tiện lợi.</p>
+        </div>
+    </section>
 
-                <form method="post">
-                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <div class="max-w-[1280px] mx-auto px-4 md:px-8 pt-8">
+        <partial name="_BookingSteps" model="4" />
+    </div>
 
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label asp-for="FullName" class="form-label"></label>
-                            <input asp-for="FullName" class="form-control" />
-                            <span asp-validation-for="FullName" class="text-danger"></span>
+    <section class="max-w-[1280px] mx-auto px-4 md:px-8 py-4 flex flex-col lg:flex-row gap-8">
+                <aside class="w-full lg:w-[320px] shrink-0">
+            <!-- Tóm tắt lịch khám -->
+            <div class="bg-white border border-[#e2e8f0] rounded-xl overflow-hidden shadow-sm mb-6 sticky top-6">
+                <div class="bg-[#00346f] p-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-white">receipt_long</span>
+                    <h3 class="font-bold text-white text-[16px] m-0">Thông tin đặt khám</h3>
+                </div>
+                <div class="p-5">
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-gray-400 text-[20px] mt-0.5">person</span>
+                            <div>
+                                <p class="text-[12px] text-gray-500 mb-0.5">Bác sĩ</p>
+                                <p class="text-[14px] font-bold text-[#1e293b] m-0" id="summaryDoctor">Chưa chọn</p>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <label asp-for="PhoneNumber" class="form-label"></label>
-                            <input asp-for="PhoneNumber" class="form-control" />
-                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-gray-400 text-[20px] mt-0.5">medical_services</span>
+                            <div>
+                                <p class="text-[12px] text-gray-500 mb-0.5">Chuyên khoa</p>
+                                <p class="text-[14px] font-bold text-[#1e293b] m-0" id="summarySpecialty">Chưa chọn</p>
+                            </div>
                         </div>
-                        <div class="col-12">
-                            <label asp-for="Address" class="form-label"></label>
-                            <input asp-for="Address" class="form-control" />
-                            <span asp-validation-for="Address" class="text-danger"></span>
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-gray-400 text-[20px] mt-0.5">home_health</span>
+                            <div>
+                                <p class="text-[12px] text-gray-500 mb-0.5">Dịch vụ khám</p>
+                                <p class="text-[14px] font-bold text-[#1e293b] m-0" id="summaryService">Chưa chọn</p>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <label asp-for="DoctorId" class="form-label"></label>
-                            <select asp-for="DoctorId" asp-items="Model.Doctors" class="form-select">
-                                <option value="">-- Chọn bác sĩ --</option>
-                            </select>
-                            <span asp-validation-for="DoctorId" class="text-danger"></span>
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-gray-400 text-[20px] mt-0.5">calendar_month</span>
+                            <div>
+                                <p class="text-[12px] text-gray-500 mb-0.5">Thời gian khám</p>
+                                <p class="text-[14px] font-bold text-[#1e293b] m-0" id="summaryTime">Chưa chọn</p>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <label asp-for="AppointmentDate" class="form-label"></label>
-                            <input asp-for="AppointmentDate" class="form-control" />
-                            <span asp-validation-for="AppointmentDate" class="text-danger"></span>
-                        </div>
-                        <div class="col-md-6">
-                            <label asp-for="StartTime" class="form-label"></label>
-                            <input asp-for="StartTime" class="form-control" />
-                            <span asp-validation-for="StartTime" class="text-danger"></span>
-                        </div>
-                        <div class="col-md-6">
-                            <label asp-for="EndTime" class="form-label"></label>
-                            <input asp-for="EndTime" class="form-control" />
-                            <span asp-validation-for="EndTime" class="text-danger"></span>
-                        </div>
-                        <div class="col-12">
-                            <label asp-for="ReasonForVisit" class="form-label"></label>
-                            <textarea asp-for="ReasonForVisit" class="form-control" rows="3"></textarea>
-                            <span asp-validation-for="ReasonForVisit" class="text-danger"></span>
-                        </div>
-                        <div class="col-12">
-                            <label asp-for="MedicalHistory" class="form-label"></label>
-                            <textarea asp-for="MedicalHistory" class="form-control" rows="3"></textarea>
-                            <span asp-validation-for="MedicalHistory" class="text-danger"></span>
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-gray-400 text-[20px] mt-0.5">payments</span>
+                            <div>
+                                <p class="text-[12px] text-gray-500 mb-0.5">Phí khám (Dự kiến)</p>
+                                <p class="text-[14px] font-bold text-[#e11d48] m-0">Theo giá niêm yết</p>
+                                <p class="text-[11px] text-gray-400 m-0 mt-0.5">Thanh toán tại viện</p>
+                            </div>
                         </div>
                     </div>
+                </div>
+                <div class="bg-blue-50 p-4 border-t border-blue-100">
+                    <h4 class="text-[13px] font-bold text-[#1e3a8a] mb-2 flex items-center gap-1.5 m-0">
+                        <span class="material-symbols-outlined text-[16px]">info</span> Lưu ý quan trọng
+                    </h4>
+                    <ul class="text-[12px] text-[#1e3a8a] space-y-1.5 m-0 pl-4 list-disc mt-2">
+                        <li>Vui lòng đến trước <strong>15 phút</strong> để làm thủ tục.</li>
+                        <li>Mang theo CMND/CCCD và BHYT (nếu có).</li>
+                        <li>Lịch khám có thể thay đổi do ca cấp cứu đột xuất.</li>
+                    </ul>
+                </div>
+            </div>
 
-                    <div class="d-flex gap-3 mt-4">
-                        <button type="submit" class="btn btn-primary">Xác nhận đặt lịch</button>
-                        <a class="btn btn-outline-secondary" asp-controller="Doctors" asp-action="Index">Xem bác sĩ</a>
+            <div class="bg-[#fce8e6] border border-[#f5c2c7] rounded-lg p-5 shadow-sm">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-10 h-10 bg-[#c5221f] rounded-lg flex items-center justify-center shrink-0">
+                        <span class="material-symbols-outlined text-white text-[24px] font-bold">asterisk</span>
+                    </div>
+                    <h3 class="text-[#b31412] font-bold text-[16px] m-0">Cấp cứu 24/24</h3>
+                </div>
+                <p class="text-[#c5221f] text-[13px] mb-4">Gọi ngay hotline nếu bạn đang trong tình trạng khẩn cấp cần hỗ trợ y tế.</p>
+                <a href="tel:19001234" class="w-full bg-[#c5221f] text-white py-2.5 rounded-md font-bold text-[14px] hover:bg-[#b31412] transition-colors flex items-center justify-center gap-2 no-underline shadow-sm">
+                    <span class="material-symbols-outlined text-[18px]">call</span> 1900 1234
+                </a>
+            </div>
+        </aside>
+
+                <div class="flex-1">
+            <div class="bg-white border border-gray-200 rounded-lg p-6 md:p-8 shadow-sm relative overflow-hidden">
+                                <div class="absolute top-0 left-0 w-full h-1 bg-[#00346f]"></div>
+                
+                <div class="mb-8">
+                    <p class="text-[12px] font-semibold uppercase tracking-wider mb-2 text-[#008a7b]">BIỂU MẪU ĐĂNG KÝ</p>
+                    <h2 class="text-[28px] font-bold text-[#1e293b] mb-2">Thông Tin Đặt Lịch</h2>
+                    <p class="text-[14px] text-gray-500">Vui lòng điền đầy đủ thông tin bên dưới. Chúng tôi sẽ xác nhận lịch hẹn của bạn trong thời gian sớm nhất.</p>
+                </div>
+
+                <form method="post" class="space-y-8">
+                    <div asp-validation-summary="ModelOnly" class="text-red-600 text-[13px] mb-4 bg-red-50 p-3 rounded border border-red-200"></div>
+
+                                        <div>
+                        <div class="flex items-center gap-3 mb-4 border-b border-gray-100 pb-3">
+                            <div class="w-8 h-8 bg-[#f0f4fa] rounded-full flex items-center justify-center shrink-0">
+                                <span class="material-symbols-outlined text-[#00346f] text-[18px]">stethoscope</span>
+                            </div>
+                            <h3 class="text-[16px] font-bold text-[#00346f]">1. Chọn Cơ Sở & Dịch Vụ</h3>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
+                            <div>
+                                <label asp-for="Facility" class="block text-[13px] font-semibold text-gray-700 mb-1.5">Cơ sở khám</label>
+                                <select asp-for="Facility" id="facilitySelect" class="w-full px-3 py-2.5 rounded border border-gray-300 text-[14px] focus:ring-1 focus:ring-blue-500 outline-none bg-white shadow-sm">
+                                    <option value="">-- Chọn cơ sở --</option>
+                                    <option value="CS1">Cơ sở 1: TP. Thủ Đức</option>
+                                    <option value="CS2">Cơ sở 2: Nhơn Trạch</option>
+                                </select>
+                                <span asp-validation-for="Facility" class="text-red-500 text-[12px] mt-1 block"></span>
+                            </div>
+                            <div>
+                                <label asp-for="SpecialtyId" class="block text-[13px] font-semibold text-gray-700 mb-1.5">Chuyên khoa</label>
+                                <select asp-for="SpecialtyId" id="specialtySelect" asp-items="Model.Specialties" class="w-full px-3 py-2.5 rounded border border-gray-300 text-[14px] focus:ring-1 focus:ring-blue-500 outline-none bg-white shadow-sm">
+                                    <option value="">-- Chọn chuyên khoa --</option>
+                                </select>
+                                <span asp-validation-for="SpecialtyId" class="text-red-500 text-[12px] mt-1 block"></span>
+                            </div>
+                            <div>
+                                <label asp-for="DoctorId" class="block text-[13px] font-semibold text-gray-700 mb-1.5">Bác sĩ khám</label>
+                                <select asp-for="DoctorId" id="doctorSelect" asp-items="Model.Doctors" class="w-full px-3 py-2.5 rounded border border-gray-300 text-[14px] focus:ring-1 focus:ring-blue-500 outline-none bg-white shadow-sm">
+                                    <option value="">-- Chọn bác sĩ trực ca --</option>
+                                </select>
+                                <span asp-validation-for="DoctorId" class="text-red-500 text-[12px] mt-1 block"></span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                            <div>
+                                <label asp-for="MedicalService" class="block text-[13px] font-semibold text-gray-700 mb-1.5">Chọn dịch vụ khám *</label>
+                                <select asp-for="MedicalService" id="medicalServiceSelect" class="w-full px-3 py-2.5 rounded border border-gray-300 text-[14px] focus:ring-1 focus:ring-blue-500 outline-none bg-white shadow-sm">
+                                    <option value="">-- Chọn dịch vụ khám --</option>
+                                    <optgroup label="Khám Chuyên Khoa">
+                                        <option value="Khám Nội tổng quát">Khám Nội tổng quát</option>
+                                        <option value="Tầm soát Tim mạch & Đái tháo đường">Tầm soát Tim mạch & Đái tháo đường</option>
+                                        <option value="Khám & Điều trị bệnh lý Da liễu">Khám & Điều trị bệnh lý Da liễu</option>
+                                        <option value="Trị mụn & Chăm sóc da chuyên sâu">Trị mụn & Chăm sóc da chuyên sâu</option>
+                                        <option value="Khám Nhi tổng quát & Tư vấn dinh dưỡng">Khám Nhi tổng quát & Tư vấn dinh dưỡng</option>
+                                        <option value="Khám & Tiêm chủng vắc-xin cho trẻ">Khám & Tiêm chủng vắc-xin cho trẻ</option>
+                                        <option value="Khám & Nội sơ Tai Mũi Họng">Khám & Nội soi Tai Mũi Họng</option>
+                                        <option value="Điều trị viêm mũi họng, viêm xoang">Điều trị viêm mũi họng, viêm xoang</option>
+                                        <option value="Khám thai định kỳ & Quản lý thai sản">Khám thai định kỳ & Quản lý thai sản</option>
+                                        <option value="Khám Phụ khoa & Tầm soát ung thư cổ tử cung">Khám Phụ khoa & Tầm soát ung thư cổ tử cung</option>
+                                        <option value="Khám răng tổng quát & Cạo vôi răng">Khám răng tổng quát & Cạo vôi răng</option>
+                                        <option value="Nhổ răng khôn & Hàn răng thẩm mỹ">Nhổ răng khôn & Hàn răng thẩm mỹ</option>
+                                        <option value="Khám Nội thần kinh (Đau đầu, chóng mặt, mất ngủ)">Khám Nội thần kinh (Đau đầu, chóng mặt, mất ngủ)</option>
+                                        <option value="Tầm soát nguy cơ đột quỵ & Tai biến">Tầm soát nguy cơ đột quỵ & Tai biến</option>
+                                    </optgroup>
+                                    <optgroup label="Dịch Vụ Khám Đặc Thù">
+                                        <option value="Khám sức khỏe tổng quát định kỳ">Khám sức khỏe tổng quát định kỳ</option>
+                                        <option value="Gói tầm soát sức khỏe Toàn diện (VIP)">Gói tầm soát sức khỏe Toàn diện (VIP)</option>
+                                        <option value="Xét nghiệm máu & Kiểm tra sinh hóa tại nhà">Xét nghiệm máu & Kiểm tra sinh hóa tại nhà</option>
+                                    </optgroup>
+                                </select>
+                                <span asp-validation-for="MedicalService" class="text-red-500 text-[12px] mt-1 block"></span>
+                            </div>
+                            <div>
+                                <label class="block text-[13px] font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-[#00346f] text-[18px]">calendar_today</span> Thời gian khám
+                                </label>
+                                <input asp-for="AppointmentDate" id="appointmentDateInput" type="hidden" />
+                                <div class="grid grid-cols-4 gap-2 md:gap-3" id="dateCardsContainer">
+                                    <button type="button" id="quickDateCard0" class="date-card py-2.5 px-2 border border-gray-200 rounded-xl flex flex-col items-center justify-center transition-all bg-white hover:border-gray-400 cursor-pointer">
+                                        <span class="text-[14px] font-bold text-gray-800" id="quickDateStr0"></span>
+                                        <span class="text-[11px] text-gray-400 mt-0.5" id="quickDayStr0"></span>
+                                    </button>
+                                    <button type="button" id="quickDateCard1" class="date-card py-2.5 px-2 border border-gray-200 rounded-xl flex flex-col items-center justify-center transition-all bg-white hover:border-gray-400 cursor-pointer">
+                                        <span class="text-[14px] font-bold text-gray-800" id="quickDateStr1"></span>
+                                        <span class="text-[11px] text-gray-400 mt-0.5" id="quickDayStr1"></span>
+                                    </button>
+                                    <button type="button" id="quickDateCard2" class="date-card py-2.5 px-2 border border-gray-200 rounded-xl flex flex-col items-center justify-center transition-all bg-white hover:border-gray-400 cursor-pointer">
+                                        <span class="text-[14px] font-bold text-gray-800" id="quickDateStr2"></span>
+                                        <span class="text-[11px] text-gray-400 mt-0.5" id="quickDayStr2"></span>
+                                    </button>
+                                    <button type="button" id="otherDateCard" class="date-card py-2.5 px-2 border border-gray-200 rounded-xl flex flex-col items-center justify-center transition-all bg-white hover:border-gray-400 cursor-pointer relative">
+                                        <span class="material-symbols-outlined text-[18px] text-gray-500 mb-0.5">calendar_month</span>
+                                        <span class="text-[11px] text-gray-500 font-bold">Ngày khác</span>
+                                        <input type="date" id="hiddenDateInput" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full" />
+                                    </button>
+                                </div>
+                                <span asp-validation-for="AppointmentDate" class="text-red-500 text-[12px] mt-1 block"></span>
+                            </div>
+                        </div>
+                            
+                            <input asp-for="StartTime" id="startTimeInput" type="hidden" />
+                            <input asp-for="EndTime" id="endTimeHidden" type="hidden" />
+
+                            <div>
+                                <div class="flex items-center gap-2 mb-3 border-b border-gray-100 pb-2 mt-2">
+                                    <span class="material-symbols-outlined text-[#00346f] text-[18px]">calendar_clock</span>
+                                    <label class="block text-[14px] font-bold text-[#00346f] m-0">Khung giờ khám</label>
+                                </div>
+                                
+                                <div id="schedulePlaceholder" class="p-6 text-center border border-dashed border-gray-300 rounded-lg bg-gray-50">
+                                    <span class="material-symbols-outlined text-gray-400 text-[32px] mb-2 block">event_busy</span>
+                                    <p class="text-[13px] text-gray-500 m-0">Vui lòng chọn <strong>Bác sĩ</strong> và <strong>Ngày khám</strong> để xem lịch trống.</p>
+                                </div>
+
+                                <div id="scheduleInfoPanel" class="hidden">
+                                    <div id="scheduleInfoContent" class="space-y-5">
+                                        <!-- JS will generate Morning/Afternoon grids here -->
+                                    </div>
+                                    <div id="scheduleTimeWarning" class="hidden mt-3 text-[12px] text-amber-700 bg-amber-50 border border-amber-200 rounded px-3 py-2 flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-[15px]">warning</span>
+                                        <span id="scheduleTimeWarningText"></span>
+                                    </div>
+                                </div>
+                                <span asp-validation-for="StartTime" class="text-red-500 text-[12px] mt-2 block"></span>
+                            </div>
+                    </div>
+
+                        <div class="flex items-center gap-3 mb-4 border-b border-gray-100 pb-3 mt-8">
+                            <div class="w-8 h-8 bg-[#f0f4fa] rounded-full flex items-center justify-center shrink-0">
+                                <span class="material-symbols-outlined text-[#00346f] text-[18px]">person</span>
+                            </div>
+                            <h3 class="text-[16px] font-bold text-[#00346f] m-0">2. Thông Tin Bệnh Nhân</h3>
+                        </div>
+
+                        <!-- Đăng nhập nhanh -->
+                        <div class="text-[14px] text-gray-600 mb-4">
+                            Hoặc <a href="/Home/Login?ReturnUrl=@Url.Action("Create", "Appointments")" class="text-[#0088ff] hover:underline font-bold">Đăng nhập</a> để lấy nhanh thông tin đặt khám
+                        </div>
+
+                        <!-- Vạch kẻ phân cách -->
+                        <div class="flex items-center justify-center my-6">
+                            <div class="grow h-px bg-gray-200"></div>
+                            <span class="px-4 text-[13px] text-gray-400 font-medium bg-white">Hoặc nhập thủ công</span>
+                            <div class="grow h-px bg-gray-200"></div>
+                        </div>
+
+                        <div class="space-y-5">
+                            <!-- Dòng 1: Số điện thoại (trái) và Họ và tên (phải) -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div>
+                                    <label asp-for="PhoneNumber" class="block text-[13px] font-semibold text-gray-700 mb-1.5">Số điện thoại *</label>
+                                    <input asp-for="PhoneNumber" class="w-full px-3 py-2.5 rounded border border-gray-300 text-[14px] focus:ring-1 focus:ring-blue-500 outline-none shadow-sm" placeholder="Nhập số điện thoại..." required />
+                                    <span asp-validation-for="PhoneNumber" class="text-red-500 text-[12px] mt-1 block"></span>
+                                </div>
+                                <div>
+                                    <label asp-for="FullName" class="block text-[13px] font-semibold text-gray-700 mb-1.5">Họ và tên *</label>
+                                    <input asp-for="FullName" class="w-full px-3 py-2.5 rounded border border-gray-300 text-[14px] focus:ring-1 focus:ring-blue-500 outline-none shadow-sm" placeholder="NHẬP HỌ VÀ TÊN..." required style="text-transform: uppercase;" />
+                                    <span asp-validation-for="FullName" class="text-red-500 text-[12px] mt-1 block"></span>
+                                </div>
+                            </div>
+
+                            <!-- Mục collapsible: Thông tin khác -->
+                            <div class="border border-gray-200 rounded-xl p-4 bg-gray-50/50">
+                                <button type="button" onclick="toggleOtherInfo()" class="flex items-center justify-between w-full text-[#0088ff] hover:text-[#0066cc] font-bold text-[14px] focus:outline-none transition-colors border-none bg-transparent cursor-pointer">
+                                    <span class="flex items-center gap-1.5">
+                                        <span class="material-symbols-outlined text-[18px]">add_circle</span> Thông tin khác
+                                    </span>
+                                    <span id="toggleArrow" class="transition-transform duration-200">⋁</span>
+                                </button>
+                                
+                                <div id="otherInfoContent" class="hidden grid grid-cols-1 md:grid-cols-2 gap-5 mt-4 pt-4 border-t border-gray-150">
+                                    <!-- Dòng 2: Ngày sinh (trái) và Giới tính (phải) -->
+                                    <div>
+                                        <label asp-for="DateOfBirth" class="block text-[13px] font-semibold text-gray-700 mb-1.5">Ngày sinh</label>
+                                        <input asp-for="DateOfBirth" type="date" class="w-full px-3 py-2.5 rounded border border-gray-300 text-[14px] focus:ring-1 focus:ring-blue-500 outline-none shadow-sm text-gray-700" placeholder="Nhập ngày sinh" />
+                                        <span asp-validation-for="DateOfBirth" class="text-red-500 text-[12px] mt-1 block"></span>
+                                    </div>
+                                    <div>
+                                        <label asp-for="Gender" class="block text-[13px] font-semibold text-gray-700 mb-1.5">Giới tính</label>
+                                        <select asp-for="Gender" class="w-full px-3 py-2.5 rounded border border-gray-300 text-[14px] focus:ring-1 focus:ring-blue-500 outline-none bg-white shadow-sm">
+                                            <option value="">Chọn giới tính</option>
+                                            <option value="Nam">Nam</option>
+                                            <option value="Nữ">Nữ</option>
+                                            <option value="Khác">Khác</option>
+                                        </select>
+                                        <span asp-validation-for="Gender" class="text-red-500 text-[12px] mt-1 block"></span>
+                                    </div>
+
+                                    <!-- Dòng 3: Mã định danh/CCCD (trái) và Mã bảo hiểm y tế (phải) -->
+                                    <div>
+                                        <label asp-for="IdentityCard" class="block text-[13px] font-semibold text-gray-700 mb-1.5">Mã định danh/CCCD</label>
+                                        <div class="flex">
+                                            <select class="px-2.5 py-2.5 rounded-l border border-r-0 border-gray-300 bg-gray-100 text-[13px] focus:outline-none outline-none text-gray-700 font-semibold">
+                                                <option value="CCCD">CCCD</option>
+                                                <option value="CMND">CMND</option>
+                                                <option value="HC">Hộ chiếu</option>
+                                            </select>
+                                            <input asp-for="IdentityCard" class="w-full px-3 py-2.5 rounded-r border border-gray-300 text-[14px] focus:ring-1 focus:ring-blue-500 outline-none shadow-sm" placeholder="Vui lòng nhập Mã định danh/CCCD" />
+                                        </div>
+                                        <span asp-validation-for="IdentityCard" class="text-red-500 text-[12px] mt-1 block"></span>
+                                    </div>
+                                    <div>
+                                        <label asp-for="InsuranceCode" class="block text-[13px] font-semibold text-gray-700 mb-1.5">Mã bảo hiểm y tế</label>
+                                        <input asp-for="InsuranceCode" class="w-full px-3 py-2.5 rounded border border-gray-300 text-[14px] focus:ring-1 focus:ring-blue-500 outline-none shadow-sm" placeholder="Nhập Mã bảo hiểm y tế" />
+                                        <span asp-validation-for="InsuranceCode" class="text-red-500 text-[12px] mt-1 block"></span>
+                                    </div>
+
+                                    <!-- Dòng 4: Nghề nghiệp (trái) và Quốc gia (phải) -->
+                                    <div>
+                                        <label asp-for="Occupation" class="block text-[13px] font-semibold text-gray-700 mb-1.5">Nghề nghiệp</label>
+                                        <input asp-for="Occupation" class="w-full px-3 py-2.5 rounded border border-gray-300 text-[14px] focus:ring-1 focus:ring-blue-500 outline-none shadow-sm" placeholder="Nhập nghề nghiệp..." />
+                                        <span asp-validation-for="Occupation" class="text-red-500 text-[12px] mt-1 block"></span>
+                                    </div>
+                                    <div>
+                                        <label asp-for="Country" class="block text-[13px] font-semibold text-gray-700 mb-1.5">Quốc gia</label>
+                                        <select asp-for="Country" class="w-full px-3 py-2.5 rounded border border-gray-300 text-[14px] focus:ring-1 focus:ring-blue-500 outline-none bg-white shadow-sm">
+                                            <option value="Việt Nam">Việt Nam</option>
+                                            <option value="Nước ngoài">Nước ngoài</option>
+                                        </select>
+                                        <span asp-validation-for="Country" class="text-red-500 text-[12px] mt-1 block"></span>
+                                    </div>
+                                    
+                                    <!-- Ẩn trường Email cũ để giữ nguyên giá trị nếu có -->
+                                    <input type="hidden" asp-for="Email" />
+                                </div>
+                            </div>
+
+                            <!-- Địa chỉ theo CCCD (cũ) -->
+                            <div class="border border-gray-200 rounded-xl p-4 bg-gray-50/50">
+                                <h4 class="text-[#0088ff] font-bold text-[14px] m-0 mb-3 flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-[18px]">location_on</span> Địa chỉ theo CCCD (cũ)
+                                </h4>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                    <!-- Dòng 6: Tỉnh/Thành (trái) và Quận/Huyện (phải) -->
+                                    <div>
+                                        <label asp-for="Province" class="block text-[13px] font-semibold text-gray-700 mb-1.5">Tỉnh/Thành</label>
+                                        <select asp-for="Province" id="provinceSelect" class="w-full px-3 py-2.5 rounded border border-gray-300 text-[14px] focus:ring-1 focus:ring-blue-500 outline-none bg-white shadow-sm">
+                                            <option value="">Chọn tỉnh thành</option>
+                                        </select>
+                                        <span asp-validation-for="Province" class="text-red-500 text-[12px] mt-1 block"></span>
+                                    </div>
+                                    <div>
+                                        <label asp-for="District" class="block text-[13px] font-semibold text-gray-700 mb-1.5">Quận/Huyện</label>
+                                        <select asp-for="District" id="districtSelect" class="w-full px-3 py-2.5 rounded border border-gray-300 text-[14px] focus:ring-1 focus:ring-blue-500 outline-none bg-white shadow-sm" disabled>
+                                            <option value="">Chọn quận huyện</option>
+                                        </select>
+                                        <span asp-validation-for="District" class="text-red-500 text-[12px] mt-1 block"></span>
+                                    </div>
+
+                                    <!-- Dòng 7: Phường/Xã (trái) và Số nhà/Tên đường/Ấp thôn xóm (phải) -->
+                                    <div>
+                                        <label asp-for="Ward" class="block text-[13px] font-semibold text-gray-700 mb-1.5">Phường/Xã</label>
+                                        <select asp-for="Ward" id="wardSelect" class="w-full px-3 py-2.5 rounded border border-gray-300 text-[14px] focus:ring-1 focus:ring-blue-500 outline-none bg-white shadow-sm" disabled>
+                                            <option value="">Chọn xã phường</option>
+                                        </select>
+                                        <span asp-validation-for="Ward" class="text-red-500 text-[12px] mt-1 block"></span>
+                                    </div>
+                                    <div>
+                                        <label asp-for="StreetAddress" class="block text-[13px] font-semibold text-gray-700 mb-1.5">Số nhà/Tên đường/Ấp thôn xóm</label>
+                                        <input asp-for="StreetAddress" class="w-full px-3 py-2.5 rounded border border-gray-300 text-[14px] focus:ring-1 focus:ring-blue-500 outline-none shadow-sm" placeholder="Nhập số nhà, tên đường, ấp thôn xóm,..." />
+                                        <span asp-validation-for="StreetAddress" class="text-red-500 text-[12px] mt-1 block"></span>
+                                        <small class="text-red-500 italic text-[11px] block mt-1">(không bao gồm tỉnh/thành, quận/huyện, phường/xã)</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Ẩn trường Address cũ để tương thích ngược -->
+                            <input asp-for="Address" id="hiddenAddressInput" type="hidden" />
+
+                            <!-- Dòng 8: Mã xác nhận (trái) và Nhập lại mã xác nhận (phải) -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div>
+                                    <label asp-for="Passcode" class="block text-[13px] font-semibold text-gray-700 mb-1.5">Mã xác nhận (4 chữ số)</label>
+                                    <input asp-for="Passcode" type="password" maxlength="4" pattern="\d{4}" inputmode="numeric" class="w-full px-3 py-2.5 rounded border border-gray-300 text-[14px] focus:ring-1 focus:ring-blue-500 outline-none shadow-sm" placeholder="Nhập 4 chữ số (ví dụ: 1234)" required />
+                                    <span asp-validation-for="Passcode" class="text-red-500 text-[12px] mt-1 block"></span>
+                                    <small class="text-amber-600 font-semibold text-[11px] block mt-1">Lưu ý: Bạn phải nhớ mã này để tra cứu lịch khám sau này.</small>
+                                </div>
+                                <div>
+                                    <label asp-for="ConfirmPasscode" class="block text-[13px] font-semibold text-gray-700 mb-1.5">Nhập lại mã xác nhận</label>
+                                    <input asp-for="ConfirmPasscode" type="password" maxlength="4" pattern="\d{4}" inputmode="numeric" class="w-full px-3 py-2.5 rounded border border-gray-300 text-[14px] focus:ring-1 focus:ring-blue-500 outline-none shadow-sm" placeholder="Nhập lại mã xác nhận" required />
+                                    <span asp-validation-for="ConfirmPasscode" class="text-red-500 text-[12px] mt-1 block"></span>
+                                </div>
+                            </div>
+
+                            <!-- Dòng 9: Lý do khám / Triệu chứng -->
+                            <div>
+                                <label asp-for="ReasonForVisit" class="block text-[13px] font-semibold text-gray-700 mb-1.5">Lý do khám / Triệu chứng</label>
+                                <textarea asp-for="ReasonForVisit" class="w-full px-3 py-2.5 rounded border border-gray-300 text-[14px] focus:ring-1 focus:ring-blue-500 outline-none resize-none shadow-sm" rows="3" placeholder="Mô tả chi tiết triệu chứng hoặc lý do bạn muốn đặt lịch khám..."></textarea>
+                                <span asp-validation-for="ReasonForVisit" class="text-red-500 text-[12px] mt-1 block"></span>
+                            </div>
+
+                            <!-- Dòng 10: Tiền sử bệnh lý (Nếu có) -->
+                            <div>
+                                <label asp-for="MedicalHistory" class="block text-[13px] font-semibold text-gray-700 mb-1.5">Tiền sử bệnh lý (Nếu có)</label>
+                                <textarea asp-for="MedicalHistory" class="w-full px-3 py-2.5 rounded border border-gray-300 text-[14px] focus:ring-1 focus:ring-blue-500 outline-none resize-none shadow-sm" rows="2" placeholder="Ví dụ: Dị ứng thuốc, có tiền sử bệnh tim mạch..."></textarea>
+                                <span asp-validation-for="MedicalHistory" class="text-red-500 text-[12px] mt-1 block"></span>
+                            </div>
+                        </div>
+
+                                        <div class="pt-6 border-t border-gray-100 flex items-center justify-between gap-4 flex-col-reverse sm:flex-row mt-8">
+                        <a asp-controller="Doctors" asp-action="Index" class="w-full sm:w-auto px-6 py-3 rounded-md text-[14px] font-bold text-gray-500 hover:text-[#00346f] hover:bg-[#f0f4fa] transition-colors text-center no-underline border border-transparent hover:border-[#dbe6f5]">
+                            <span class="material-symbols-outlined text-[18px] align-middle mr-1">arrow_back</span> Quay lại Bác Sĩ
+                        </a>
+                        <button type="submit" class="w-full sm:w-auto px-8 py-3 bg-[#00346f] text-white rounded-md text-[15px] font-bold hover:bg-[#002244] shadow-md transition-colors flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-[20px]">send</span>
+                            Gửi Yêu Cầu Đặt Lịch
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
-    </div>
-</div>
+    </section>
+
+        <section class="bg-[#f0f4fa] py-12 border-t border-gray-200">
+        <div class="max-w-[1280px] mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center shrink-0 shadow-sm border border-gray-100">
+                    <span class="material-symbols-outlined text-[#00346f] text-[24px]">verified</span>
+                </div>
+                <div>
+                    <h4 class="font-bold text-[#1e293b] text-[15px] mb-1">Đội ngũ chuyên gia</h4>
+                    <p class="text-[13px] text-gray-600">Quy tụ các bác sĩ giỏi, nhiều năm kinh nghiệm từ các bệnh viện lớn.</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center shrink-0 shadow-sm border border-gray-100">
+                    <span class="material-symbols-outlined text-[#00346f] text-[24px]">devices</span>
+                </div>
+                <div>
+                    <h4 class="font-bold text-[#1e293b] text-[15px] mb-1">Trang thiết bị hiện đại</h4>
+                    <p class="text-[13px] text-gray-600">Hệ thống máy móc tân tiến nhập khẩu từ các quốc gia y tế hàng đầu.</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center shrink-0 shadow-sm border border-gray-100">
+                    <span class="material-symbols-outlined text-[#00346f] text-[24px]">support_agent</span>
+                </div>
+                <div>
+                    <h4 class="font-bold text-[#1e293b] text-[15px] mb-1">Chăm sóc tận tâm</h4>
+                    <p class="text-[13px] text-gray-600">Dịch vụ chăm sóc khách hàng chuyên nghiệp, chu đáo 24/7.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            const facilitySelect    = document.getElementById('facilitySelect');
+            const specialtySelect   = document.getElementById('specialtySelect');
+            const doctorSelect      = document.getElementById('doctorSelect');
+            const dateInput         = document.getElementById('appointmentDateInput');
+            const startInput        = document.getElementById('startTimeInput');
+            const endHidden         = document.getElementById('endTimeHidden');
+            const display           = document.getElementById('estimatedEndTimeDisplay');
+            const displayText       = document.getElementById('estimatedEndTimeText');
+            const schedulePanel     = document.getElementById('scheduleInfoPanel');
+            const scheduleContent   = document.getElementById('scheduleInfoContent');
+            const scheduleTitle     = document.getElementById('scheduleInfoTitle');
+            const timeWarning       = document.getElementById('scheduleTimeWarning');
+            const timeWarningText   = document.getElementById('scheduleTimeWarningText');
+
+            // Summary elements
+            const summaryDoctor     = document.getElementById('summaryDoctor');
+            const summarySpecialty  = document.getElementById('summarySpecialty');
+            const summaryService    = document.getElementById('summaryService');
+            const summaryTime       = document.getElementById('summaryTime');
+
+            // Lưu lịch làm hiện tại để validate
+            let currentSchedules = [];
+
+            function updateSummary() {
+                const serviceSelect = document.getElementById('medicalServiceSelect') || document.querySelector('select[name="MedicalService"]');
+                const serviceVal = serviceSelect ? serviceSelect.value : '';
+                const selectedService = medicalServices.find(s => s.value === serviceVal);
+                const isSpecialized = selectedService && selectedService.group === "Dịch Vụ Khám Đặc Thù";
+
+                if (isSpecialized) {
+                    if (summarySpecialty) summarySpecialty.textContent = 'Khám đặc thù';
+                    if (summaryDoctor) summaryDoctor.textContent = 'Không có';
+                } else {
+                    if (summarySpecialty && specialtySelect && specialtySelect.selectedIndex > 0) {
+                        summarySpecialty.textContent = specialtySelect.options[specialtySelect.selectedIndex].text;
+                    } else if (summarySpecialty) {
+                        summarySpecialty.textContent = 'Chưa chọn';
+                    }
+
+                    if (summaryDoctor && doctorSelect && doctorSelect.selectedIndex > 0) {
+                        let docName = doctorSelect.options[doctorSelect.selectedIndex].text.split(' - ')[0];
+                        summaryDoctor.textContent = docName;
+                    } else if (summaryDoctor) {
+                        summaryDoctor.textContent = 'Chưa chọn';
+                    }
+                }
+
+                if (summaryService && serviceSelect && serviceSelect.selectedIndex > 0) {
+                    summaryService.textContent = serviceSelect.options[serviceSelect.selectedIndex].text;
+                } else if (summaryService) {
+                    summaryService.textContent = 'Chưa chọn';
+                }
+
+                if (summaryTime && dateInput) {
+                    let timeStr = 'Chưa chọn';
+                    if (dateInput.value) {
+                        const dateParts = dateInput.value.split('-');
+                        if (dateParts.length === 3) {
+                            timeStr = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+                        } else {
+                            timeStr = dateInput.value;
+                        }
+                        if (startInput && startInput.value) {
+                            timeStr += ' - ' + startInput.value;
+                        }
+                    }
+                    summaryTime.textContent = timeStr;
+                }
+            }
+
+            // ---- Tiện ích ----
+            function timeStrToMinutes(str) {
+                if (!str) return -1;
+                const [h, m] = str.split(':').map(Number);
+                return h * 60 + m;
+            }
+
+            // Generate time slots every 30 mins
+            function generateSlotsForShift(startStr, endStr, bookedSlots) {
+                const slots = [];
+                let [h, m] = startStr.split(':').map(Number);
+                let endMin = timeStrToMinutes(endStr);
+                
+                while (h * 60 + m < endMin) {
+                    const slotStr = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+                    const isBooked = bookedSlots.includes(slotStr);
+                    slots.push({ time: slotStr, booked: isBooked });
+                    
+                    m += 30;
+                    if (m >= 60) {
+                        h++;
+                        m -= 60;
+                    }
+                }
+                return slots;
+            }
+
+            function calcEndTime(timeStr) {
+                if (!timeStr) return;
+                const parts = timeStr.split(':');
+                if (parts.length < 2) return;
+                const h = parseInt(parts[0], 10);
+                const m = parseInt(parts[1], 10);
+                const endMin = h * 60 + m + 30;
+                const endH = Math.floor(endMin / 60) % 24;
+                const endM = endMin % 60;
+                const formattedEndTime = String(endH).padStart(2, '0') + ':' + String(endM).padStart(2, '0');
+                if (endHidden) {
+                    endHidden.value = formattedEndTime;
+                }
+            }
+
+            window.selectTimeSlot = function(timeStr) {
+                startInput.value = timeStr;
+                // Calculate end time (+30 mins)
+                let [h, m] = timeStr.split(':').map(Number);
+                let endMin = h * 60 + m + 30;
+                let endH = Math.floor(endMin / 60) % 24;
+                let endM = endMin % 60;
+                endHidden.value = String(endH).padStart(2, '0') + ':' + String(endM).padStart(2, '0');
+                
+                // Update active style
+                document.querySelectorAll('.time-slot-btn').forEach(btn => {
+                    if (btn.dataset.time === timeStr) {
+                        btn.classList.remove('bg-white', 'text-gray-700', 'border-gray-300');
+                        btn.classList.add('bg-[#10b981]', 'text-white', 'border-[#10b981]', 'ring-2', 'ring-green-200');
+                    } else {
+                        btn.classList.remove('bg-[#10b981]', 'text-white', 'border-[#10b981]', 'ring-2', 'ring-green-200');
+                        btn.classList.add('bg-white', 'text-gray-700', 'border-gray-300');
+                    }
+                });
+                
+                if (timeWarning) timeWarning.classList.add('hidden');
+                updateSummary();
+            };
+
+            // ---- Load danh sách bác sĩ theo chi nhánh + chuyên khoa ----
+            async function loadDoctors() {
+                if (!doctorSelect) return;
+
+                const serviceVal = serviceSelectElement ? serviceSelectElement.value : '';
+                const selectedService = medicalServices.find(s => s.value === serviceVal);
+                const isSpecialized = selectedService && selectedService.group === "Dịch Vụ Khám Đặc Thù";
+
+                if (isSpecialized) {
+                    doctorSelect.innerHTML = '<option value="">-- Dịch vụ này không cần chọn Bác sĩ --</option>';
+                    doctorSelect.value = "";
+                    doctorSelect.disabled = true;
+                    if (specialtySelect) {
+                        specialtySelect.value = "";
+                        specialtySelect.disabled = true;
+                    }
+                    updateSummary();
+                    return;
+                } else {
+                    doctorSelect.disabled = false;
+                    if (specialtySelect) {
+                        specialtySelect.disabled = false;
+                    }
+                }
+
+                const facility   = facilitySelect ? facilitySelect.value : '';
+                const specialty  = specialtySelect ? specialtySelect.value : '';
+                const currentVal = doctorSelect ? doctorSelect.value : '';
+
+                const params = new URLSearchParams();
+                if (facility)  params.set('facility', facility);
+                if (specialty) params.set('specialtyId', specialty);
+
+                try {
+                    const res = await fetch('/Appointments/GetDoctors?' + params.toString());
+                    const doctors = await res.json();
+
+                    // Rebuild options
+                    doctorSelect.innerHTML = '<option value="">-- Chọn bác sĩ trực ca --</option>';
+                    doctors.forEach(d => {
+                        const opt = document.createElement('option');
+                        opt.value = d.value;
+                        opt.textContent = d.text;
+                        if (d.value === currentVal) opt.selected = true;
+                        doctorSelect.appendChild(opt);
+                    });
+
+                    // Nếu bác sĩ cũ vẫn còn trong danh sách mới, giữ lại và load lịch
+                    if (currentVal && [...doctorSelect.options].some(o => o.value === currentVal)) {
+                        doctorSelect.value = currentVal;
+                    }
+                    updateSummary();
+                } catch (e) {
+                    console.error('Lỗi tải danh sách bác sĩ:', e);
+                }
+            }
+
+            // ---- Render lịch dịch vụ đặc thù (7h-12h và 13h-18h) ----
+            function renderSpecializedSchedule(dateVal) {
+                const placeholder = document.getElementById('schedulePlaceholder');
+                if (placeholder) placeholder.classList.add('hidden');
+                schedulePanel.classList.remove('hidden');
+
+                const morningSlots = ["07:00", "07:30", "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30"];
+                const afternoonSlots = ["13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30"];
+
+                const now = new Date();
+                const todayStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+                const isToday = dateVal === todayStr;
+
+                let html = '';
+
+                // Ca Sáng
+                html += `
+                <div>
+                    <h4 class="text-[13px] font-bold text-gray-700 mb-3 flex items-center gap-1.5 border-b border-gray-100 pb-2">
+                        <span class="material-symbols-outlined text-[18px] text-amber-500">wb_sunny</span> 
+                        Ca sáng (07:00 - 12:00)
+                    </h4>
+                    <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
+                `;
+                morningSlots.forEach(time => {
+                    let isPast = false;
+                    if (isToday) {
+                        const [sh, sm] = time.split(':').map(Number);
+                        if (sh < now.getHours() || (sh === now.getHours() && sm <= now.getMinutes())) {
+                            isPast = true;
+                        }
+                    }
+
+                    if (isPast) {
+                        html += `<button type="button" disabled class="px-3 py-2.5 text-[14px] font-semibold rounded-xl border border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed flex flex-col items-center justify-center gap-0.5 opacity-65">
+                                    ${time}
+                                    <span class="text-[10px] font-normal text-red-500/80 no-underline">Đã qua</span>
+                                 </button>`;
+                    } else {
+                        const isSelected = startInput && startInput.value === time;
+                        const btnClass = isSelected 
+                            ? 'bg-[#10b981] text-white border-[#10b981] ring-2 ring-green-200 font-bold scale-[1.02]' 
+                            : 'bg-white text-gray-700 border-gray-300 hover:border-green-500 hover:text-green-600';
+                        
+                        html += `<button type="button" data-time="${time}" onclick="selectTimeSlot('${time}')" class="time-slot-btn px-3 py-2.5 text-[14px] font-semibold rounded-xl border shadow-sm transition-all ${btnClass} flex flex-col items-center justify-center gap-0.5">
+                                    ${time}
+                                    <span class="text-[10px] font-normal opacity-70">Còn trống</span>
+                                 </button>`;
+                    }
+                });
+                html += `</div></div>`;
+
+                // Ca Chiều
+                html += `
+                <div class="mt-5">
+                    <h4 class="text-[13px] font-bold text-gray-700 mb-3 flex items-center gap-1.5 border-b border-gray-100 pb-2">
+                        <span class="material-symbols-outlined text-[18px] text-orange-500">wb_twilight</span> 
+                        Ca chiều (13:00 - 18:00)
+                    </h4>
+                    <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
+                `;
+                afternoonSlots.forEach(time => {
+                    let isPast = false;
+                    if (isToday) {
+                        const [sh, sm] = time.split(':').map(Number);
+                        if (sh < now.getHours() || (sh === now.getHours() && sm <= now.getMinutes())) {
+                            isPast = true;
+                        }
+                    }
+
+                    if (isPast) {
+                        html += `<button type="button" disabled class="px-3 py-2.5 text-[14px] font-semibold rounded-xl border border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed flex flex-col items-center justify-center gap-0.5 opacity-65">
+                                    ${time}
+                                    <span class="text-[10px] font-normal text-red-500/80 no-underline">Đã qua</span>
+                                 </button>`;
+                    } else {
+                        const isSelected = startInput && startInput.value === time;
+                        const btnClass = isSelected 
+                            ? 'bg-[#10b981] text-white border-[#10b981] ring-2 ring-green-200 font-bold scale-[1.02]' 
+                            : 'bg-white text-gray-700 border-gray-300 hover:border-green-500 hover:text-green-600';
+                        
+                        html += `<button type="button" data-time="${time}" onclick="selectTimeSlot('${time}')" class="time-slot-btn px-3 py-2.5 text-[14px] font-semibold rounded-xl border shadow-sm transition-all ${btnClass} flex flex-col items-center justify-center gap-0.5">
+                                    ${time}
+                                    <span class="text-[10px] font-normal opacity-70">Còn trống</span>
+                                 </button>`;
+                    }
+                });
+                html += `</div></div>`;
+
+                scheduleContent.innerHTML = html;
+            }
+
+            // ---- Load lịch làm của bác sĩ ----
+            async function loadDoctorSchedule() {
+                const doctorId = doctorSelect ? doctorSelect.value : '';
+                const dateVal  = dateInput ? dateInput.value : '';
+
+                currentSchedules = [];
+                schedulePanel.classList.add('hidden');
+                scheduleContent.innerHTML = '';
+                if (timeWarning) timeWarning.classList.add('hidden');
+                const placeholder = document.getElementById('schedulePlaceholder');
+
+                // Kiểm tra xem dịch vụ chọn có phải là dịch vụ đặc thù không
+                const serviceSelect = document.getElementById('medicalServiceSelect') || document.querySelector('select[name="MedicalService"]');
+                const serviceVal = serviceSelect ? serviceSelect.value : '';
+                const selectedService = medicalServices.find(s => s.value === serviceVal);
+                const isSpecialized = selectedService && selectedService.group === "Dịch Vụ Khám Đặc Thù";
+
+                if (isSpecialized) {
+                    if (!dateVal) {
+                        if (placeholder) {
+                            placeholder.classList.remove('hidden');
+                            placeholder.innerHTML = `
+                                <span class="material-symbols-outlined text-gray-400 text-[32px] mb-2 block">event_busy</span>
+                                <p class="text-[13px] text-gray-500 m-0">Vui lòng chọn <strong>Ngày khám</strong> để xem khung giờ trống.</p>`;
+                        }
+                        updateSummary();
+                        return;
+                    }
+                    renderSpecializedSchedule(dateVal);
+                    updateSummary();
+                    return;
+                }
+
+                if (!doctorId || !dateVal) {
+                    if (placeholder) {
+                        placeholder.classList.remove('hidden');
+                        placeholder.innerHTML = `
+                            <span class="material-symbols-outlined text-gray-400 text-[32px] mb-2 block">event_busy</span>
+                            <p class="text-[13px] text-gray-500 m-0">Vui lòng chọn <strong>Bác sĩ</strong> và <strong>Ngày khám</strong> để xem lịch trống.</p>`;
+                    }
+                    updateSummary();
+                    return;
+                }
+
+                try {
+                    const res = await fetch(`/Appointments/GetDoctorSchedule?doctorId=${doctorId}&date=${dateVal}`);
+                    const data = await res.json();
+                    const schedules = data.schedules;
+                    const bookedSlots = data.bookedSlots || [];
+                    currentSchedules = schedules;
+
+                    if (schedules.length === 0) {
+                        schedulePanel.classList.add('hidden');
+                        if (placeholder) {
+                            placeholder.classList.remove('hidden');
+                            placeholder.innerHTML = `
+                                <span class="material-symbols-outlined text-red-400 text-[32px] mb-2 block">event_busy</span>
+                                <p class="text-[13px] text-red-500 m-0">Bác sĩ không có lịch làm việc vào ngày này.</p>`;
+                        }
+                    } else {
+                        if (placeholder) placeholder.classList.add('hidden');
+                        schedulePanel.classList.remove('hidden');
+                        
+                        let html = '';
+                        schedules.forEach(s => {
+                            const slots = generateSlotsForShift(s.startTime, s.endTime, bookedSlots);
+                            const shiftIcon = s.shift === 'Morning' ? 'wb_sunny' : (s.shift === 'Afternoon' ? 'wb_twilight' : 'dark_mode');
+                            const shiftColor = s.shift === 'Morning' ? 'text-amber-500' : (s.shift === 'Afternoon' ? 'text-orange-500' : 'text-indigo-500');
+                            
+                            html += `
+                            <div>
+                                <h4 class="text-[13px] font-bold text-gray-700 mb-3 flex items-center gap-1.5 border-b border-gray-100 pb-2">
+                                    <span class="material-symbols-outlined text-[18px] ${shiftColor}">${shiftIcon}</span> 
+                                    ${s.shiftName} (${s.startTime} - ${s.endTime})
+                                </h4>
+                                <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
+                            `;
+                            
+                            const now = new Date();
+                            const todayStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+                            const isToday = dateInput.value === todayStr;
+
+                            slots.forEach(slot => {
+                                let isPast = false;
+                                if (isToday) {
+                                    const [sh, sm] = slot.time.split(':').map(Number);
+                                    if (sh < now.getHours() || (sh === now.getHours() && sm <= now.getMinutes())) {
+                                        isPast = true;
+                                    }
+                                }
+
+                                if (slot.booked || isPast) {
+                                    const reasonText = isPast ? 'Đã qua' : 'Đã đặt';
+                                    html += `<button type="button" disabled class="px-3 py-2.5 text-[14px] font-semibold rounded-xl border border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed flex flex-col items-center justify-center gap-0.5 opacity-65">
+                                                ${slot.time}
+                                                <span class="text-[10px] font-normal text-red-500/80 no-underline">${reasonText}</span>
+                                             </button>`;
+                                } else {
+                                    const isSelected = startInput && startInput.value === slot.time;
+                                    const btnClass = isSelected 
+                                        ? 'bg-[#10b981] text-white border-[#10b981] ring-2 ring-green-200 font-bold scale-[1.02]' 
+                                        : 'bg-white text-gray-700 border-gray-300 hover:border-green-500 hover:text-green-600';
+                                    
+                                    html += `<button type="button" data-time="${slot.time}" onclick="selectTimeSlot('${slot.time}')" class="time-slot-btn px-3 py-2.5 text-[14px] font-semibold rounded-xl border shadow-sm transition-all ${btnClass} flex flex-col items-center justify-center gap-0.5">
+                                                ${slot.time}
+                                                <span class="text-[10px] font-normal opacity-70">Còn trống</span>
+                                             </button>`;
+                                }
+                            });
+                            
+                            html += `</div></div>`;
+                        });
+                        
+                        scheduleContent.innerHTML = html;
+                    }
+                    updateSummary();
+                } catch (e) {
+                    console.error('Lỗi tải lịch bác sĩ:', e);
+                }
+            }
+
+            // ---- Gắn sự kiện & Đồng bộ Chuyên khoa - Dịch vụ ----
+            const serviceSelectElement = document.getElementById('medicalServiceSelect') || document.querySelector('select[name="MedicalService"]');
+            
+            const medicalServices = [
+                // Nội tổng hợp
+                { value: "Khám Nội tổng quát", text: "Khám Nội tổng quát", specialty: "Nội tổng hợp", group: "Khám Chuyên Khoa" },
+                { value: "Tầm soát Tim mạch & Đái tháo đường", text: "Tầm soát Tim mạch & Đái tháo đường", specialty: "Nội tổng hợp", group: "Khám Chuyên Khoa" },
+                
+                // Da liễu
+                { value: "Khám & Điều trị bệnh lý Da liễu", text: "Khám & Điều trị bệnh lý Da liễu", specialty: "Da liễu", group: "Khám Chuyên Khoa" },
+                { value: "Trị mụn & Chăm sóc da chuyên sâu", text: "Trị mụn & Chăm sóc da chuyên sâu", specialty: "Da liễu", group: "Khám Chuyên Khoa" },
+                
+                // Nhi khoa
+                { value: "Khám Nhi tổng quát & Tư vấn dinh dưỡng", text: "Khám Nhi tổng quát & Tư vấn dinh dưỡng", specialty: "Nhi khoa", group: "Khám Chuyên Khoa" },
+                { value: "Khám & Tiêm chủng vắc-xin cho trẻ", text: "Khám & Tiêm chủng vắc-xin cho trẻ", specialty: "Nhi khoa", group: "Khám Chuyên Khoa" },
+                
+                // Tai Mũi Họng
+                { value: "Khám & Nội soi Tai Mũi Họng", text: "Khám & Nội soi Tai Mũi Họng", specialty: "Tai Mũi Họng", group: "Khám Chuyên Khoa" },
+                { value: "Điều trị viêm mũi họng, viêm xoang", text: "Điều trị viêm mũi họng, viêm xoang", specialty: "Tai Mũi Họng", group: "Khám Chuyên Khoa" },
+                
+                // Sản phụ khoa
+                { value: "Khám thai định kỳ & Quản lý thai sản", text: "Khám thai định kỳ & Quản lý thai sản", specialty: "Sản phụ khoa", group: "Khám Chuyên Khoa" },
+                { value: "Khám Phụ khoa & Tầm soát ung thư cổ tử cung", text: "Khám Phụ khoa & Tầm soát ung thư cổ tử cung", specialty: "Sản phụ khoa", group: "Khám Chuyên Khoa" },
+                
+                // Răng Hàm Mặt
+                { value: "Khám răng tổng quát & Cạo vôi răng", text: "Khám răng tổng quát & Cạo vôi răng", specialty: "Răng Hàm Mặt", group: "Khám Chuyên Khoa" },
+                { value: "Nhổ răng khôn & Hàn răng thẩm mỹ", text: "Nhổ răng khôn & Hàn răng thẩm mỹ", specialty: "Răng Hàm Mặt", group: "Khám Chuyên Khoa" },
+                
+                // Nội thần kinh
+                { value: "Khám Nội thần kinh (Đau đầu, chóng mặt, mất ngủ)", text: "Khám Nội thần kinh (Đau đầu, chóng mặt, mất ngủ)", specialty: "Nội thần kinh", group: "Khám Chuyên Khoa" },
+                { value: "Tầm soát nguy cơ đột quỵ & Tai biến", text: "Tầm soát nguy cơ đột quỵ & Tai biến", specialty: "Nội thần kinh", group: "Khám Chuyên Khoa" },
+                
+                // Dịch Vụ Khám Đặc Thù
+                { value: "Khám sức khỏe tổng quát định kỳ", text: "Khám sức khỏe tổng quát định kỳ", specialty: "", group: "Dịch Vụ Khám Đặc Thù" },
+                { value: "Gói tầm soát sức khỏe Toàn diện (VIP)", text: "Gói tầm soát sức khỏe Toàn diện (VIP)", specialty: "", group: "Dịch Vụ Khám Đặc Thù" },
+                { value: "Xét nghiệm máu & Kiểm tra sinh hóa tại nhà", text: "Xét nghiệm máu & Kiểm tra sinh hóa tại nhà", specialty: "", group: "Dịch Vụ Khám Đặc Thù" }
+            ];
+
+            const specialtyNameToId = {};
+            const specialtyIdToName = {};
+            if (specialtySelect) {
+                Array.from(specialtySelect.options).forEach(opt => {
+                    if (opt.value) {
+                        specialtyNameToId[opt.text.trim()] = opt.value;
+                        specialtyIdToName[opt.value] = opt.text.trim();
+                    }
+                });
+            }
+
+            function renderServices(specialtyName) {
+                if (!serviceSelectElement) return;
+                const currentServiceVal = serviceSelectElement.value;
+                
+                const filtered = medicalServices.filter(s => {
+                    return !specialtyName || s.specialty === specialtyName;
+                });
+
+                serviceSelectElement.innerHTML = '<option value="">-- Chọn dịch vụ khám --</option>';
+                const groups = {};
+                filtered.forEach(s => {
+                    if (!groups[s.group]) groups[s.group] = [];
+                    groups[s.group].push(s);
+                });
+
+                for (const groupName in groups) {
+                    const optGroup = document.createElement('optgroup');
+                    optGroup.label = groupName;
+                    groups[groupName].forEach(s => {
+                        const opt = document.createElement('option');
+                        opt.value = s.value;
+                        opt.textContent = s.text;
+                        if (s.value === currentServiceVal) opt.selected = true;
+                        optGroup.appendChild(opt);
+                    });
+                    serviceSelectElement.appendChild(optGroup);
+                }
+            }
+
+            function lockSpecialties(allowedSpecialtyId) {
+                if (!specialtySelect) return;
+                Array.from(specialtySelect.options).forEach(opt => {
+                    if (opt.value === "") {
+                        opt.style.display = "";
+                        opt.disabled = false;
+                    } else if (allowedSpecialtyId !== "" && opt.value === allowedSpecialtyId) {
+                        opt.style.display = "";
+                        opt.disabled = false;
+                    } else {
+                        opt.style.display = "none";
+                        opt.disabled = true;
+                    }
+                });
+            }
+
+            function unlockSpecialties() {
+                if (!specialtySelect) return;
+                Array.from(specialtySelect.options).forEach(opt => {
+                    opt.style.display = "";
+                    opt.disabled = false;
+                });
+            }
+
+            function syncSpecialtyAndService(changedSource) {
+                const specialtyVal = specialtySelect ? specialtySelect.value : '';
+                const specialtyName = specialtyIdToName[specialtyVal] || '';
+                const serviceVal = serviceSelectElement ? serviceSelectElement.value : '';
+                const selectedService = medicalServices.find(s => s.value === serviceVal);
+
+                if (changedSource === 'specialty') {
+                    renderServices(specialtyName);
+                    
+                    const currentServiceObj = medicalServices.find(s => s.value === serviceSelectElement.value);
+                    if (currentServiceObj && specialtyVal !== "" && currentServiceObj.specialty !== specialtyName) {
+                        serviceSelectElement.value = "";
+                    }
+                } 
+                else if (changedSource === 'service') {
+                    if (selectedService) {
+                        if (selectedService.specialty !== "") {
+                            const targetSpecialtyId = specialtyNameToId[selectedService.specialty];
+                            if (targetSpecialtyId) {
+                                specialtySelect.value = targetSpecialtyId;
+                                lockSpecialties(targetSpecialtyId);
+                            }
+                        } else {
+                            specialtySelect.value = "";
+                            lockSpecialties("");
+                            if (doctorSelect) {
+                                doctorSelect.innerHTML = '<option value="">-- Chọn bác sĩ trực ca --</option>';
+                                doctorSelect.value = "";
+                            }
+                        }
+                        renderServices(selectedService.specialty);
+                    } else {
+                        unlockSpecialties();
+                        renderServices(specialtyName);
+                    }
+                }
+            }
+
+            if (serviceSelectElement) {
+                serviceSelectElement.addEventListener('change', function() {
+                    syncSpecialtyAndService('service');
+                    loadDoctors();
+                    loadDoctorSchedule();
+                    updateSummary();
+                });
+            }
+            if (specialtySelect) {
+                specialtySelect.addEventListener('change', function() {
+                    syncSpecialtyAndService('specialty');
+                    loadDoctors();
+                    updateSummary();
+                });
+            }
+            if (facilitySelect)  facilitySelect.addEventListener('change',  loadDoctors);
+            if (doctorSelect) {
+                doctorSelect.addEventListener('change', function() {
+                    loadDoctorSchedule();
+                    updateSummary();
+                });
+            }
+            if (dateInput) {
+                dateInput.addEventListener('change', function() {
+                    loadDoctorSchedule();
+                    updateSummary();
+                });
+            }
+
+            // Run initial synchronization
+            if (specialtySelect && specialtySelect.value) {
+                syncSpecialtyAndService('specialty');
+            } else if (serviceSelectElement && serviceSelectElement.value) {
+                syncSpecialtyAndService('service');
+            }
+
+            if (startInput) {
+                startInput.addEventListener('change', function () {
+                    calcEndTime(this.value);
+                    updateSummary();
+                });
+                if (startInput.value) calcEndTime(startInput.value);
+            }
+
+            // Thiết lập giá trị tối thiểu cho date input
+            if (dateInput) {
+                const now = new Date();
+                const todayStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+                let minDateStr = todayStr;
+
+                // Nếu quá 17:30 thì set min và trị mặc định là ngày mai, còn không thì hôm nay
+                if (now.getHours() > 17 || (now.getHours() === 17 && now.getMinutes() >= 30)) {
+                    const tomorrow = new Date(now);
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    const tomorrowStr = tomorrow.getFullYear() + '-' + String(tomorrow.getMonth() + 1).padStart(2, '0') + '-' + String(tomorrow.getDate()).padStart(2, '0');
+                    dateInput.min = tomorrowStr;
+                    minDateStr = tomorrowStr;
+                    if (!dateInput.value || dateInput.value === todayStr) {
+                        dateInput.value = tomorrowStr;
+                    }
+                } else {
+                    dateInput.min = todayStr;
+                    if (!dateInput.value) {
+                        dateInput.value = todayStr;
+                    }
+                }
+
+                // Initialize quick date cards
+                initQuickDateCards(minDateStr);
+            }
+
+            function initQuickDateCards(minDateStr) {
+                const parts = minDateStr.split('-');
+                const baseDate = new Date(parts[0], parts[1] - 1, parts[2]);
+                const dates = [];
+                for (let i = 0; i < 3; i++) {
+                    const d = new Date(baseDate);
+                    d.setDate(baseDate.getDate() + i);
+                    dates.push(d);
+                }
+
+                const dayNames = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+
+                dates.forEach((d, idx) => {
+                    const yyyy = d.getFullYear();
+                    const mm = String(d.getMonth() + 1).padStart(2, '0');
+                    const dd = String(d.getDate()).padStart(2, '0');
+                    const ymd = `${yyyy}-${mm}-${dd}`;
+
+                    const dateStr = `${dd}/${mm}`;
+                    const dayStr = dayNames[d.getDay()];
+
+                    const cardBtn = document.getElementById(`quickDateCard${idx}`);
+                    if (cardBtn) {
+                        document.getElementById(`quickDateStr${idx}`).textContent = dateStr;
+                        document.getElementById(`quickDayStr${idx}`).textContent = dayStr;
+                        cardBtn.dataset.date = ymd;
+
+                        cardBtn.onclick = function() {
+                            dateInput.value = ymd;
+                            dateInput.dispatchEvent(new Event('change'));
+                            updateDateCardsHighlight();
+                        };
+                    }
+                });
+
+                const hiddenDateInput = document.getElementById('hiddenDateInput');
+                if (hiddenDateInput) {
+                    hiddenDateInput.min = minDateStr;
+                    hiddenDateInput.onchange = function() {
+                        if (this.value) {
+                            dateInput.value = this.value;
+                            dateInput.dispatchEvent(new Event('change'));
+                            updateDateCardsHighlight();
+                        }
+                    };
+                }
+
+                updateDateCardsHighlight();
+            }
+
+            function updateDateCardsHighlight() {
+                const selectedVal = dateInput.value;
+                let found = false;
+
+                for (let i = 0; i < 3; i++) {
+                    const cardBtn = document.getElementById(`quickDateCard${i}`);
+                    if (cardBtn) {
+                        if (cardBtn.dataset.date === selectedVal) {
+                            cardBtn.classList.remove('bg-white', 'text-gray-800', 'border-gray-200');
+                            cardBtn.classList.add('bg-[#10b981]', 'text-white', 'border-[#10b981]', 'shadow-sm', 'font-bold');
+                            found = true;
+                        } else {
+                            cardBtn.classList.remove('bg-[#10b981]', 'text-white', 'border-[#10b981]', 'shadow-sm', 'font-bold');
+                            cardBtn.classList.add('bg-white', 'text-gray-800', 'border-gray-200');
+                        }
+                    }
+                }
+
+                const otherCard = document.getElementById('otherDateCard');
+                if (otherCard) {
+                    const labelSpan = otherCard.querySelector('span.font-bold');
+                    const iconSpan = otherCard.querySelector('span.material-symbols-outlined');
+                    if (!found && selectedVal) {
+                        otherCard.classList.remove('bg-white', 'text-gray-800', 'border-gray-200');
+                        otherCard.classList.add('bg-[#10b981]', 'text-white', 'border-[#10b981]', 'shadow-sm', 'font-bold');
+                        
+                        const parts = selectedVal.split('-');
+                        if (parts.length === 3) {
+                            labelSpan.textContent = `${parts[2]}/${parts[1]}`;
+                        }
+                        if (iconSpan) {
+                            iconSpan.classList.remove('text-gray-500');
+                            iconSpan.classList.add('text-white');
+                        }
+                    } else {
+                        otherCard.classList.remove('bg-[#10b981]', 'text-white', 'border-[#10b981]', 'shadow-sm', 'font-bold');
+                        otherCard.classList.add('bg-white', 'text-gray-800', 'border-gray-200');
+                        labelSpan.textContent = 'Ngày khác';
+                        if (iconSpan) {
+                            iconSpan.classList.remove('text-white');
+                            iconSpan.classList.add('text-gray-500');
+                        }
+                    }
+                }
+            }
+
+            // Khởi tạo nếu form đã có giá trị (ví dụ từ query string hoặc validation fail)
+            updateSummary();
+            if (doctorSelect && dateInput && doctorSelect.value && dateInput.value) {
+                loadDoctorSchedule();
+            }
+
+            // Accordion toggle for "Thông tin khác"
+            window.toggleOtherInfo = function() {
+                const otherInfoContent = document.getElementById("otherInfoContent");
+                const toggleArrow = document.getElementById("toggleArrow");
+                if (otherInfoContent.classList.contains("hidden")) {
+                    otherInfoContent.classList.remove("hidden");
+                    otherInfoContent.classList.add("grid");
+                    toggleArrow.style.transform = "rotate(180deg)";
+                } else {
+                    otherInfoContent.classList.add("hidden");
+                    otherInfoContent.classList.remove("grid");
+                    toggleArrow.style.transform = "rotate(0deg)";
+                }
+            };
+
+            // Cascading addresses selection from API
+            (async function() {
+                const provinceSelect = document.getElementById("provinceSelect");
+                const districtSelect = document.getElementById("districtSelect");
+                const wardSelect = document.getElementById("wardSelect");
+                
+                const initialProvince = '@Html.Raw(Model.Province)';
+                const initialDistrict = '@Html.Raw(Model.District)';
+                const initialWard = '@Html.Raw(Model.Ward)';
+
+                try {
+                    const response = await fetch("https://provinces.open-api.vn/api/p/");
+                    if (!response.ok) throw new Error("Network response error");
+                    const provinces = await response.json();
+                    
+                    provinceSelect.innerHTML = '<option value="">Chọn tỉnh thành</option>';
+                    provinces.forEach(p => {
+                        const option = document.createElement("option");
+                        option.value = p.name;
+                        option.dataset.code = p.code;
+                        option.textContent = p.name;
+                        if (p.name === initialProvince) {
+                            option.selected = true;
+                        }
+                        provinceSelect.appendChild(option);
+                    });
+
+                    if (initialProvince) {
+                        await loadDistricts(initialDistrict, initialWard);
+                    }
+                } catch (err) {
+                    console.error("Lỗi khi tải danh sách Tỉnh/Thành phố:", err);
+                }
+
+                provinceSelect.addEventListener("change", async function() {
+                    districtSelect.innerHTML = '<option value="">Chọn quận huyện</option>';
+                    districtSelect.disabled = true;
+                    wardSelect.innerHTML = '<option value="">Chọn xã phường</option>';
+                    wardSelect.disabled = true;
+                    
+                    const selectedOption = provinceSelect.options[provinceSelect.selectedIndex];
+                    if (selectedOption && selectedOption.dataset.code) {
+                        await loadDistricts("", "");
+                    }
+                });
+
+                districtSelect.addEventListener("change", async function() {
+                    wardSelect.innerHTML = '<option value="">Chọn xã phường</option>';
+                    wardSelect.disabled = true;
+                    
+                    const selectedOption = districtSelect.options[districtSelect.selectedIndex];
+                    if (selectedOption && selectedOption.dataset.code) {
+                        await loadWards("");
+                    }
+                });
+
+                async function loadDistricts(selectedDistrictName, selectedWardName) {
+                    const selectedOption = provinceSelect.options[provinceSelect.selectedIndex];
+                    if (!selectedOption || !selectedOption.dataset.code) return;
+                    const code = selectedOption.dataset.code;
+
+                    try {
+                        const response = await fetch(`https://provinces.open-api.vn/api/p/${code}?depth=2`);
+                        if (!response.ok) throw new Error("Network response error");
+                        const provinceData = await response.json();
+                        
+                        districtSelect.innerHTML = '<option value="">Chọn quận huyện</option>';
+                        provinceData.districts.forEach(d => {
+                            const option = document.createElement("option");
+                            option.value = d.name;
+                            option.dataset.code = d.code;
+                            option.textContent = d.name;
+                            if (d.name === selectedDistrictName) {
+                                option.selected = true;
+                            }
+                            districtSelect.appendChild(option);
+                        });
+                        districtSelect.disabled = false;
+
+                        if (selectedDistrictName) {
+                            await loadWards(selectedWardName);
+                        }
+                    } catch (err) {
+                        console.error("Lỗi khi tải danh sách Quận/Huyện:", err);
+                    }
+                }
+
+                async function loadWards(selectedWardName) {
+                    const selectedOption = districtSelect.options[districtSelect.selectedIndex];
+                    if (!selectedOption || !selectedOption.dataset.code) return;
+                    const code = selectedOption.dataset.code;
+
+                    try {
+                        const response = await fetch(`https://provinces.open-api.vn/api/d/${code}?depth=2`);
+                        if (!response.ok) throw new Error("Network response error");
+                        const districtData = await response.json();
+                        
+                        wardSelect.innerHTML = '<option value="">Chọn xã phường</option>';
+                        districtData.wards.forEach(w => {
+                            const option = document.createElement("option");
+                            option.value = w.name;
+                            option.dataset.code = w.code;
+                            option.textContent = w.name;
+                            if (w.name === selectedWardName) {
+                                option.selected = true;
+                            }
+                            wardSelect.appendChild(option);
+                        });
+                        wardSelect.disabled = false;
+                    } catch (err) {
+                        console.error("Lỗi khi tải danh sách Xã/Phường:", err);
+                    }
+                }
+            })();
+        })();
+    </script>
 }
+

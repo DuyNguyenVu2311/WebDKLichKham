@@ -1,9 +1,14 @@
-.vs/
+# ---- Build outputs ----
 bin/
 obj/
+
+# ---- Visual Studio ----
+.vs/
 *.user
 *.suo
 *.cache
+
+# ---- Logs ----
 *.log
 run.err
 run.out
@@ -11,3 +16,30 @@ run2.err
 run2.out
 run3.err
 run3.out
+run-err.log
+run-out.log
+
+# ---- Node / npm ----
+node_modules/
+
+# ---- Temporary & working folders (tools, scripts, outputs) ----
+tmp_*/
+tools/
+scripts/
+outputs/
+buildcheck/
+report-assets/
+doc_extracts/
+
+# ---- Scratch / dev-only files ----
+login.html
+medical_images_result.json
+WebDKLichKham/Views/Home/Index.cshtml.fixed
+
+# ---- Temp browser profiles ----
+tmp_edge_profile/
+tmp_edge_profile2/
+tmp_mdj/
+tmp_pdf_images/
+tmp_pdf_pages/
+tmp_new_pdf_images/

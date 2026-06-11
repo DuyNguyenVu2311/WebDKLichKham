@@ -1,100 +1,139 @@
 @model IEnumerable<WebDKLichKham.Models.Appointment>
 @using WebDKLichKham.Models
 @{
-    ViewData["Title"] = "Quan ly lich kham";
+    ViewData["Title"] = "Quản lý lịch khám";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-        <h1 class="h2 mb-1">Quan ly lich kham</h1>
-        <p class="text-secondary mb-0">Theo doi, xac nhan va cap nhat trang thai lich hen cua benh nhan.</p>
+<div class="max-w-[1280px] mx-auto px-4 md:px-8 py-8">
+
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <div>
+            <div class="flex items-center gap-2 mb-2">
+                <span class="material-symbols-outlined text-[#00346f] text-[28px]">event_note</span>
+                <h1 class="text-[28px] font-bold text-[#0b1c30]">Quản lý lịch khám</h1>
+            </div>
+            <p class="text-[14px] text-gray-500">Theo dõi, xác nhận và cập nhật trạng thái lịch hẹn của bệnh nhân.</p>
+        </div>
+        <a class="px-4 py-2.5 border border-gray-300 text-gray-600 rounded-lg text-[13px] font-semibold hover:bg-gray-50 transition-colors no-underline flex items-center gap-2" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+            <span class="material-symbols-outlined text-[18px]">arrow_back</span> Về tổng quan
+        </a>
     </div>
-    <a class="btn btn-outline-secondary" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Ve dashboard</a>
-</div>
 
-@if (TempData["StatusMessage"] is string message)
-{
-    <div class="alert alert-success" role="alert">
-        @message
-    </div>
-}
-
-<div class="card border-0 shadow-sm">
-    <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-            <thead>
-                <tr>
-                    <th>Benh nhan</th>
-                    <th>Bac si</th>
-                    <th>Ngay kham</th>
-                    <th>Ly do</th>
-                    <th>Trang thai</th>
-                    <th class="text-end">Thao tac</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var appointment in Model)
-                {
-                    <tr>
-                        <td>@appointment.PatientProfile?.FullName</td>
-                        <td>@appointment.Doctor?.FullName</td>
-                        <td>@appointment.AppointmentDate.ToString("dd/MM/yyyy") @appointment.StartTime.ToString(@"hh\:mm")</td>
-                        <td>@appointment.ReasonForVisit</td>
-                        <td>
-                            <span class="badge @GetStatusBadgeClass(appointment.Status)">
-                                @appointment.Status.GetDisplayName()
-                            </span>
-                        </td>
-                        <td class="text-end">
-                            <div class="d-inline-flex gap-2 flex-wrap justify-content-end">
-                                @if (appointment.Status == AppointmentStatus.Pending)
-                                {
-                                    <form asp-area="Admin" asp-controller="Appointments" asp-action="Confirm" method="post" class="d-inline">
-                                        @Html.AntiForgeryToken()
-                                        <input type="hidden" name="id" value="@appointment.Id" />
-                                        <button type="submit" class="btn btn-sm btn-success">Xac nhan</button>
-                                    </form>
-
-                                    <form asp-area="Admin" asp-controller="Appointments" asp-action="Cancel" method="post" class="d-inline">
-                                        @Html.AntiForgeryToken()
-                                        <input type="hidden" name="id" value="@appointment.Id" />
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">Huy</button>
-                                    </form>
-                                }
-                                else if (appointment.Status == AppointmentStatus.Confirmed)
-                                {
-                                    <form asp-area="Admin" asp-controller="Appointments" asp-action="Complete" method="post" class="d-inline">
-                                        @Html.AntiForgeryToken()
-                                        <input type="hidden" name="id" value="@appointment.Id" />
-                                        <button type="submit" class="btn btn-sm btn-primary">Hoan thanh</button>
-                                    </form>
-
-                                    <form asp-area="Admin" asp-controller="Appointments" asp-action="Cancel" method="post" class="d-inline">
-                                        @Html.AntiForgeryToken()
-                                        <input type="hidden" name="id" value="@appointment.Id" />
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">Huy</button>
-                                    </form>
-                                }
-                                else
-                                {
-                                    <span class="text-muted small">Khong co thao tac</span>
-                                }
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-</div>
-
-@functions {
-    private static string GetStatusBadgeClass(AppointmentStatus status) => status switch
+    @if (TempData["StatusMessage"] is string message)
     {
-        AppointmentStatus.Pending => "bg-warning text-dark",
-        AppointmentStatus.Confirmed => "bg-success",
-        AppointmentStatus.Completed => "bg-primary",
-        AppointmentStatus.Cancelled => "bg-danger",
-        _ => "bg-secondary"
-    };
-}
+        <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl flex items-center gap-3 text-green-800 text-[14px] font-medium">
+            <span class="material-symbols-outlined text-green-600 text-[22px]">check_circle</span>
+            @message
+        </div>
+    }
+
+    <!-- Table -->
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-[#f0f4fa] rounded-lg flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[#00346f] text-[20px]">calendar_month</span>
+                </div>
+                <div>
+                    <h2 class="text-[18px] font-bold text-[#0b1c30]">Danh sách lịch hẹn</h2>
+                    <p class="text-[12px] text-gray-400">Tổng cộng @Model.Count() lịch hẹn</p>
+                </div>
+            </div>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-[14px]">
+                <thead class="bg-[#f8fafc]">
+                    <tr>
+                        <th class="text-left px-6 py-3 font-semibold text-[12px] text-gray-500 uppercase tracking-wider">Mã</th>
+                        <th class="text-left px-6 py-3 font-semibold text-[12px] text-gray-500 uppercase tracking-wider">Bệnh nhân</th>
+                        <th class="text-left px-6 py-3 font-semibold text-[12px] text-gray-500 uppercase tracking-wider">Bác sĩ</th>
+                        <th class="text-left px-6 py-3 font-semibold text-[12px] text-gray-500 uppercase tracking-wider">Ngày khám</th>
+                        <th class="text-left px-6 py-3 font-semibold text-[12px] text-gray-500 uppercase tracking-wider">Lý do</th>
+                        <th class="text-left px-6 py-3 font-semibold text-[12px] text-gray-500 uppercase tracking-wider">Trạng thái</th>
+                        <th class="text-right px-6 py-3 font-semibold text-[12px] text-gray-500 uppercase tracking-wider">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    @foreach (var appointment in Model)
+                    {
+                        var statusClass = appointment.Status switch
+                        {
+                            AppointmentStatus.Pending => "bg-amber-50 text-amber-700 border-amber-200",
+                            AppointmentStatus.Confirmed => "bg-green-50 text-green-700 border-green-200",
+                            AppointmentStatus.Completed => "bg-blue-50 text-blue-700 border-blue-200",
+                            AppointmentStatus.Cancelled => "bg-red-50 text-red-700 border-red-200",
+                            _ => "bg-gray-50 text-gray-700 border-gray-200"
+                        };
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4">
+                                <span class="text-[12px] font-bold text-[#00346f] bg-[#f0f4fa] px-2 py-1 rounded">@appointment.AppointmentCode</span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="font-semibold text-[#0b1c30]">@(appointment.PatientProfile?.FullName ?? appointment.PatientName)</div>
+                                <div class="text-[12px] text-gray-400">@appointment.PatientPhone</div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="font-medium">@appointment.Doctor?.FullName</div>
+                                <div class="text-[12px] text-gray-400">@appointment.Doctor?.Specialty</div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="font-medium">@appointment.AppointmentDate.ToString("dd/MM/yyyy")</div>
+                                <div class="text-[12px] text-gray-400">@appointment.StartTime.ToString(@"hh\:mm") - @appointment.EndTime.ToString(@"hh\:mm")</div>
+                            </td>
+                            <td class="px-6 py-4 text-gray-600 max-w-[200px] truncate" title="@appointment.ReasonForVisit">@appointment.ReasonForVisit</td>
+                            <td class="px-6 py-4">
+                                <span class="px-3 py-1 rounded-full text-[11px] font-bold border @statusClass">
+                                    @appointment.Status.GetDisplayName()
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <div class="flex gap-2 justify-end flex-wrap">
+                                    @if (appointment.Status == AppointmentStatus.Pending)
+                                    {
+                                        <form asp-area="Admin" asp-controller="Appointments" asp-action="Confirm" method="post" class="inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@appointment.Id" />
+                                            <button type="submit" class="px-3 py-1.5 bg-green-600 text-white rounded-lg text-[12px] font-semibold hover:bg-green-700 transition-colors flex items-center gap-1 shadow-sm">
+                                                <span class="material-symbols-outlined text-[14px]">check</span> Xác nhận
+                                            </button>
+                                        </form>
+                                        <form asp-area="Admin" asp-controller="Appointments" asp-action="Cancel" method="post" class="inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@appointment.Id" />
+                                            <button type="submit" class="px-3 py-1.5 border border-red-300 text-red-600 rounded-lg text-[12px] font-semibold hover:bg-red-50 transition-colors flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[14px]">close</span> Hủy
+                                            </button>
+                                        </form>
+                                    }
+                                    else if (appointment.Status == AppointmentStatus.Confirmed)
+                                    {
+                                        <form asp-area="Admin" asp-controller="Appointments" asp-action="Complete" method="post" class="inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@appointment.Id" />
+                                            <button type="submit" class="px-3 py-1.5 bg-[#00346f] text-white rounded-lg text-[12px] font-semibold hover:bg-[#002244] transition-colors flex items-center gap-1 shadow-sm">
+                                                <span class="material-symbols-outlined text-[14px]">done_all</span> Hoàn thành
+                                            </button>
+                                        </form>
+                                        <form asp-area="Admin" asp-controller="Appointments" asp-action="Cancel" method="post" class="inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@appointment.Id" />
+                                            <button type="submit" class="px-3 py-1.5 border border-red-300 text-red-600 rounded-lg text-[12px] font-semibold hover:bg-red-50 transition-colors flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[14px]">close</span> Hủy
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-[12px] text-gray-400 italic">Không có thao tác</span>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

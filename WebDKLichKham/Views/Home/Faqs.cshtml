@@ -1,0 +1,94 @@
+@{
+    ViewData["Title"] = "Câu hỏi thường gặp";
+}
+
+<main class="font-sans bg-[#f8fafc] py-12">
+    <div class="max-w-[1000px] mx-auto px-4">
+        
+        <!-- Breadcrumbs -->
+        <nav class="flex items-center gap-2 text-[14px] text-gray-500 mb-8">
+            <a asp-controller="Home" asp-action="Index" class="hover:text-primary transition-colors no-underline">Trang chủ</a>
+            <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+            <span class="text-gray-800">Hỏi đáp y khoa & dịch vụ</span>
+        </nav>
+
+        <div class="bg-white rounded-3xl border border-gray-100 p-8 md:p-12 shadow-sm">
+            <h1 class="text-[32px] md:text-[40px] font-extrabold text-[#00346f] mb-6 leading-tight">
+                Câu Hỏi Thường Gặp
+            </h1>
+            <p class="text-[#334155] text-[16px] mb-8 leading-relaxed">
+                Để thuận tiện cho quá trình đăng ký lịch khám và sử dụng dịch vụ tại Hệ thống Phòng khám Đa khoa Duy Tâm, Ban biên tập Y khoa xin tổng hợp giải đáp chi tiết các câu hỏi thường gặp nhất từ phía khách hàng:
+            </p>
+
+            <div class="space-y-6">
+                <!-- Câu 1 -->
+                <div class="p-6 bg-[#f4f7fc] rounded-2xl border border-gray-100">
+                    <h3 class="text-[17px] font-bold text-[#00346f] mb-3 flex items-start gap-2">
+                        <span class="material-symbols-outlined text-primary shrink-0">help</span>
+                        Quy trình đặt lịch hẹn khám trực tuyến tại phòng khám hoạt động như thế nào?
+                    </h3>
+                    <p class="text-[15px] text-gray-600 pl-8">
+                        Quý khách chỉ cần thực hiện 3 bước đơn giản:
+                        <br />1. Nhấp nút <strong>"Đặt Lịch Khám"</strong> trên thanh menu.
+                        <br />2. Chọn Cơ sở khám (Thủ Đức/Nhơn Trạch), Chuyên khoa cần khám, Ngày giờ phù hợp và cung cấp đầy đủ thông tin cá nhân.
+                        <br />3. Nhận tin nhắn SMS/Email chứa <strong>Mã lịch hẹn</strong>. Quý khách vui lòng đến trước 10 phút để được vào phòng khám ngay mà không cần xếp hàng mua sổ.
+                    </p>
+                </div>
+
+                <!-- Câu 2 -->
+                <div class="p-6 bg-[#f4f7fc] rounded-2xl border border-gray-100">
+                    <h3 class="text-[17px] font-bold text-[#00346f] mb-3 flex items-start gap-2">
+                        <span class="material-symbols-outlined text-primary shrink-0">help</span>
+                        Phòng khám Duy Tâm có thanh toán Bảo hiểm Y tế (BHYT) Nhà nước và Bảo hiểm Bảo lãnh tư nhân không?
+                    </h3>
+                    <p class="text-[15px] text-gray-600 pl-8">
+                        Dạ có! Phòng khám Duy Tâm hỗ trợ áp dụng thanh toán BHYT đúng tuyến và thông tuyến theo quy định hiện hành của Bộ Y tế. Ngoài ra, chúng tôi có liên kết bảo lãnh viện phí trực tiếp với hơn 20 đơn vị bảo hiểm tư nhân uy tín (như Bao Viet, Manulife, Prudential, Dai-ichi Life...) giúp tối ưu chi phí điều trị cho người bệnh.
+                    </p>
+                </div>
+
+                <!-- Câu 3 -->
+                <div class="p-6 bg-[#f4f7fc] rounded-2xl border border-gray-100">
+                    <h3 class="text-[17px] font-bold text-[#00346f] mb-3 flex items-start gap-2">
+                        <span class="material-symbols-outlined text-primary shrink-0">help</span>
+                        Tôi cần mang theo những giấy tờ gì khi đến khám bệnh theo lịch hẹn?
+                    </h3>
+                    <p class="text-[15px] text-gray-600 pl-8">
+                        Để làm thủ tục tiếp tiếp đón nhanh chóng, quý khách vui lòng mang theo:
+                        <br />- Căn cước công dân (CCCD) hoặc Hộ chiếu.
+                        <br />- Thẻ BHYT (nếu có áp dụng thanh toán bảo hiểm).
+                        <br />- Sổ khám bệnh cũ, các kết quả xét nghiệm, đơn thuốc hoặc phim chụp X-quang/MRI trong vòng 6 tháng gần nhất (nếu có) để bác sĩ nắm được lịch sử điều trị.
+                    </p>
+                </div>
+
+                <!-- Câu 4 -->
+                <div class="p-6 bg-[#f4f7fc] rounded-2xl border border-gray-100">
+                    <h3 class="text-[17px] font-bold text-[#00346f] mb-3 flex items-start gap-2">
+                        <span class="material-symbols-outlined text-primary shrink-0">help</span>
+                        Làm thế nào để tôi có thể hủy lịch hẹn hoặc đổi giờ khám khác?
+                    </h3>
+                    <p class="text-[15px] text-gray-600 pl-8">
+                        Quý khách có thể tự chủ động chỉnh sửa lịch hẹn bằng cách truy cập mục <strong>"Lịch của tôi"</strong> ở đầu trang, nhập số điện thoại cá nhân để tìm lại lịch đã đăng ký. Ngoài ra, quý khách có thể liên hệ trực tiếp Tổng đài <strong>1900 1234</strong> để được nhân viên hỗ trợ đổi giờ khám nhanh chóng.
+                    </p>
+                </div>
+
+                <!-- Câu 5 -->
+                <div class="p-6 bg-[#f4f7fc] rounded-2xl border border-gray-100">
+                    <h3 class="text-[17px] font-bold text-[#00346f] mb-3 flex items-start gap-2">
+                        <span class="material-symbols-outlined text-primary shrink-0">help</span>
+                        Thời gian nhận kết quả xét nghiệm và chẩn đoán hình ảnh tại phòng khám là bao lâu?
+                    </h3>
+                    <p class="text-[15px] text-gray-600 pl-8">
+                        Chúng tôi trang bị hệ thống lab xét nghiệm đạt chuẩn ISO tại chỗ, nên thời gian trả kết quả được rút ngắn tối đa:
+                        <br />- Siêu âm, X-quang, Điện tim (ECG): Kết quả có sau **10 - 15 phút** sau khi thực hiện xong kỹ thuật.
+                        <br />- Xét nghiệm máu sinh hóa, huyết học cơ bản: Kết quả trả sau **60 - 90 phút**.
+                        <br />- Các xét nghiệm sinh học phân tử hoặc tầm soát ung thư chuyên sâu: Trả kết quả sau **24 - 48 giờ** tùy danh mục (được thông báo và gửi bản mềm qua SMS/Email).
+                    </p>
+                </div>
+            </div>
+
+            <p class="mt-8 text-center text-[14px] text-gray-500 italic">
+                Nếu cần hỗ trợ khẩn cấp, xin vui lòng gọi hotline hỗ trợ khẩn cấp 24/7: 1900 1234. Phòng khám Duy Tâm hân hạnh được phục vụ quý khách!
+            </p>
+        </div>
+    </div>
+</main>

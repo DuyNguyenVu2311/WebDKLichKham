@@ -1,26 +1,41 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
 
-<ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
+@if (Context.Request.Cookies["PortalRole"] != null)
 {
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Quản lý tài khoản">Xin chào @User.Identity?.Name!</a>
-    </li>
-    <li class="nav-item">
-        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button type="submit" class="nav-link btn btn-link text-dark">Đăng xuất</button>
-        </form>
-    </li>
+    var role = Context.Request.Cookies["PortalRole"];
+    var userName = Context.Request.Cookies["PortalUser"];
+    var dashboardUrl = role == "Customer" ? "/Portal/PatientDashboard" : role == "Doctor" ? "/Portal/DoctorDashboard" : "/Portal/AdminDashboard";
+
+    <div class="hidden sm:flex items-center gap-2">
+        <a class="inline-flex items-center gap-2 text-[15px] font-bold text-[#00346f] hover:text-[#002244] bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-all no-underline px-4 py-2 rounded-xl" href="@dashboardUrl">
+            <div class="w-6 h-6 rounded-full bg-[#00346f] text-white flex items-center justify-center text-[12px]">@userName?.Substring(0, 1)</div>
+            Chào, @userName
+        </a>
+        <a href="/Home/LogoutPortal" class="inline-flex items-center text-red-500 hover:text-white hover:bg-red-500 px-3 py-2 rounded-xl transition-colors" title="Đăng xuất">
+            <span class="material-symbols-outlined text-[20px]">logout</span>
+        </a>
+    </div>
+}
+else if (User.IsInRole("Admin"))
+{
+    <a class="hidden sm:inline-flex items-center gap-1.5 text-[15px] font-semibold text-[#475569] hover:text-[#2563eb] hover:bg-[#eff6ff] transition-all no-underline px-3 py-2 rounded-lg" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+        <span class="material-symbols-outlined text-[18px]">admin_panel_settings</span> Quản trị
+    </a>
 }
 else
 {
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Đăng ký</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Đăng nhập</a>
-    </li>
+    <a class="hidden sm:inline-flex items-center gap-2 text-[15px] font-bold text-[#00346f] hover:text-white bg-blue-50 hover:bg-[#00346f] border border-blue-200 hover:border-[#00346f] transition-all no-underline px-4 py-2 rounded-xl shadow-sm" asp-area="" asp-controller="Home" asp-action="Login">
+        <span class="material-symbols-outlined text-[20px]">login</span> Đăng nhập
+    </a>
 }
-</ul>
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" class="inline">
+        <button type="submit" class="inline-flex items-center gap-1.5 text-[15px] font-semibold text-[#475569] hover:text-red-600 hover:bg-red-50 transition-all no-underline px-3 py-2 rounded-lg border-none bg-transparent cursor-pointer">
+            <span class="material-symbols-outlined text-[18px]">logout</span> Đăng xuất
+        </button>
+    </form>
+}
+

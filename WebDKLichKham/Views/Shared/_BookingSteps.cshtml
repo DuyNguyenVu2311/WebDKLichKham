@@ -1,0 +1,112 @@
+@model int
+@{
+    int activeStep = Model;
+
+    var steps = new[]
+    {
+        new { Step = 1, Title = "Chọn bác sĩ", Subtitle = "Chuyên khoa & Dịch vụ", Icon = "stethoscope", Url = "/Doctors" },
+        new { Step = 2, Title = "Lịch khám", Subtitle = "Ngày & Khung giờ", Icon = "calendar_month", Url = "/Appointments/Create" },
+        new { Step = 3, Title = "Người khám", Subtitle = "Thông tin bệnh nhân", Icon = "patient_list", Url = "/Appointments/Create" },
+        new { Step = 4, Title = "Hoàn tất", Subtitle = "Xác nhận lịch hẹn", Icon = "fact_check", Url = "#" }
+    };
+}
+
+<div class="w-full mb-10 mt-2 px-1">
+    <!-- Desktop and Tablet Stepper (Horizontal Line-Connected) -->
+    <div class="relative flex items-start justify-between w-full">
+        @for (int i = 0; i < steps.Length; i++)
+        {
+            var s = steps[i];
+            var isActive = s.Step == activeStep;
+            var isCompleted = s.Step < activeStep;
+            var isUpcoming = s.Step > activeStep;
+
+            string circleClass = "";
+            string titleClass = "";
+            string subtitleClass = "";
+
+            if (isActive)
+            {
+                circleClass = "bg-[#00346f] border-[#00346f] text-white ring-4 ring-blue-100 scale-105 shadow-md shadow-blue-900/10";
+                titleClass = "text-[#00346f] font-bold";
+                subtitleClass = "text-blue-600 font-medium";
+            }
+            else if (isCompleted)
+            {
+                circleClass = "bg-green-600 border-green-600 text-white hover:bg-green-700 hover:border-green-700";
+                titleClass = "text-green-700 font-semibold";
+                subtitleClass = "text-green-500";
+            }
+            else
+            {
+                circleClass = "bg-white border-gray-300 text-gray-400 hover:border-gray-400";
+                titleClass = "text-gray-500 font-medium";
+                subtitleClass = "text-gray-400";
+            }
+
+            <!-- Step Node -->
+            <a href="@(isUpcoming ? "#" : s.Url)" class="flex flex-col items-center no-underline group @(isUpcoming ? "cursor-default pointer-events-none" : "cursor-pointer")">
+                <!-- Circle -->
+                <div class="w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 @circleClass">
+                    @if (isCompleted)
+                    {
+                        <span class="material-symbols-outlined text-[20px] font-bold">check</span>
+                    }
+                    else
+                    {
+                        <span class="material-symbols-outlined text-[20px]">@s.Icon</span>
+                    }
+                </div>
+                
+                <!-- Labels (Hidden on mobile, shown on md and up) -->
+                <div class="hidden md:flex flex-col items-center mt-3 text-center px-1 max-w-[120px]">
+                    <span class="text-[13px] tracking-tight transition-colors group-hover:text-blue-600 @titleClass">
+                        @s.Title
+                    </span>
+                    <span class="text-[10px] tracking-normal mt-0.5 leading-tight @subtitleClass">
+                        @s.Subtitle
+                    </span>
+                </div>
+            </a>
+
+            <!-- Connecting Line -->
+            if (i < steps.Length - 1)
+            {
+                var isLineActive = s.Step < activeStep;
+                <div class="flex-1 h-[3px] mx-2 md:mx-4 rounded-full bg-gray-200 self-start mt-5">
+                    <div class="h-full bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full transition-all duration-500" style="width: @(isLineActive ? "100%" : "0%")"></div>
+                </div>
+            }
+        }
+    </div>
+
+    <!-- Mobile active step card (Shown only on mobile) -->
+    @{
+        var currentActiveStepIdx = Math.Min(activeStep - 1, steps.Length - 1);
+        if (currentActiveStepIdx < 0) currentActiveStepIdx = 0;
+        var currentActiveStep = steps[currentActiveStepIdx];
+    }
+    <div class="md:hidden mt-6 bg-[#f8fafc] border border-gray-100 rounded-xl p-4 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-lg bg-blue-50 text-[#00346f] flex items-center justify-center">
+                <span class="material-symbols-outlined text-[20px]">@currentActiveStep.Icon</span>
+            </div>
+            <div>
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">
+                    ĐANG THỰC HIỆN (BƯỚC @(activeStep <= 4 ? activeStep : 4)/4)
+                </p>
+                <p class="text-[14px] font-bold text-[#1e293b] m-0">
+                    @currentActiveStep.Title
+                </p>
+            </div>
+        </div>
+        @if (activeStep < 4)
+        {
+            <div class="text-right text-[11px] text-gray-400 font-medium">
+                Tiếp theo:<br/>
+                <span class="text-[#00346f] font-semibold">@steps[activeStep].Title</span>
+            </div>
+        }
+    </div>
+</div>
+

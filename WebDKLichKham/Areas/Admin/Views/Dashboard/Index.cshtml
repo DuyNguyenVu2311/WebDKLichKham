@@ -3,57 +3,133 @@
     ViewData["Title"] = "Tổng quan quản trị";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-        <h1 class="h2 mb-1">Tổng quan quản trị</h1>
-        <p class="text-secondary mb-0">Trang khởi đầu cho vai trò admin quản lý phòng khám.</p>
-    </div>
-    <div class="d-flex gap-2">
-        <a class="btn btn-outline-secondary" asp-area="Admin" asp-controller="Doctors" asp-action="Index">Quản lý bác sĩ</a>
-        <a class="btn btn-primary" asp-area="Admin" asp-controller="Appointments" asp-action="Index">Quản lý lịch khám</a>
-    </div>
-</div>
+<div class="max-w-[1280px] mx-auto px-4 md:px-8 py-8">
 
-<div class="row g-3 mb-4">
-    <div class="col-md-3">
-        <div class="card border-0 shadow-sm h-100"><div class="card-body"><div class="text-secondary small">Bác sĩ</div><div class="display-6">@Model.TotalDoctors</div></div></div>
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <div>
+            <div class="flex items-center gap-2 mb-2">
+                <span class="material-symbols-outlined text-[#00346f] text-[28px]">dashboard</span>
+                <h1 class="text-[28px] font-bold text-[#0b1c30]">Tổng quan quản trị</h1>
+            </div>
+            <p class="text-[14px] text-gray-500">Xin chào, Admin! Đây là bảng điều khiển quản lý phòng khám của bạn.</p>
+        </div>
+        <div class="flex gap-3">
+            <a class="px-4 py-2.5 border border-gray-300 text-gray-600 rounded-lg text-[13px] font-semibold hover:bg-gray-50 transition-colors no-underline flex items-center gap-2" asp-area="Admin" asp-controller="Doctors" asp-action="Index">
+                <span class="material-symbols-outlined text-[18px]">stethoscope</span> Quản lý bác sĩ
+            </a>
+            <a class="px-4 py-2.5 bg-[#00346f] text-white rounded-lg text-[13px] font-semibold hover:bg-[#002244] transition-colors no-underline flex items-center gap-2 shadow-md" asp-area="Admin" asp-controller="Appointments" asp-action="Index">
+                <span class="material-symbols-outlined text-[18px]">event_note</span> Quản lý lịch khám
+            </a>
+        </div>
     </div>
-    <div class="col-md-3">
-        <div class="card border-0 shadow-sm h-100"><div class="card-body"><div class="text-secondary small">Bệnh nhân</div><div class="display-6">@Model.TotalPatients</div></div></div>
-    </div>
-    <div class="col-md-3">
-        <div class="card border-0 shadow-sm h-100"><div class="card-body"><div class="text-secondary small">Chờ xác nhận</div><div class="display-6">@Model.PendingAppointments</div></div></div>
-    </div>
-    <div class="col-md-3">
-        <div class="card border-0 shadow-sm h-100"><div class="card-body"><div class="text-secondary small">Đã xác nhận</div><div class="display-6">@Model.ConfirmedAppointments</div></div></div>
-    </div>
-</div>
 
-<div class="card border-0 shadow-sm">
-    <div class="card-body p-4">
-        <h2 class="h4 mb-3">Lịch đặt gần đây</h2>
-        <div class="table-responsive">
-            <table class="table align-middle">
-                <thead>
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+        <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow group">
+            <div class="flex items-center justify-between mb-3">
+                <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center group-hover:bg-[#00346f] transition-colors">
+                    <span class="material-symbols-outlined text-[#00346f] text-[22px] group-hover:text-white transition-colors">stethoscope</span>
+                </div>
+                <span class="text-[11px] font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-full uppercase tracking-wider">Nhân sự</span>
+            </div>
+            <div class="text-[32px] font-bold text-[#0b1c30] mb-1">@Model.TotalDoctors</div>
+            <p class="text-[13px] text-gray-500">Bác sĩ đang hoạt động</p>
+        </div>
+
+        <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow group">
+            <div class="flex items-center justify-between mb-3">
+                <div class="w-11 h-11 bg-teal-50 rounded-xl flex items-center justify-center group-hover:bg-teal-600 transition-colors">
+                    <span class="material-symbols-outlined text-teal-600 text-[22px] group-hover:text-white transition-colors">groups</span>
+                </div>
+                <span class="text-[11px] font-bold text-teal-600 bg-teal-50 px-2 py-1 rounded-full uppercase tracking-wider">Bệnh nhân</span>
+            </div>
+            <div class="text-[32px] font-bold text-[#0b1c30] mb-1">@Model.TotalPatients</div>
+            <p class="text-[13px] text-gray-500">Hồ sơ bệnh nhân</p>
+        </div>
+
+        <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow group">
+            <div class="flex items-center justify-between mb-3">
+                <div class="w-11 h-11 bg-amber-50 rounded-xl flex items-center justify-center group-hover:bg-amber-500 transition-colors">
+                    <span class="material-symbols-outlined text-amber-600 text-[22px] group-hover:text-white transition-colors">pending_actions</span>
+                </div>
+                <span class="text-[11px] font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded-full uppercase tracking-wider">Chờ duyệt</span>
+            </div>
+            <div class="text-[32px] font-bold text-[#0b1c30] mb-1">@Model.PendingAppointments</div>
+            <p class="text-[13px] text-gray-500">Lịch chờ xác nhận</p>
+        </div>
+
+        <div class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow group">
+            <div class="flex items-center justify-between mb-3">
+                <div class="w-11 h-11 bg-green-50 rounded-xl flex items-center justify-center group-hover:bg-green-600 transition-colors">
+                    <span class="material-symbols-outlined text-green-600 text-[22px] group-hover:text-white transition-colors">event_available</span>
+                </div>
+                <span class="text-[11px] font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full uppercase tracking-wider">Đã duyệt</span>
+            </div>
+            <div class="text-[32px] font-bold text-[#0b1c30] mb-1">@Model.ConfirmedAppointments</div>
+            <p class="text-[13px] text-gray-500">Lịch đã xác nhận</p>
+        </div>
+    </div>
+
+    <!-- Recent Appointments Table -->
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-[#f0f4fa] rounded-lg flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[#00346f] text-[20px]">schedule</span>
+                </div>
+                <div>
+                    <h2 class="text-[18px] font-bold text-[#0b1c30]">Lịch đặt gần đây</h2>
+                    <p class="text-[12px] text-gray-400">Hiển thị 8 lịch hẹn mới nhất</p>
+                </div>
+            </div>
+            <a class="text-[13px] font-semibold text-[#00346f] hover:underline no-underline flex items-center gap-1" asp-area="Admin" asp-controller="Appointments" asp-action="Index">
+                Xem tất cả <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+            </a>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-[14px]">
+                <thead class="bg-[#f8fafc]">
                     <tr>
-                        <th>Bệnh nhân</th>
-                        <th>Bác sĩ</th>
-                        <th>Ngày</th>
-                        <th>Trạng thái</th>
+                        <th class="text-left px-6 py-3 font-semibold text-[12px] text-gray-500 uppercase tracking-wider">Bệnh nhân</th>
+                        <th class="text-left px-6 py-3 font-semibold text-[12px] text-gray-500 uppercase tracking-wider">Bác sĩ</th>
+                        <th class="text-left px-6 py-3 font-semibold text-[12px] text-gray-500 uppercase tracking-wider">Ngày khám</th>
+                        <th class="text-left px-6 py-3 font-semibold text-[12px] text-gray-500 uppercase tracking-wider">Giờ</th>
+                        <th class="text-left px-6 py-3 font-semibold text-[12px] text-gray-500 uppercase tracking-wider">Trạng thái</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-gray-100">
                     @foreach (var item in Model.RecentAppointments)
                     {
-                        <tr>
-                            <td>@item.PatientProfile?.FullName</td>
-                            <td>@item.Doctor?.FullName</td>
-                            <td>@item.AppointmentDate.ToString("dd/MM/yyyy") @item.StartTime.ToString(@"hh\:mm")</td>
-                            <td>@item.Status.GetDisplayName()</td>
+                        var statusClass = item.Status switch
+                        {
+                            WebDKLichKham.Models.AppointmentStatus.Pending => "bg-amber-50 text-amber-700 border-amber-200",
+                            WebDKLichKham.Models.AppointmentStatus.Confirmed => "bg-green-50 text-green-700 border-green-200",
+                            WebDKLichKham.Models.AppointmentStatus.Completed => "bg-blue-50 text-blue-700 border-blue-200",
+                            WebDKLichKham.Models.AppointmentStatus.Cancelled => "bg-red-50 text-red-700 border-red-200",
+                            _ => "bg-gray-50 text-gray-700 border-gray-200"
+                        };
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4">
+                                <div class="font-semibold text-[#0b1c30]">@(item.PatientProfile?.FullName ?? item.PatientName)</div>
+                                <div class="text-[12px] text-gray-400">@item.PatientPhone</div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="font-medium">@item.Doctor?.FullName</div>
+                                <div class="text-[12px] text-gray-400">@item.Doctor?.Specialty</div>
+                            </td>
+                            <td class="px-6 py-4 font-medium">@item.AppointmentDate.ToString("dd/MM/yyyy")</td>
+                            <td class="px-6 py-4 text-gray-600">@item.StartTime.ToString(@"hh\:mm") - @item.EndTime.ToString(@"hh\:mm")</td>
+                            <td class="px-6 py-4">
+                                <span class="px-3 py-1 rounded-full text-[11px] font-bold border @statusClass">
+                                    @item.Status.GetDisplayName()
+                                </span>
+                            </td>
                         </tr>
                     }
                 </tbody>
             </table>
         </div>
     </div>
+
 </div>

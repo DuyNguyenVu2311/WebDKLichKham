@@ -3,75 +3,151 @@
     ViewData["Title"] = "Lịch của tôi";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-        <h1 class="h2 mb-1">Lịch của tôi</h1>
-        <p class="text-secondary mb-0">Theo dõi lịch sắp tới và lịch sử đặt khám của @Model.PatientName.</p>
-    </div>
-    <a class="btn btn-primary" asp-action="Create">Đặt lịch mới</a>
-</div>
+<main class="font-sans bg-white pb-20 min-h-screen">
+    <!-- Header Section -->
+    <section class="bg-[#f4f7fc] py-12 border-b border-gray-100">
+        <div class="max-w-[1280px] mx-auto px-4 md:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <p class="text-[12px] font-semibold uppercase tracking-wider mb-2 text-[#008a7b] flex items-center justify-center md:justify-start gap-2">
+                    <span class="material-symbols-outlined text-[16px]">account_circle</span> CỔNG BỆNH NHÂN
+                </p>
+                <h1 class="text-[32px] font-bold text-[#00346f] mb-2">Lịch Của Tôi</h1>
+                <p class="text-[14px] text-gray-500">Xin chào <span class="font-bold text-[#1e293b]">@Model.PatientName</span>, dưới đây là danh sách lịch hẹn của bạn.</p>
+            </div>
+            <a class="px-6 py-3.5 bg-[#00346f] text-white rounded-lg text-[14px] font-bold hover:bg-[#002244] shadow-md transition-colors flex items-center justify-center gap-2 no-underline shrink-0" asp-action="Create">
+                <span class="material-symbols-outlined text-[20px]">add_circle</span> Đặt lịch mới
+            </a>
+        </div>
+    </section>
 
-<div class="row g-4">
-    <div class="col-lg-7">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body p-4">
-                <h2 class="h4 mb-3">Lịch sắp tới</h2>
-                @if (Model.UpcomingAppointments.Count == 0)
+    <!-- Main Content -->
+    <section class="max-w-[1280px] mx-auto px-4 md:px-8 py-10 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Cột Trái: Lịch sắp tới -->
+        <div class="lg:col-span-8">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 bg-[#e6f4f1] text-[#008a7b] rounded-lg flex items-center justify-center border border-[#cce8e3]">
+                    <span class="material-symbols-outlined text-[22px]">event_upcoming</span>
+                </div>
+                <h2 class="text-[22px] font-bold text-[#1e293b]">Lịch hẹn sắp tới</h2>
+            </div>
+
+            @if (Model.UpcomingAppointments.Count == 0)
+            {
+                <div class="bg-white border border-gray-200 rounded-xl p-12 text-center shadow-sm">
+                    <div class="w-20 h-20 bg-gray-50 text-gray-300 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="material-symbols-outlined text-[40px]">event_busy</span>
+                    </div>
+                    <h3 class="text-[18px] font-bold text-[#0b1c30] mb-2">Chưa có lịch hẹn nào</h3>
+                    <p class="text-[14px] text-gray-500 max-w-sm mx-auto">Bạn hiện không có lịch hẹn khám nào trong thời gian tới. Nhấn nút "Đặt lịch mới" để tạo một lịch hẹn.</p>
+                </div>
+            }
+            else
+            {
+                <div class="space-y-5">
+                    @foreach (var item in Model.UpcomingAppointments)
+                    {
+                        var isConfirmed = item.Status == WebDKLichKham.Models.AppointmentStatus.Confirmed;
+                        var statusColor = isConfirmed 
+                            ? "bg-[#ecfdf5] text-[#059669] border-[#a7f3d0]" 
+                            : "bg-[#fffbeb] text-[#d97706] border-[#fde68a]";
+                        var borderAccent = isConfirmed ? "bg-[#10b981]" : "bg-[#f59e0b]";
+
+                        <div class="bg-white border border-gray-200 rounded-xl p-5 sm:p-6 shadow-sm hover:shadow-md transition-all relative overflow-hidden group">
+                            <!-- Accent left border -->
+                            <div class="absolute left-0 top-0 bottom-0 w-1.5 @borderAccent"></div>
+                            
+                            <div class="flex flex-col sm:flex-row justify-between items-start gap-4 mb-5">
+                                <div class="flex items-start gap-4">
+                                    <div class="w-12 h-12 bg-[#f0f4fa] rounded-full flex items-center justify-center shrink-0 border border-[#dbe6f5] text-[#00346f]">
+                                        <span class="material-symbols-outlined text-[24px]">stethoscope</span>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-[18px] font-bold text-[#0b1c30] mb-1">@item.DoctorName</h3>
+                                        <p class="text-[13px] font-semibold text-[#008a7b]">@item.Specialty</p>
+                                    </div>
+                                </div>
+                                <span class="px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider rounded-md border shadow-sm @statusColor">
+                                    @item.Status.GetDisplayName()
+                                </span>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-[#f8fafc] p-4 rounded-lg mb-4 border border-slate-100">
+                                <div class="flex items-center gap-3">
+                                    <span class="material-symbols-outlined text-[#64748b] text-[20px]">calendar_today</span>
+                                    <div>
+                                        <p class="text-[11px] text-[#64748b] font-semibold uppercase mb-0.5">Ngày khám</p>
+                                        <p class="text-[14px] font-bold text-[#0f172a]">@item.AppointmentDate.ToString("dd/MM/yyyy")</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="material-symbols-outlined text-[#64748b] text-[20px]">schedule</span>
+                                    <div>
+                                        <p class="text-[11px] text-[#64748b] font-semibold uppercase mb-0.5">Thời gian</p>
+                                        <p class="text-[14px] font-bold text-[#0f172a]">@item.StartTime.ToString(@"hh\:mm") - @item.EndTime.ToString(@"hh\:mm")</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            @if (!string.IsNullOrEmpty(item.ReasonForVisit))
+                            {
+                                <div class="text-[13px] text-slate-600 border-t border-slate-100 pt-3 mt-2 flex items-start gap-2">
+                                    <span class="material-symbols-outlined text-[16px] text-slate-400 mt-0.5">info</span>
+                                    <p><span class="font-semibold text-slate-700">Lý do/Triệu chứng:</span> @item.ReasonForVisit</p>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+        <!-- Cột Phải: Lịch sử -->
+        <div class="lg:col-span-4">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 bg-gray-100 text-gray-500 rounded-lg flex items-center justify-center border border-gray-200">
+                    <span class="material-symbols-outlined text-[22px]">history</span>
+                </div>
+                <h2 class="text-[20px] font-bold text-[#1e293b]">Lịch sử khám</h2>
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+                @if (Model.HistoryAppointments.Count == 0)
                 {
-                    <p class="text-secondary mb-0">Chưa có lịch hẹn nào sắp tới.</p>
+                    <div class="text-center py-10 text-gray-400">
+                        <span class="material-symbols-outlined text-[40px] mb-3 opacity-50">inbox</span>
+                        <p class="text-[14px]">Chưa có dữ liệu lịch sử.</p>
+                    </div>
                 }
                 else
                 {
-                    <div class="table-responsive">
-                        <table class="table align-middle">
-                            <thead>
-                                <tr>
-                                    <th>Bác sĩ</th>
-                                    <th>Ngày</th>
-                                    <th>Giờ</th>
-                                    <th>Trạng thái</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model.UpcomingAppointments)
-                                {
-                                    <tr>
-                                        <td>
-                                            <div>@item.DoctorName</div>
-                                            <small class="text-secondary">@item.Specialty</small>
-                                        </td>
-                                        <td>@item.AppointmentDate.ToString("dd/MM/yyyy")</td>
-                                        <td>@item.StartTime.ToString(@"hh\:mm") - @item.EndTime.ToString(@"hh\:mm")</td>
-                                        <td>@item.Status.GetDisplayName()</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
+                    <div class="space-y-4">
+                        @foreach (var item in Model.HistoryAppointments)
+                        {
+                            var isCompleted = item.Status == WebDKLichKham.Models.AppointmentStatus.Completed;
+                            var isCancelled = item.Status == WebDKLichKham.Models.AppointmentStatus.Cancelled;
+                            var histColor = isCompleted ? "text-blue-600 bg-blue-50 border-blue-100" 
+                                          : isCancelled ? "text-red-600 bg-red-50 border-red-100" 
+                                          : "text-gray-600 bg-gray-100 border-gray-200";
+
+                            <div class="flex flex-col gap-2 p-4 rounded-lg border border-gray-100 hover:border-gray-300 hover:bg-gray-50 transition-colors">
+                                <div class="flex justify-between items-start gap-2">
+                                    <div class="font-bold text-[14px] text-[#0b1c30]">@item.DoctorName</div>
+                                    <span class="px-2 py-0.5 text-[10px] font-bold rounded border @histColor whitespace-nowrap">
+                                        @item.Status.GetDisplayName()
+                                    </span>
+                                </div>
+                                <div class="text-[12px] text-gray-500 flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-[14px]">event</span> @item.AppointmentDate.ToString("dd/MM/yyyy") 
+                                    <span class="mx-1 text-gray-300">|</span>
+                                    <span class="material-symbols-outlined text-[14px]">schedule</span> @item.StartTime.ToString(@"hh\:mm")
+                                </div>
+                            </div>
+                        }
                     </div>
                 }
             </div>
         </div>
-    </div>
-    <div class="col-lg-5">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body p-4">
-                <h2 class="h4 mb-3">Lịch sử</h2>
-                @if (Model.HistoryAppointments.Count == 0)
-                {
-                    <p class="text-secondary mb-0">Chưa có dữ liệu lịch sử.</p>
-                }
-                else
-                {
-                    @foreach (var item in Model.HistoryAppointments)
-                    {
-                        <div class="border rounded-3 p-3 mb-3">
-                            <div class="fw-semibold">@item.DoctorName</div>
-                            <div class="small text-secondary">@item.AppointmentDate.ToString("dd/MM/yyyy") | @item.StartTime.ToString(@"hh\:mm")</div>
-                            <div class="small">Trạng thái: @item.Status.GetDisplayName()</div>
-                        </div>
-                    }
-                }
-            </div>
-        </div>
-    </div>
-</div>
+
+    </section>
+</main>

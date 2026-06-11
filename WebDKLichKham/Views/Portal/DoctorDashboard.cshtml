@@ -1,0 +1,1082 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Không gian làm việc Bác sĩ - Duy Tâm eHospital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .toast-enter { animation: slideInRight 0.3s ease-out forwards; }
+        @@keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="text-slate-800 flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-[#00346f] text-white flex flex-col h-full shrink-0">
+        <div class="h-16 flex items-center justify-between px-6 border-b border-white/10">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-[24px]">local_hospital</span>
+                <span class="font-bold text-[16px]">Phòng Khám Duy Tâm</span>
+            </div>
+        </div>
+        
+        <div class="p-6 text-center border-b border-white/10">
+            <div class="w-16 h-16 rounded-full bg-white/20 mx-auto mb-3 flex items-center justify-center">
+                <span class="material-symbols-outlined text-[32px]">stethoscope</span>
+            </div>
+            <h3 class="font-bold text-[15px]">BS. Nguyễn Văn An</h3>
+            <p class="text-[12px] text-blue-200">Khoa Tiêu Hóa</p>
+        </div>
+        
+        <nav class="flex-1 py-4">
+            <ul class="space-y-1">
+                <li><a href="#" onclick="switchTab('patients')" id="tab-patients" class="flex items-center gap-3 px-6 py-3 bg-white/10 font-medium text-[14px] border-l-4 border-blue-400"><span class="material-symbols-outlined text-[20px]">group</span> Danh sách bệnh nhân</a></li>
+                <li><a href="#" onclick="switchTab('emr')" id="tab-emr" class="flex items-center gap-3 px-6 py-3 hover:bg-white/5 text-blue-100 font-medium text-[14px] border-l-4 border-transparent"><span class="material-symbols-outlined text-[20px]">history_edu</span> Bệnh án điện tử</a></li>
+                <li><a href="#" onclick="switchTab('prescriptions')" id="tab-prescriptions" class="flex items-center gap-3 px-6 py-3 hover:bg-white/5 text-blue-100 font-medium text-[14px] border-l-4 border-transparent"><span class="material-symbols-outlined text-[20px]">prescriptions</span> Quản lý toa thuốc</a></li>
+            </ul>
+        </nav>
+        
+        <div class="p-4 border-t border-white/10 space-y-2">
+            <a href="/" class="flex items-center gap-2 text-blue-200 hover:text-white hover:bg-white/10 px-4 py-2 rounded-lg text-[14px] transition-colors">
+                <span class="material-symbols-outlined text-[18px]">home</span> Về Trang Chủ
+            </a>
+            <a href="/Home/LogoutPortal" class="flex items-center gap-2 text-red-300 hover:text-red-100 hover:bg-white/10 px-4 py-2 rounded-lg text-[14px] transition-colors">
+                <span class="material-symbols-outlined text-[18px]">logout</span> Đăng xuất
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden relative">
+        <!-- Toast Container -->
+        <div id="toast-container" class="absolute top-4 right-4 z-50 flex flex-col gap-2"></div>
+
+        <!-- Header -->
+        <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 shrink-0">
+            <h1 class="font-bold text-[18px] text-slate-800" id="header-title">Danh sách bệnh nhân (Hôm nay, <span id="currentDate"></span>)</h1>
+            <div class="flex items-center gap-4" id="header-stats">
+                <span class="bg-blue-50 text-blue-600 px-3 py-1.5 rounded-lg text-[13px] font-bold">Tổng: 3 BN</span>
+                <span class="bg-orange-50 text-orange-600 px-3 py-1.5 rounded-lg text-[13px] font-bold">Chờ khám: 2</span>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="flex-1 overflow-auto p-8">
+            <!-- VIEW: PATIENTS -->
+            <div id="view-patients" class="grid grid-cols-1 xl:grid-cols-4 gap-4 h-full">
+                <!-- Patient Queue List -->
+                <div class="xl:col-span-1 bg-white border border-slate-300 flex flex-col h-full shadow-sm">
+                    <div class="p-3 border-b border-slate-300 bg-slate-100 flex justify-between items-center">
+                        <h3 class="font-bold text-[13px] text-slate-800 uppercase">Danh sách tiếp nhận</h3>
+                        <span class="material-symbols-outlined text-[18px] text-slate-500 cursor-pointer">filter_list</span>
+                    </div>
+                    <div class="p-2 border-b border-slate-200 bg-slate-50">
+                        <input type="text" placeholder="Tìm kiếm nhanh (F3)..." class="w-full px-2 py-1.5 border border-slate-300 text-[12px] outline-none focus:border-blue-500">
+                    </div>
+                    <div class="flex-1 overflow-y-auto bg-white" id="patient-list">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+
+                <!-- Clinical Workspace Area -->
+                <div class="xl:col-span-3 flex flex-col h-full bg-white border border-slate-300 shadow-sm" id="workspace-area">
+                    <!-- Top Bar: Patient Info & Vitals -->
+                    <div class="bg-slate-50 border-b border-slate-300 p-3 flex justify-between items-start shrink-0">
+                        <div class="flex gap-3 items-center">
+                            <div class="w-12 h-12 bg-slate-300 text-slate-700 rounded flex items-center justify-center font-bold text-[18px]" id="ws-avatar">TVH</div>
+                            <div>
+                                <h2 class="font-bold text-[16px] text-slate-800 uppercase" id="ws-name">Trần Văn Hoàng</h2>
+                                <div class="text-[12px] text-slate-600 mt-0.5 flex gap-4" id="ws-meta">
+                                    <span><i class="font-semibold text-slate-500">Mã BN:</i> BN-847291</span>
+                                    <span><i class="font-semibold text-slate-500">Giới tính:</i> Nam</span>
+                                    <span><i class="font-semibold text-slate-500">Tuổi:</i> 45</span>
+                                    <span><i class="font-semibold text-slate-500">Nhóm máu:</i> O+</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="switchTab('emr')" class="text-blue-600 text-[12px] font-bold hover:underline flex items-center gap-1 border border-blue-200 bg-blue-50 px-2 py-1 rounded">
+                            <span class="material-symbols-outlined text-[16px]">history</span> Bệnh án điện tử
+                        </button>
+                    </div>
+
+                    <!-- Vitals Bar -->
+                    <div class="bg-blue-50/50 border-b border-slate-300 p-2 flex flex-wrap gap-x-6 gap-y-2 px-4 shrink-0">
+                        <div class="flex items-center gap-1.5 text-[12px]">
+                            <span class="material-symbols-outlined text-[16px] text-slate-400">monitor_heart</span>
+                            <span class="text-slate-500">Mạch:</span> <span class="font-bold text-slate-800">80</span> <span class="text-slate-400">l/p</span>
+                        </div>
+                        <div class="flex items-center gap-1.5 text-[12px]">
+                            <span class="material-symbols-outlined text-[16px] text-slate-400">blood_pressure</span>
+                            <span class="text-slate-500">Huyết áp:</span> <span class="font-bold text-slate-800">120/80</span> <span class="text-slate-400">mmHg</span>
+                        </div>
+                        <div class="flex items-center gap-1.5 text-[12px]">
+                            <span class="material-symbols-outlined text-[16px] text-slate-400">thermometer</span>
+                            <span class="text-slate-500">Nhiệt độ:</span> <span class="font-bold text-slate-800">37</span> <span class="text-slate-400">°C</span>
+                        </div>
+                        <div class="flex items-center gap-1.5 text-[12px]" id="ws-weight-container">
+                            <span class="material-symbols-outlined text-[16px] text-slate-400">scale</span>
+                            <span class="text-slate-500">Cân nặng:</span> <span class="font-bold text-slate-800" id="ws-weight">65kg</span>
+                        </div>
+                    </div>
+
+                    <!-- Clinical Form -->
+                    <div class="flex-1 overflow-y-auto p-4 bg-slate-100/50">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                            <!-- Left col: Bệnh sử -->
+                            <div class="col-span-1 space-y-4">
+                                <div class="bg-white border border-slate-300 rounded shadow-sm">
+                                    <div class="bg-slate-100 border-b border-slate-200 px-3 py-1.5 font-bold text-[12px] text-slate-700">1. LÝ DO KHÁM & TIỀN SỬ</div>
+                                    <div class="p-3 space-y-3">
+                                        <div>
+                                            <label class="text-[11px] font-semibold text-slate-500 mb-1 block">Lý do đến khám:</label>
+                                            <textarea id="ws-reason" class="w-full text-[13px] border border-slate-300 rounded p-2 outline-none focus:border-blue-500 bg-yellow-50/50 resize-y" rows="2" readonly></textarea>
+                                        </div>
+                                        <div>
+                                            <label class="text-[11px] font-semibold text-slate-500 mb-1 block">Tiền sử bệnh lý:</label>
+                                            <textarea id="ws-history" class="w-full text-[13px] border border-slate-300 rounded p-2 outline-none focus:border-blue-500 resize-y" rows="2" readonly></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right col: Khám & Chẩn đoán -->
+                            <div class="col-span-1 space-y-4">
+                                <div class="bg-white border border-slate-300 rounded shadow-sm">
+                                    <div class="bg-slate-100 border-b border-slate-200 px-3 py-1.5 font-bold text-[12px] text-slate-700">2. KHÁM LÂM SÀNG & CHẨN ĐOÁN</div>
+                                    <div class="p-3 space-y-3">
+                                        <div>
+                                            <label class="text-[11px] font-semibold text-slate-500 mb-1 block">Khám các cơ quan / Toàn thân:</label>
+                                            <textarea id="input-clinical" class="w-full text-[13px] border border-slate-300 rounded p-2 outline-none focus:border-blue-500 resize-y" rows="3" placeholder="Nhập diễn biến và triệu chứng lâm sàng..."></textarea>
+                                        </div>
+                                        <div>
+                                            <label class="text-[11px] font-semibold text-slate-500 mb-1 block">Mã bệnh / Chẩn đoán (ICD-10):</label>
+                                            <div class="flex gap-2">
+                                                <input type="text" id="input-icd10-code" class="w-24 text-[13px] border border-slate-300 rounded p-2 outline-none focus:border-blue-500 font-bold text-center uppercase" placeholder="K29.1">
+                                                <input type="text" id="input-icd10-name" class="flex-1 text-[13px] border border-slate-300 rounded p-2 outline-none focus:border-blue-500" placeholder="Diễn giải chẩn đoán chi tiết...">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white border border-slate-300 rounded shadow-sm">
+                                    <div class="bg-slate-100 border-b border-slate-200 px-3 py-1.5 font-bold text-[12px] text-slate-700">3. CHỈ ĐỊNH DỊCH VỤ & ĐIỀU TRỊ</div>
+                                    <div class="p-3">
+                                        <div class="flex gap-2">
+                                            <button onclick="openLabModal()" class="flex-1 border border-teal-500 text-teal-700 bg-teal-50 hover:bg-teal-100 py-2 rounded text-[12px] font-bold flex items-center justify-center gap-1 transition-colors">
+                                                <span class="material-symbols-outlined text-[16px]">science</span> Xét nghiệm / Chẩn đoán HA
+                                            </button>
+                                            <button onclick="switchTab('prescriptions')" class="flex-1 border border-blue-500 text-blue-700 bg-blue-50 hover:bg-blue-100 py-2 rounded text-[12px] font-bold flex items-center justify-center gap-1 transition-colors">
+                                                <span class="material-symbols-outlined text-[16px]">prescriptions</span> Kê Toa Thuốc
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer Actions -->
+                    <div class="bg-slate-100 border-t border-slate-300 p-3 flex justify-between items-center shrink-0">
+                        <div class="text-[12px] text-slate-500 flex items-center gap-2">
+                            Trạng thái tiếp nhận: <span id="ws-status-badge" class="font-bold text-orange-600 bg-orange-100 px-2 py-0.5 rounded">Đang chờ</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="saveDraft()" class="px-4 py-1.5 border border-slate-300 bg-white text-slate-700 font-bold rounded hover:bg-slate-200 text-[12px] transition-colors">Lưu Nháp</button>
+                            <button onclick="finishExam()" class="px-5 py-1.5 bg-[#00346f] text-white font-bold rounded hover:bg-[#002244] text-[12px] flex items-center gap-1 transition-colors">
+                                <span class="material-symbols-outlined text-[16px]">done_all</span> Hoàn tất bệnh án
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW: EMR -->
+            <div id="view-emr" class="hidden h-full flex flex-col gap-6">
+                <!-- EMR Header -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4 shrink-0">
+                    <div>
+                        <h2 class="font-bold text-[20px] text-slate-800">Tra cứu Hồ sơ Bệnh án điện tử</h2>
+                        <p class="text-[13px] text-slate-500">Hệ thống lưu trữ tập trung dữ liệu khám chữa bệnh của bệnh nhân</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <div class="relative w-72">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                            <input type="text" id="emr-search-input" placeholder="Mã BN, SĐT hoặc CMND/CCCD" class="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg text-[14px] outline-none focus:border-blue-500 bg-slate-50">
+                        </div>
+                        <button onclick="searchEMR()" class="bg-[#00346f] text-white px-5 py-2.5 rounded-lg font-bold text-[14px] hover:bg-[#002244] transition-colors flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">search</span> Tra cứu
+                        </button>
+                    </div>
+                </div>
+
+                <!-- EMR Content (Hidden initially, shown after search) -->
+                <div id="emr-results" class="hidden flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6 overflow-hidden">
+                    <!-- Thông tin hành chính -->
+                    <div class="lg:col-span-1 bg-white rounded-2xl shadow-sm border border-slate-200 p-6 overflow-y-auto">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold text-[24px]">H</div>
+                            <div>
+                                <h3 class="font-bold text-[18px] text-slate-800">Trần Văn Hoàng</h3>
+                                <p class="text-[13px] text-slate-500 font-medium tracking-wider">#BN-847291</p>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex justify-between border-b border-slate-100 pb-2">
+                                <span class="text-[13px] text-slate-500">Giới tính</span>
+                                <span class="text-[13px] font-semibold text-slate-800">Nam</span>
+                            </div>
+                            <div class="flex justify-between border-b border-slate-100 pb-2">
+                                <span class="text-[13px] text-slate-500">Ngày sinh</span>
+                                <span class="text-[13px] font-semibold text-slate-800">12/05/1979 (45 tuổi)</span>
+                            </div>
+                            <div class="flex justify-between border-b border-slate-100 pb-2">
+                                <span class="text-[13px] text-slate-500">Số điện thoại</span>
+                                <span class="text-[13px] font-semibold text-slate-800">0987.654.321</span>
+                            </div>
+                            <div class="flex justify-between border-b border-slate-100 pb-2">
+                                <span class="text-[13px] text-slate-500">Nhóm máu</span>
+                                <span class="text-[13px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded">O+</span>
+                            </div>
+                            <div class="flex justify-between border-b border-slate-100 pb-2">
+                                <span class="text-[13px] text-slate-500">Tiền sử dị ứng</span>
+                                <span class="text-[13px] font-semibold text-orange-600">Kháng sinh Penicillin</span>
+                            </div>
+                        </div>
+                        <button class="w-full mt-6 py-2.5 border border-slate-200 rounded-lg text-slate-600 font-bold text-[13px] hover:bg-slate-50 transition-colors flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">edit_note</span> Cập nhật thông tin
+                        </button>
+                    </div>
+
+                    <!-- Lịch sử khám bệnh (Timeline) -->
+                    <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 flex flex-col overflow-hidden">
+                        <div class="px-6 py-4 border-b border-slate-200 bg-slate-50">
+                            <h3 class="font-bold text-[16px] text-slate-800 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-blue-600">timeline</span> Lịch sử thăm khám
+                            </h3>
+                        </div>
+                        <div class="flex-1 overflow-y-auto p-6 space-y-8">
+                            <!-- Lần khám 1 -->
+                            <div class="relative pl-6 border-l-2 border-blue-500">
+                                <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-blue-500 border-4 border-white shadow"></div>
+                                <p class="text-[12px] font-bold text-blue-600 mb-1">Hôm nay, 24/11/2024 - 09:30 AM</p>
+                                <h4 class="font-bold text-[15px] text-slate-800 mb-2">Khoa Nội Tiêu Hóa</h4>
+                                <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-3">
+                                    <p class="text-[13px] text-slate-600"><span class="font-semibold text-slate-700">Chẩn đoán:</span> [K29.1] Viêm dạ dày cấp tính.</p>
+                                    <p class="text-[13px] text-slate-600"><span class="font-semibold text-slate-700">Lâm sàng:</span> Đau quặn bụng trái, buồn nôn.</p>
+                                    <p class="text-[13px] text-slate-600"><span class="font-semibold text-slate-700">Bác sĩ:</span> BS. Nguyễn Văn An</p>
+                                    <div class="flex gap-2 mt-2">
+                                        <button class="px-3 py-1.5 bg-white border border-slate-200 rounded text-[12px] font-semibold text-blue-600 flex items-center gap-1 hover:bg-blue-50"><span class="material-symbols-outlined text-[14px]">prescriptions</span> Xem Toa</button>
+                                        <button class="px-3 py-1.5 bg-white border border-slate-200 rounded text-[12px] font-semibold text-teal-600 flex items-center gap-1 hover:bg-teal-50"><span class="material-symbols-outlined text-[14px]">science</span> KQ Nội soi</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Lần khám 2 -->
+                            <div class="relative pl-6 border-l-2 border-slate-200">
+                                <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-300 border-4 border-white"></div>
+                                <p class="text-[12px] font-bold text-slate-500 mb-1">10/05/2023 - 14:15 PM</p>
+                                <h4 class="font-bold text-[15px] text-slate-800 mb-2">Khoa Nội Tổng Hợp</h4>
+                                <div class="bg-white border border-slate-100 p-4 rounded-xl space-y-3 opacity-80">
+                                    <p class="text-[13px] text-slate-600"><span class="font-semibold text-slate-700">Chẩn đoán:</span> [J06.9] Viêm đường hô hấp trên cấp.</p>
+                                    <p class="text-[13px] text-slate-600"><span class="font-semibold text-slate-700">Lâm sàng:</span> Ho khan, sốt nhẹ về chiều.</p>
+                                    <p class="text-[13px] text-slate-600"><span class="font-semibold text-slate-700">Bác sĩ:</span> BS. Lê Tuấn</p>
+                                    <div class="flex gap-2 mt-2">
+                                        <button class="px-3 py-1.5 bg-white border border-slate-200 rounded text-[12px] font-semibold text-blue-600 flex items-center gap-1 hover:bg-blue-50"><span class="material-symbols-outlined text-[14px]">prescriptions</span> Xem Toa</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Initial Empty State -->
+                <div id="emr-empty" class="flex-1 bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-center">
+                    <div class="text-center text-slate-400">
+                        <span class="material-symbols-outlined text-[64px] mb-2 text-slate-300">folder_open</span>
+                        <p class="text-[15px] font-medium text-slate-500">Vui lòng nhập Mã BN hoặc SĐT để tra cứu hồ sơ điện tử.</p>
+                        <p class="text-[13px] mt-1">Hệ thống sẽ đồng bộ toàn bộ lịch sử khám chữa bệnh.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW: PRESCRIPTIONS -->
+            <div id="view-prescriptions" class="hidden h-full flex flex-col overflow-hidden relative">
+                
+                <!-- STATE 1: DANH SÁCH & KHO THUỐC -->
+                <div id="prescriptions-list" class="flex-1 flex flex-col gap-6 h-full overflow-hidden">
+                    <!-- Header -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4 shrink-0">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-teal-50 text-teal-600 rounded-xl flex items-center justify-center">
+                                <span class="material-symbols-outlined text-[24px]">vaccines</span>
+                            </div>
+                            <div>
+                                <h2 class="font-bold text-[20px] text-slate-800">Kho Thuốc & Đơn Mẫu</h2>
+                                <p class="text-[13px] text-slate-500">Quản lý danh mục thuốc và các phác đồ điều trị mẫu</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <button onclick="togglePrescriptionView('create')" class="bg-[#00346f] text-white px-5 py-2.5 rounded-xl font-bold text-[14px] hover:bg-[#002244] flex items-center gap-2 shadow-sm transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">add_circle</span> Tạo Đơn Mẫu Mới
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Content grid -->
+                    <div class="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6 overflow-hidden">
+                        <!-- Danh mục thuốc -->
+                        <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 flex flex-col overflow-hidden">
+                            <div class="p-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+                                <h3 class="font-bold text-[15px] text-slate-800">Danh mục thuốc khả dụng</h3>
+                                <div class="relative w-72">
+                                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">search</span>
+                                    <input type="text" placeholder="Tìm kiếm tên thuốc, hoạt chất..." class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-[13px] outline-none focus:border-[#00346f]">
+                                </div>
+                            </div>
+                            <div class="flex-1 overflow-auto">
+                                <table class="w-full text-left text-[13px]">
+                                    <thead class="bg-white border-b border-slate-200 text-slate-500 font-semibold sticky top-0">
+                                        <tr>
+                                            <th class="px-5 py-3">Tên thuốc</th>
+                                            <th class="px-5 py-3">Hoạt chất chính</th>
+                                            <th class="px-5 py-3 text-center">Tồn kho</th>
+                                            <th class="px-5 py-3 text-right">Đơn giá</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-100">
+                                        <tr class="hover:bg-blue-50 transition-colors cursor-pointer">
+                                            <td class="px-5 py-3 font-bold text-[#00346f]">Nexium Mups 40mg</td>
+                                            <td class="px-5 py-3 text-slate-500">Esomeprazole</td>
+                                            <td class="px-5 py-3 text-center"><span class="bg-green-100 text-green-700 px-2 py-1 rounded font-bold text-[11px]">1,240 Viên</span></td>
+                                            <td class="px-5 py-3 text-right font-medium">25.000đ</td>
+                                        </tr>
+                                        <tr class="hover:bg-blue-50 transition-colors cursor-pointer">
+                                            <td class="px-5 py-3 font-bold text-[#00346f]">Amoxicillin 500mg</td>
+                                            <td class="px-5 py-3 text-slate-500">Amoxicillin trihydrate</td>
+                                            <td class="px-5 py-3 text-center"><span class="bg-green-100 text-green-700 px-2 py-1 rounded font-bold text-[11px]">5,000 Viên</span></td>
+                                            <td class="px-5 py-3 text-right font-medium">1.500đ</td>
+                                        </tr>
+                                        <tr class="hover:bg-blue-50 transition-colors cursor-pointer">
+                                            <td class="px-5 py-3 font-bold text-[#00346f]">Clarithromycin 500mg</td>
+                                            <td class="px-5 py-3 text-slate-500">Clarithromycin</td>
+                                            <td class="px-5 py-3 text-center"><span class="bg-orange-100 text-orange-700 px-2 py-1 rounded font-bold text-[11px]">85 Viên</span></td>
+                                            <td class="px-5 py-3 text-right font-medium">18.500đ</td>
+                                        </tr>
+                                        <tr class="hover:bg-blue-50 transition-colors cursor-pointer">
+                                            <td class="px-5 py-3 font-bold text-[#00346f]">Phosphalugel 20%</td>
+                                            <td class="px-5 py-3 text-slate-500">Aluminium phosphate</td>
+                                            <td class="px-5 py-3 text-center"><span class="bg-red-100 text-red-700 px-2 py-1 rounded font-bold text-[11px]">Sắp hết (12 Gói)</span></td>
+                                            <td class="px-5 py-3 text-right font-medium">5.200đ</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Đơn thuốc mẫu -->
+                        <div class="lg:col-span-1 bg-white rounded-2xl shadow-sm border border-slate-200 flex flex-col overflow-hidden">
+                            <div class="p-4 border-b border-slate-200 bg-slate-50 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-[#00346f]">bookmark_added</span>
+                                <h3 class="font-bold text-[15px] text-slate-800">Toa thuốc mẫu của bạn</h3>
+                            </div>
+                            <div class="flex-1 overflow-y-auto p-4 space-y-4" id="template-list-container">
+                                <!-- Template 1 -->
+                                <div class="border border-slate-200 rounded-xl overflow-hidden hover:border-[#00346f] transition-colors group bg-white shadow-sm">
+                                    <div class="bg-slate-50 p-3 border-b border-slate-100 flex justify-between items-center">
+                                        <h4 class="font-bold text-[14px] text-[#00346f]">Phác đồ HP cơ bản (14 ngày)</h4>
+                                        <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <button class="text-slate-400 hover:text-blue-600"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+                                            <button class="text-slate-400 hover:text-red-600"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 text-[12px] text-slate-600 space-y-1">
+                                        <p>• Nexium Mups 40mg - <span class="font-semibold text-slate-800">28 Viên</span></p>
+                                        <p>• Amoxicillin 500mg - <span class="font-semibold text-slate-800">56 Viên</span></p>
+                                        <p>• Clarithromycin 500mg - <span class="font-semibold text-slate-800">28 Viên</span></p>
+                                    </div>
+                                </div>
+                                <!-- Template 2 -->
+                                <div class="border border-slate-200 rounded-xl overflow-hidden hover:border-[#00346f] transition-colors group bg-white shadow-sm">
+                                    <div class="bg-slate-50 p-3 border-b border-slate-100 flex justify-between items-center">
+                                        <h4 class="font-bold text-[14px] text-[#00346f]">Viêm dạ dày cấp</h4>
+                                        <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <button class="text-slate-400 hover:text-blue-600"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+                                            <button class="text-slate-400 hover:text-red-600"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 text-[12px] text-slate-600 space-y-1">
+                                        <p>• Phosphalugel 20% - <span class="font-semibold text-slate-800">14 Gói</span></p>
+                                        <p>• Nexium Mups 40mg - <span class="font-semibold text-slate-800">14 Viên</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STATE 2: TẠO ĐƠN MẪU MỚI -->
+                <div id="prescriptions-create" class="hidden flex-1 flex flex-col h-full bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <button onclick="togglePrescriptionView('list')" class="w-8 h-8 rounded-full bg-white border border-slate-300 flex items-center justify-center hover:bg-slate-100 text-slate-600 transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                            </button>
+                            <h2 class="font-bold text-[18px] text-slate-800">Thiết kế Đơn thuốc mẫu</h2>
+                        </div>
+                        <button onclick="saveNewTemplate()" class="bg-green-600 text-white px-5 py-2 rounded-lg font-bold text-[14px] hover:bg-green-700 flex items-center gap-2 transition-colors">
+                            <span class="material-symbols-outlined text-[18px]">save</span> Lưu Phác Đồ
+                        </button>
+                    </div>
+
+                    <div class="flex-1 flex flex-col overflow-auto p-6">
+                        <!-- Tên mẫu -->
+                        <div class="mb-6 max-w-2xl">
+                            <label class="block text-[14px] font-bold text-slate-700 mb-2">Tên phác đồ / Đơn mẫu <span class="text-red-500">*</span></label>
+                            <input type="text" id="new-template-name" placeholder="VD: Phác đồ trào ngược GERD cấp độ 2..." class="w-full px-4 py-3 border border-slate-300 rounded-xl text-[15px] outline-none focus:border-[#00346f] focus:ring-2 focus:ring-blue-100 transition-all font-semibold text-[#00346f]">
+                        </div>
+
+                        <!-- Thêm thuốc -->
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            <!-- Cột trái: Tìm và thêm thuốc -->
+                            <div class="lg:col-span-1 border-r border-slate-200 pr-8">
+                                <h3 class="font-bold text-[14px] text-slate-800 mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-teal-600">search</span> Tra cứu thuốc</h3>
+                                <div class="relative mb-4">
+                                    <input type="text" id="drug-search" placeholder="Nhập tên thuốc để tìm..." class="w-full pl-4 pr-10 py-2.5 border border-slate-300 rounded-lg text-[13px] outline-none focus:border-teal-500 bg-slate-50">
+                                    <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                                </div>
+                                <div class="border border-slate-200 rounded-lg overflow-hidden divide-y divide-slate-100 max-h-80 overflow-y-auto shadow-inner bg-slate-50">
+                                    <!-- Drug Item -->
+                                    <div class="p-3 hover:bg-white cursor-pointer transition-colors flex justify-between items-center group" onclick="addDrugToForm('Domperidon 10mg')">
+                                        <div>
+                                            <p class="font-bold text-[13px] text-slate-800 group-hover:text-teal-700">Domperidon 10mg</p>
+                                            <p class="text-[11px] text-slate-500">Chống nôn, đầy hơi</p>
+                                        </div>
+                                        <button class="w-6 h-6 rounded bg-teal-100 text-teal-700 flex items-center justify-center group-hover:bg-teal-500 group-hover:text-white transition-colors">
+                                            <span class="material-symbols-outlined text-[16px]">add</span>
+                                        </button>
+                                    </div>
+                                    <!-- Drug Item -->
+                                    <div class="p-3 hover:bg-white cursor-pointer transition-colors flex justify-between items-center group" onclick="addDrugToForm('Esomeprazole 40mg')">
+                                        <div>
+                                            <p class="font-bold text-[13px] text-slate-800 group-hover:text-teal-700">Esomeprazole 40mg</p>
+                                            <p class="text-[11px] text-slate-500">Giảm tiết axit</p>
+                                        </div>
+                                        <button class="w-6 h-6 rounded bg-teal-100 text-teal-700 flex items-center justify-center group-hover:bg-teal-500 group-hover:text-white transition-colors">
+                                            <span class="material-symbols-outlined text-[16px]">add</span>
+                                        </button>
+                                    </div>
+                                    <!-- Drug Item -->
+                                    <div class="p-3 hover:bg-white cursor-pointer transition-colors flex justify-between items-center group" onclick="addDrugToForm('Men vi sinh Enterogermina')">
+                                        <div>
+                                            <p class="font-bold text-[13px] text-slate-800 group-hover:text-teal-700">Men vi sinh Enterogermina</p>
+                                            <p class="text-[11px] text-slate-500">2 tỷ bào tử B. clausii</p>
+                                        </div>
+                                        <button class="w-6 h-6 rounded bg-teal-100 text-teal-700 flex items-center justify-center group-hover:bg-teal-500 group-hover:text-white transition-colors">
+                                            <span class="material-symbols-outlined text-[16px]">add</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Cột phải: Danh sách thuốc đã thêm -->
+                            <div class="lg:col-span-2">
+                                <h3 class="font-bold text-[14px] text-slate-800 mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-[#00346f]">format_list_numbered</span> Chi tiết đơn thuốc</h3>
+                                <div class="bg-slate-50 border border-slate-200 rounded-xl overflow-hidden min-h-[300px]">
+                                    <table class="w-full text-left text-[13px]">
+                                        <thead class="bg-slate-100 border-b border-slate-200 text-slate-600 font-semibold">
+                                            <tr>
+                                                <th class="px-4 py-3 w-10">#</th>
+                                                <th class="px-4 py-3">Tên thuốc</th>
+                                                <th class="px-4 py-3 w-24 text-center">Số lượng</th>
+                                                <th class="px-4 py-3">Cách dùng / Liều lượng</th>
+                                                <th class="px-4 py-3 w-16 text-center">Xóa</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="selected-drugs-list" class="divide-y divide-slate-200 bg-white">
+                                            <!-- Empty state initially -->
+                                            <tr id="empty-drug-state">
+                                                <td colspan="5" class="px-4 py-12 text-center text-slate-400">
+                                                    <span class="material-symbols-outlined text-[48px] mb-2 opacity-50">medication</span>
+                                                    <p>Chưa có thuốc nào trong đơn.</p>
+                                                    <p class="text-[12px]">Hãy tìm và thêm thuốc từ danh sách bên trái.</p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        
+        <!-- MODAL: CHỈ ĐỊNH CẬN LÂM SÀNG -->
+        <div id="lab-modal" class="fixed inset-0 bg-slate-900/60 z-50 hidden items-center justify-center backdrop-blur-sm">
+            <div class="bg-white rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden animate-enter scale-95 opacity-0 transition-all duration-200" id="lab-modal-content">
+                <!-- Header -->
+                <div class="px-6 py-4 border-b border-slate-200 bg-slate-50 flex justify-between items-center shrink-0">
+                    <h2 class="font-bold text-[18px] text-[#00346f] flex items-center gap-2">
+                        <span class="material-symbols-outlined text-teal-600">science</span> Phiếu Chỉ Định Cận Lâm Sàng
+                    </h2>
+                    <button onclick="closeLabModal()" class="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 flex items-center justify-center transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">close</span>
+                    </button>
+                </div>
+                
+                <!-- Body -->
+                <div class="flex-1 overflow-y-auto p-6 bg-slate-100/50">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        
+                        <!-- Nhóm: Huyết học & Sinh hóa -->
+                        <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden h-fit">
+                            <div class="bg-blue-50 border-b border-blue-100 px-4 py-2 font-bold text-[13px] text-blue-800 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-[16px]">bloodtype</span> Xét nghiệm Máu
+                            </div>
+                            <div class="p-2 space-y-1">
+                                <label class="flex items-center justify-between p-2 hover:bg-slate-50 rounded cursor-pointer group transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" class="lab-checkbox w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer" data-price="80000" onchange="calcLabTotal()">
+                                        <span class="text-[13px] text-slate-700 font-medium group-hover:text-blue-700">Tổng phân tích Tế bào máu</span>
+                                    </div>
+                                    <span class="text-[12px] font-semibold text-slate-500">80.000đ</span>
+                                </label>
+                                <label class="flex items-center justify-between p-2 hover:bg-slate-50 rounded cursor-pointer group transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" class="lab-checkbox w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer" data-price="45000" onchange="calcLabTotal()">
+                                        <span class="text-[13px] text-slate-700 font-medium group-hover:text-blue-700">Đường huyết (Glucose)</span>
+                                    </div>
+                                    <span class="text-[12px] font-semibold text-slate-500">45.000đ</span>
+                                </label>
+                                <label class="flex items-center justify-between p-2 hover:bg-slate-50 rounded cursor-pointer group transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" class="lab-checkbox w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer" data-price="120000" onchange="calcLabTotal()">
+                                        <span class="text-[13px] text-slate-700 font-medium group-hover:text-blue-700">Men gan (AST, ALT, GGT)</span>
+                                    </div>
+                                    <span class="text-[12px] font-semibold text-slate-500">120.000đ</span>
+                                </label>
+                                <label class="flex items-center justify-between p-2 hover:bg-slate-50 rounded cursor-pointer group transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" class="lab-checkbox w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer" data-price="150000" onchange="calcLabTotal()">
+                                        <span class="text-[13px] text-slate-700 font-medium group-hover:text-blue-700">Bộ mỡ máu (Lipid máu)</span>
+                                    </div>
+                                    <span class="text-[12px] font-semibold text-slate-500">150.000đ</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Nhóm: Chẩn đoán hình ảnh -->
+                        <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden h-fit">
+                            <div class="bg-teal-50 border-b border-teal-100 px-4 py-2 font-bold text-[13px] text-teal-800 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-[16px]">radiology</span> Chẩn đoán hình ảnh
+                            </div>
+                            <div class="p-2 space-y-1">
+                                <label class="flex items-center justify-between p-2 hover:bg-slate-50 rounded cursor-pointer group transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" class="lab-checkbox w-4 h-4 text-teal-600 rounded border-slate-300 focus:ring-teal-500 cursor-pointer" data-price="150000" onchange="calcLabTotal()">
+                                        <span class="text-[13px] text-slate-700 font-medium group-hover:text-teal-700">Siêu âm bụng tổng quát</span>
+                                    </div>
+                                    <span class="text-[12px] font-semibold text-slate-500">150.000đ</span>
+                                </label>
+                                <label class="flex items-center justify-between p-2 hover:bg-slate-50 rounded cursor-pointer group transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" class="lab-checkbox w-4 h-4 text-teal-600 rounded border-slate-300 focus:ring-teal-500 cursor-pointer" data-price="120000" onchange="calcLabTotal()">
+                                        <span class="text-[13px] text-slate-700 font-medium group-hover:text-teal-700">X-Quang ngực thẳng</span>
+                                    </div>
+                                    <span class="text-[12px] font-semibold text-slate-500">120.000đ</span>
+                                </label>
+                                <label class="flex items-center justify-between p-2 hover:bg-slate-50 rounded cursor-pointer group transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" class="lab-checkbox w-4 h-4 text-teal-600 rounded border-slate-300 focus:ring-teal-500 cursor-pointer" data-price="250000" onchange="calcLabTotal()">
+                                        <span class="text-[13px] text-slate-700 font-medium group-hover:text-teal-700">Siêu âm tuyến giáp</span>
+                                    </div>
+                                    <span class="text-[12px] font-semibold text-slate-500">250.000đ</span>
+                                </label>
+                                <label class="flex items-center justify-between p-2 hover:bg-slate-50 rounded cursor-pointer group transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" class="lab-checkbox w-4 h-4 text-teal-600 rounded border-slate-300 focus:ring-teal-500 cursor-pointer" data-price="800000" onchange="calcLabTotal()">
+                                        <span class="text-[13px] text-slate-700 font-medium group-hover:text-teal-700">CT Scanner Bụng</span>
+                                    </div>
+                                    <span class="text-[12px] font-semibold text-slate-500">800.000đ</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Nhóm: Thăm dò chức năng & Nội soi -->
+                        <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden h-fit">
+                            <div class="bg-orange-50 border-b border-orange-100 px-4 py-2 font-bold text-[13px] text-orange-800 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-[16px]">pulmonology</span> Thăm dò & Nội soi
+                            </div>
+                            <div class="p-2 space-y-1">
+                                <label class="flex items-center justify-between p-2 hover:bg-slate-50 rounded cursor-pointer group transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" class="lab-checkbox w-4 h-4 text-orange-600 rounded border-slate-300 focus:ring-orange-500 cursor-pointer" data-price="750000" onchange="calcLabTotal()">
+                                        <span class="text-[13px] text-slate-700 font-medium group-hover:text-orange-700">Nội soi Dạ dày tá tràng</span>
+                                    </div>
+                                    <span class="text-[12px] font-semibold text-slate-500">750.000đ</span>
+                                </label>
+                                <label class="flex items-center justify-between p-2 hover:bg-slate-50 rounded cursor-pointer group transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" class="lab-checkbox w-4 h-4 text-orange-600 rounded border-slate-300 focus:ring-orange-500 cursor-pointer" data-price="120000" onchange="calcLabTotal()">
+                                        <span class="text-[13px] text-slate-700 font-medium group-hover:text-orange-700">Điện tâm đồ (ECG)</span>
+                                    </div>
+                                    <span class="text-[12px] font-semibold text-slate-500">120.000đ</span>
+                                </label>
+                                <label class="flex items-center justify-between p-2 hover:bg-slate-50 rounded cursor-pointer group transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <input type="checkbox" class="lab-checkbox w-4 h-4 text-orange-600 rounded border-slate-300 focus:ring-orange-500 cursor-pointer" data-price="150000" onchange="calcLabTotal()">
+                                        <span class="text-[13px] text-slate-700 font-medium group-hover:text-orange-700">Test HP hơi thở (C13)</span>
+                                    </div>
+                                    <span class="text-[12px] font-semibold text-slate-500">150.000đ</span>
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                
+                <!-- Footer -->
+                <div class="px-6 py-4 border-t border-slate-200 bg-white flex justify-between items-center shrink-0">
+                    <div>
+                        <span class="text-[13px] text-slate-500">Đã chọn: <b id="lab-count" class="text-slate-800">0</b> dịch vụ</span>
+                        <div class="text-[16px] font-bold text-red-600">Tổng cộng: <span id="lab-total">0</span>đ</div>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="closeLabModal()" class="px-5 py-2 border border-slate-300 rounded-lg text-slate-700 font-bold text-[14px] hover:bg-slate-50 transition-colors">Hủy</button>
+                        <button onclick="submitLabOrder()" class="px-5 py-2 bg-teal-600 text-white rounded-lg font-bold text-[14px] hover:bg-teal-700 flex items-center gap-2 transition-colors">
+                            <span class="material-symbols-outlined text-[18px]">print</span> Lưu & In Chỉ Định
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Set current date
+        document.getElementById('currentDate').innerText = new Date().toLocaleDateString('vi-VN');
+
+        // Mock Data
+        const patients = [
+            {
+                id: 1, name: "Trần Văn Hoàng", code: "BN-847291", age: 45, gender: "Nam",
+                status: "Đang chờ", stt: "06", reason: "Đau quặn bụng trái",
+                weight: "68kg", bloodType: "O+",
+                history: "Viêm loét dạ dày mãn tính (2020), Dị ứng Penicillin.",
+                reasonDetail: "Bệnh nhân khai đau quặn vùng bụng trái sau khi ăn, kèm buồn nôn kéo dài 2 ngày nay.",
+                clinical: "", icd: ""
+            },
+            {
+                id: 2, name: "Lê Thị Thanh", code: "BN-192837", age: 32, gender: "Nữ",
+                status: "Đang chờ", stt: "07", reason: "Khám định kỳ",
+                weight: "52kg", bloodType: "A",
+                history: "Rối loạn tiêu hóa nhẹ.",
+                reasonDetail: "Tái khám theo lịch hẹn định kỳ 6 tháng. Thỉnh thoảng đầy hơi khó tiêu.",
+                clinical: "", icd: ""
+            },
+            {
+                id: 3, name: "Phạm Minh Đức", code: "BN-556123", age: 28, gender: "Nam",
+                status: "Hoàn thành", stt: "05", reason: "Đã kê đơn",
+                weight: "75kg", bloodType: "B",
+                history: "Không có bệnh lý nền.",
+                reasonDetail: "Kiểm tra men gan cao từ đợt khám sức khỏe công ty.",
+                clinical: "Bệnh nhân tỉnh táo, gan không to.", icd: "K76.0 - Gan nhiễm mỡ"
+            }
+        ];
+
+        let activePatientId = 1;
+
+        function renderPatientList() {
+            const listEl = document.getElementById('patient-list');
+            listEl.innerHTML = '';
+
+            patients.forEach(p => {
+                const isActive = p.id === activePatientId;
+                const activeClass = isActive ? 'bg-blue-50 border-l-4 border-l-blue-500' : 'hover:bg-slate-50 border-l-4 border-l-transparent';
+                
+                let statusColor = 'bg-orange-100 text-orange-600';
+                if(p.status === 'Hoàn thành') statusColor = 'bg-green-100 text-green-700';
+                
+                const timeStr = p.id === 1 ? '08:30' : (p.id === 2 ? '09:15' : '10:00');
+                
+                const html = `
+                    <div onclick="selectPatient(${p.id})" class="p-3 border-b border-slate-200 cursor-pointer transition-colors ${activeClass} ${p.status === 'Hoàn thành' && !isActive ? 'opacity-60' : ''}">
+                        <div class="flex justify-between items-start mb-1">
+                            <span class="font-bold text-[13px] text-[#00346f]">${p.stt}. ${p.name}</span>
+                            <span class="${statusColor} text-[10px] font-bold px-1.5 py-0.5 rounded">${p.status}</span>
+                        </div>
+                        <div class="text-[11px] text-slate-500 flex justify-between mb-1">
+                            <span>${p.gender}, ${p.age}T | ${p.code}</span>
+                            <span class="font-semibold text-slate-400">${timeStr}</span>
+                        </div>
+                        <div class="text-[11px] text-slate-600 truncate">
+                            Lý do: ${p.reason}
+                        </div>
+                    </div>
+                `;
+                listEl.insertAdjacentHTML('beforeend', html);
+            });
+        }
+
+        function selectPatient(id) {
+            // Save current input to mock data before switching
+            const currentPatient = patients.find(p => p.id === activePatientId);
+            if(currentPatient && currentPatient.status !== 'Hoàn thành') {
+                currentPatient.clinical = document.getElementById('input-clinical').value;
+                const icdCode = document.getElementById('input-icd10-code').value;
+                const icdName = document.getElementById('input-icd10-name').value;
+                if(icdCode) currentPatient.icd = `${icdCode} - ${icdName}`;
+            }
+
+            activePatientId = id;
+            renderPatientList();
+            updateWorkspace();
+        }
+
+        function updateWorkspace() {
+            const p = patients.find(p => p.id === activePatientId);
+            if(!p) return;
+
+            // Header info
+            document.getElementById('ws-avatar').innerText = p.name.charAt(0);
+            document.getElementById('ws-name').innerText = p.name;
+            document.getElementById('ws-meta').innerHTML = `
+                <span><i class="font-semibold text-slate-500">Mã BN:</i> ${p.code}</span>
+                <span><i class="font-semibold text-slate-500">Giới tính:</i> ${p.gender}</span>
+                <span><i class="font-semibold text-slate-500">Tuổi:</i> ${p.age}</span>
+                <span><i class="font-semibold text-slate-500">Nhóm máu:</i> <b class="text-red-500">${p.bloodType}</b></span>
+            `;
+            document.getElementById('ws-weight').innerText = p.weight;
+            
+            // Status badge
+            const badge = document.getElementById('ws-status-badge');
+            badge.innerText = p.status;
+            if(p.status === 'Hoàn thành') {
+                badge.className = 'font-bold text-green-700 bg-green-100 px-2 py-0.5 rounded';
+            } else {
+                badge.className = 'font-bold text-orange-600 bg-orange-100 px-2 py-0.5 rounded';
+            }
+
+            // Forms
+            document.getElementById('ws-reason').value = p.reasonDetail;
+            document.getElementById('ws-history').value = p.history;
+
+            const clin = document.getElementById('input-clinical');
+            const icdCode = document.getElementById('input-icd10-code');
+            const icdName = document.getElementById('input-icd10-name');
+            
+            clin.value = p.clinical;
+            
+            if(p.icd) {
+                const parts = p.icd.split(' - ');
+                icdCode.value = parts[0] || '';
+                icdName.value = parts[1] || '';
+            } else {
+                icdCode.value = '';
+                icdName.value = '';
+            }
+
+            if(p.status === 'Hoàn thành') {
+                clin.disabled = true;
+                icdCode.disabled = true;
+                icdName.disabled = true;
+            } else {
+                clin.disabled = false;
+                icdCode.disabled = false;
+                icdName.disabled = false;
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const icon = type === 'success' ? 'check_circle' : 'info';
+            const bgColor = type === 'success' ? 'bg-green-50 text-green-700 border-green-200' : 'bg-blue-50 text-blue-700 border-blue-200';
+            
+            const toast = document.createElement('div');
+            toast.className = `toast-enter flex items-center gap-2 p-4 rounded-xl shadow-md border ${bgColor}`;
+            toast.innerHTML = `<span class="material-symbols-outlined">${icon}</span> <span class="text-[14px] font-semibold">${message}</span>`;
+            
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function saveDraft() {
+            showToast('Đã lưu bản nháp bệnh án thành công!', 'success');
+        }
+
+        function finishExam() {
+            const clin = document.getElementById('input-clinical').value;
+            const icdCode = document.getElementById('input-icd10-code').value;
+            const icdName = document.getElementById('input-icd10-name').value;
+            
+            if(!clin || !icdCode) {
+                showToast('Vui lòng nhập đầy đủ Khám lâm sàng và Mã ICD-10', 'info');
+                return;
+            }
+
+            const p = patients.find(p => p.id === activePatientId);
+            p.status = 'Hoàn thành';
+            p.reason = 'Đã hoàn tất khám';
+            p.clinical = clin;
+            p.icd = `${icdCode} - ${icdName}`;
+            
+            showToast('Đã hoàn tất khám và chuyển hồ sơ lưu trữ', 'success');
+            renderPatientList();
+            updateWorkspace();
+        }
+
+        function switchTab(tabId) {
+            // Update active states on sidebar
+            document.querySelectorAll('nav a').forEach(a => {
+                a.classList.remove('bg-white/10', 'border-l-4', 'border-blue-400', 'text-white');
+                a.classList.add('text-blue-100', 'border-l-4', 'border-transparent');
+                if(a.id === `tab-${tabId}`) {
+                    a.classList.add('bg-white/10', 'border-l-4', 'border-blue-400', 'text-white');
+                    a.classList.remove('text-blue-100', 'border-transparent');
+                }
+            });
+
+            // Hide all views
+            document.getElementById('view-patients').classList.add('hidden');
+            document.getElementById('view-emr').classList.add('hidden');
+            document.getElementById('view-prescriptions').classList.add('hidden');
+
+            // Show selected view
+            if(tabId === 'patients') {
+                document.getElementById('view-patients').classList.remove('hidden');
+                document.getElementById('view-patients').classList.add('grid');
+                document.getElementById('header-title').innerHTML = `Danh sách bệnh nhân (Hôm nay, <span id="currentDate">${new Date().toLocaleDateString('vi-VN')}</span>)`;
+                document.getElementById('header-stats').style.display = 'flex';
+            } else if(tabId === 'emr') {
+                document.getElementById('view-emr').classList.remove('hidden');
+                document.getElementById('header-title').innerText = 'Hệ thống Bệnh án điện tử (EMR)';
+                document.getElementById('header-stats').style.display = 'none';
+            } else if(tabId === 'prescriptions') {
+                document.getElementById('view-prescriptions').classList.remove('hidden');
+                document.getElementById('header-title').innerText = 'Quản lý Dược & Toa thuốc';
+                document.getElementById('header-stats').style.display = 'none';
+            }
+        }
+
+        function searchEMR() {
+            const input = document.getElementById('emr-search-input').value;
+            if(!input) {
+                showToast("Vui lòng nhập Mã BN hoặc Số điện thoại để tra cứu!", "error");
+                return;
+            }
+            
+            showToast("Đang truy xuất dữ liệu bệnh án hệ thống...", "info");
+            
+            // Simulate API call
+            setTimeout(() => {
+                document.getElementById('emr-empty').classList.add('hidden');
+                document.getElementById('emr-empty').classList.remove('flex-1', 'flex');
+                
+                document.getElementById('emr-results').classList.remove('hidden');
+                document.getElementById('emr-results').classList.add('flex-1');
+                
+                showToast("Đã tải thành công hồ sơ bệnh nhân Trần Văn Hoàng.", "success");
+            }, 800);
+        }
+
+        /* --- PRESCRIPTIONS JS --- */
+        function togglePrescriptionView(view) {
+            if(view === 'create') {
+                document.getElementById('prescriptions-list').classList.add('hidden');
+                document.getElementById('prescriptions-list').classList.remove('flex-1', 'flex');
+                document.getElementById('prescriptions-create').classList.remove('hidden');
+                document.getElementById('prescriptions-create').classList.add('flex-1', 'flex');
+            } else {
+                document.getElementById('prescriptions-create').classList.add('hidden');
+                document.getElementById('prescriptions-create').classList.remove('flex-1', 'flex');
+                document.getElementById('prescriptions-list').classList.remove('hidden');
+                document.getElementById('prescriptions-list').classList.add('flex-1', 'flex');
+            }
+        }
+
+        let drugCounter = 0;
+        let selectedDrugs = [];
+
+        function addDrugToForm(drugName) {
+            const list = document.getElementById('selected-drugs-list');
+            const emptyState = document.getElementById('empty-drug-state');
+            
+            if (emptyState) {
+                emptyState.style.display = 'none';
+            }
+
+            drugCounter++;
+            const trId = `drug-row-${drugCounter}`;
+            selectedDrugs.push(drugName);
+            
+            const tr = document.createElement('tr');
+            tr.id = trId;
+            tr.innerHTML = `
+                <td class="px-4 py-3 font-medium text-slate-500">${drugCounter}</td>
+                <td class="px-4 py-3 font-bold text-[#00346f]">${drugName}</td>
+                <td class="px-4 py-3 text-center">
+                    <input type="number" value="1" min="1" class="w-16 px-2 py-1.5 border border-slate-300 rounded outline-none text-center text-[13px] focus:border-teal-500">
+                </td>
+                <td class="px-4 py-3">
+                    <input type="text" placeholder="VD: Sáng 1 viên, Tối 1 viên sau ăn..." class="w-full px-3 py-1.5 border border-slate-300 rounded outline-none text-[13px] focus:border-teal-500">
+                </td>
+                <td class="px-4 py-3 text-center">
+                    <button onclick="removeDrug('${trId}')" class="text-slate-400 hover:text-red-600 transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">delete</span>
+                    </button>
+                </td>
+            `;
+            list.appendChild(tr);
+            showToast(`Đã thêm ${drugName} vào đơn.`, "success");
+        }
+
+        function removeDrug(trId) {
+            const tr = document.getElementById(trId);
+            if (tr) {
+                tr.remove();
+            }
+            
+            const list = document.getElementById('selected-drugs-list');
+            if (list.children.length === 1 && list.children[0].id === 'empty-drug-state') {
+                document.getElementById('empty-drug-state').style.display = 'table-row';
+            } else if (list.querySelectorAll('tr[id^="drug-row"]').length === 0) {
+                document.getElementById('empty-drug-state').style.display = 'table-row';
+            }
+        }
+
+        function saveNewTemplate() {
+            const name = document.getElementById('new-template-name').value;
+            const rows = document.querySelectorAll('#selected-drugs-list tr[id^="drug-row"]');
+            
+            if(!name) {
+                showToast("Vui lòng nhập Tên phác đồ / Đơn mẫu!", "error");
+                return;
+            }
+            if(rows.length === 0) {
+                showToast("Vui lòng thêm ít nhất một loại thuốc vào đơn!", "error");
+                return;
+            }
+
+            // Mở rộng thêm vào danh sách Toa thuốc mẫu (UI mock)
+            let drugTexts = [];
+            rows.forEach(r => {
+                const drugName = r.querySelector('td:nth-child(2)').innerText;
+                const quantity = r.querySelector('td:nth-child(3) input').value;
+                drugTexts.push(`• ${drugName} - <span class="font-semibold text-slate-800">${quantity}</span>`);
+            });
+
+            const templateHTML = `
+                <div class="border border-green-200 rounded-xl overflow-hidden hover:border-green-500 transition-colors group bg-green-50/30 shadow-sm animate-pulse-once">
+                    <div class="bg-green-100 p-3 border-b border-green-200 flex justify-between items-center">
+                        <h4 class="font-bold text-[14px] text-green-800">${name} (Mới)</h4>
+                        <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button class="text-slate-400 hover:text-blue-600"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+                            <button class="text-slate-400 hover:text-red-600"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+                        </div>
+                    </div>
+                    <div class="p-3 text-[12px] text-slate-600 space-y-1">
+                        ${drugTexts.join('')}
+                    </div>
+                </div>
+            `;
+            
+            const container = document.getElementById('template-list-container');
+            container.insertAdjacentHTML('afterbegin', templateHTML);
+
+            showToast("Đã lưu Phác đồ điều trị thành công!", "success");
+            
+            // Reset form & Go back
+            document.getElementById('new-template-name').value = '';
+            document.querySelectorAll('#selected-drugs-list tr[id^="drug-row"]').forEach(tr => tr.remove());
+            document.getElementById('empty-drug-state').style.display = 'table-row';
+            drugCounter = 0;
+            
+            togglePrescriptionView('list');
+        }
+
+        /* --- LAB ORDERS JS --- */
+        function openLabModal() {
+            const p = patients.find(p => p.id === activePatientId);
+            if(p && p.status === 'Hoàn thành') {
+                showToast("Bệnh nhân này đã hoàn tất khám, không thể chỉ định thêm!", "error");
+                return;
+            }
+
+            const modal = document.getElementById('lab-modal');
+            const content = document.getElementById('lab-modal-content');
+            
+            // Reset checkboxes
+            document.querySelectorAll('.lab-checkbox').forEach(cb => cb.checked = false);
+            calcLabTotal();
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Animate pop in
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeLabModal() {
+            const modal = document.getElementById('lab-modal');
+            const content = document.getElementById('lab-modal-content');
+            
+            // Animate pop out
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }, 200);
+        }
+
+        function calcLabTotal() {
+            const checkboxes = document.querySelectorAll('.lab-checkbox');
+            let total = 0;
+            let count = 0;
+            
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    count++;
+                    total += parseInt(cb.dataset.price);
+                }
+            });
+            
+            document.getElementById('lab-count').innerText = count;
+            document.getElementById('lab-total').innerText = total.toLocaleString('vi-VN');
+        }
+
+        function submitLabOrder() {
+            const count = parseInt(document.getElementById('lab-count').innerText);
+            if(count === 0) {
+                showToast("Vui lòng tick chọn ít nhất 1 dịch vụ để chỉ định!", "error");
+                return;
+            }
+            
+            closeLabModal();
+            showToast(`Đã gửi yêu cầu ${count} dịch vụ Xét nghiệm/CĐHA xuống quầy Thu ngân`, "success");
+        }
+
+        // Init
+        renderPatientList();
+        updateWorkspace();
+    </script>
+</body>
+</html>

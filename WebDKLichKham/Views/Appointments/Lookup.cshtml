@@ -1,0 +1,99 @@
+@model WebDKLichKham.Models.ViewModels.AppointmentLookupViewModel
+@{
+    ViewData["Title"] = "Tra cứu lịch hẹn";
+}
+
+<section class="py-16">
+    <div class="max-w-container-max mx-auto px-margin-desktop">
+        <div class="text-center mb-12">
+            <span class="inline-flex items-center gap-2 py-1 px-4 bg-primary/10 text-primary font-bold text-label-sm rounded-full mb-3">
+                <span class="material-symbols-outlined text-sm">search</span> Tra cứu nhanh
+            </span>
+            <h1 class="text-headline-lg font-headline-lg text-primary">Tra cứu lịch hẹn</h1>
+            <p class="text-body-md text-on-surface-variant max-w-xl mx-auto mt-2">Nhập số điện thoại và mã xác nhận để xem danh sách và trạng thái các lịch hẹn của bạn.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+            <div class="lg:col-span-2">
+                <div class="bg-white p-8 rounded-2xl shadow-xl border border-outline-variant">
+                    <h2 class="text-headline-md font-headline-md text-primary mb-6 flex items-center gap-2">
+                        <span class="material-symbols-outlined">key</span> Nhập thông tin
+                    </h2>
+                    <form method="post" class="space-y-4">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        <div>
+                            <label asp-for="PhoneNumber" class="block text-label-md font-label-md text-on-surface-variant mb-1"></label>
+                            <input asp-for="PhoneNumber" class="w-full px-4 py-3 rounded-lg border border-outline focus:ring-2 focus:ring-primary outline-none transition-all" placeholder="0901234567" required />
+                            <span asp-validation-for="PhoneNumber" class="text-error text-body-sm"></span>
+                        </div>
+                        <div>
+                            <label asp-for="Passcode" class="block text-label-md font-label-md text-on-surface-variant mb-1"></label>
+                            <input asp-for="Passcode" type="password" maxlength="4" pattern="\d{4}" class="w-full px-4 py-3 rounded-lg border border-outline focus:ring-2 focus:ring-primary outline-none transition-all" placeholder="Nhập mã xác nhận 4 số" required />
+                            <span asp-validation-for="Passcode" class="text-error text-body-sm"></span>
+                            <small class="text-on-surface-variant text-[11px] block mt-1.5 leading-normal">
+                                Lưu ý: Bạn cần nhập đúng số điện thoại và mã xác nhận 4 chữ số đã tạo lúc đăng ký để tra cứu thông tin lịch khám.
+                            </small>
+                        </div>
+
+                        <button type="submit" class="w-full py-4 bg-primary text-on-primary rounded-xl font-headline-md text-headline-md shadow-lg hover:bg-primary-container hover:text-on-primary-container active:scale-[0.98] transition-all">Tra cứu</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="lg:col-span-3">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-outline-variant min-h-[400px]">
+                    <h2 class="text-headline-md font-headline-md mb-6 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">receipt_long</span> Kết quả
+                    </h2>
+                    @if (Model.Results is null)
+                    {
+                        <div class="flex flex-col items-center justify-center text-center py-8">
+                            <img src="~/images/lookup-illustration.png" alt="Tra cứu lịch hẹn" class="w-72 h-auto mb-6 object-contain mix-blend-multiply opacity-90 hover:opacity-100 transition-opacity duration-500" />
+                            <h3 class="font-headline-md text-headline-md text-primary mb-2">Thông tin trống</h3>
+                            <p class="text-body-md text-on-surface-variant max-w-sm">Vui lòng nhập số điện thoại và mã xác nhận của bạn vào biểu mẫu bên trái để hệ thống hiển thị danh sách lịch hẹn.</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="space-y-6 overflow-y-auto max-h-[600px] pr-2 custom-scrollbar">
+                            @foreach (var app in Model.Results)
+                            {
+                                var sn = app.Doctor?.SpecialtyInfo?.Name ?? app.Doctor?.Specialty ?? "";
+                                <div class="border border-outline-variant rounded-xl overflow-hidden shadow-sm relative">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-px bg-outline-variant">
+                                        <div class="p-4 bg-surface-container-low"><div class="text-label-sm font-bold text-on-surface-variant uppercase tracking-wider mb-1">Mã lịch hẹn</div><div class="font-bold text-primary text-lg">#@app.AppointmentCode</div></div>
+                                        <div class="p-4 bg-surface-container-low"><div class="text-label-sm font-bold text-on-surface-variant uppercase tracking-wider mb-1">Trạng thái</div><div><span class="px-3 py-1 bg-secondary/10 text-secondary text-label-sm font-bold rounded-full">@app.Status.GetDisplayName()</span></div></div>
+                                        <div class="p-4 bg-surface-container-low"><div class="text-label-sm font-bold text-on-surface-variant uppercase tracking-wider mb-1">Bệnh nhân</div><div class="font-bold">@app.PatientName</div></div>
+                                        <div class="p-4 bg-surface-container-low"><div class="text-label-sm font-bold text-on-surface-variant uppercase tracking-wider mb-1">Bác sĩ</div><div class="font-bold">@app.Doctor?.FullName</div></div>
+                                        <div class="p-4 bg-surface-container-low"><div class="text-label-sm font-bold text-on-surface-variant uppercase tracking-wider mb-1">Chuyên khoa</div><div class="font-bold">@sn</div></div>
+                                        <div class="p-4 bg-surface-container-low"><div class="text-label-sm font-bold text-on-surface-variant uppercase tracking-wider mb-1">Thời gian</div><div class="font-bold">@app.AppointmentDate.ToString("dd/MM/yyyy") · @app.StartTime.ToString(@"hh\:mm")-@app.EndTime.ToString(@"hh\:mm")</div></div>
+                                        @if (!string.IsNullOrEmpty(app.MedicalService))
+                                        {
+                                            <div class="p-4 bg-surface-container-low sm:col-span-2"><div class="text-label-sm font-bold text-on-surface-variant uppercase tracking-wider mb-1">Dịch vụ y tế</div><div class="font-bold text-primary">@app.MedicalService</div></div>
+                                        }
+                                    </div>
+                                    @if (!string.IsNullOrWhiteSpace(app.ReasonForVisit))
+                                    {
+                                        <div class="mt-px p-4 bg-white">
+                                            <div class="text-label-sm font-bold text-on-surface-variant uppercase tracking-wider mb-1">Lý do khám / Triệu chứng</div>
+                                            <p class="text-body-md text-on-surface">@app.ReasonForVisit</p>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                        <style>
+                            .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+                            .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+                            .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+                            .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+                        </style>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }
+
