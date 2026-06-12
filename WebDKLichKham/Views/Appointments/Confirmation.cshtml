@@ -53,7 +53,7 @@
                         </div>
                         <div>
                             <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">THỜI GIAN</p>
-                            <p class="text-[16px] font-bold text-slate-800 mb-0.5">@DateTime.Today.Add(@Model.StartTime).ToString("hh:mm tt", new System.Globalization.CultureInfo("en-US"))</p>
+                            <p class="text-[16px] font-bold text-slate-800 mb-0.5">@DateTime.Today.Add(@Model.StartTime).ToString("HH:mm")</p>
                             <p class="text-[13px] text-slate-500">@Model.AppointmentDate.ToString("dddd, dd 'Tháng' MM, yyyy", new System.Globalization.CultureInfo("vi-VN"))</p>
                         </div>
                     </div>
