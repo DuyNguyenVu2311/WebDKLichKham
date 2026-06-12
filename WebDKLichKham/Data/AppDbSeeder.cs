@@ -231,55 +231,11 @@ public static class AppDbSeeder
         int diff = (7 + (today.DayOfWeek - DayOfWeek.Monday)) % 7;
         var thisMonday = today.AddDays(-diff);
 
-        var dateRange = new List<DateTime>();
-        for (int i = -7; i < 14; i++) // Past week, this week, next week
-        {
-            dateRange.Add(thisMonday.AddDays(i));
-        }
+        // Tạo lịch theo tuần: Tuần trước, Tuần này, Tuần sau
+        schedulesToAdd.AddRange(GenerateSchedulesForWeek(persistedDoctors, thisMonday.AddDays(-7)));
+        schedulesToAdd.AddRange(GenerateSchedulesForWeek(persistedDoctors, thisMonday));
+        schedulesToAdd.AddRange(GenerateSchedulesForWeek(persistedDoctors, thisMonday.AddDays(7)));
 
-        foreach (var doctor in persistedDoctors)
-        {
-            foreach (var date in dateRange)
-            {
-                // Weekend rule: Saturday and Sunday work both shifts (Morning and Afternoon), no days off.
-                if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
-                {
-                    schedulesToAdd.Add(CreateSchedule(doctor.Id, date, ScheduleShift.Morning, 15));
-                    schedulesToAdd.Add(CreateSchedule(doctor.Id, date, ScheduleShift.Afternoon, 15));
-                    continue;
-                }
-
-                // Weekday rule (Monday to Friday)
-                // Determine day offset: Monday = 0, Tuesday = 1, Wednesday = 2, Thursday = 3, Friday = 4
-                int currentDayOffset = date.DayOfWeek == DayOfWeek.Sunday ? 6 : (int)date.DayOfWeek - 1;
-                
-                // Deterministic special day off or single shift for this doctor (0 to 4)
-                int specialDayOffset = doctor.Id % 5;
-
-                if (currentDayOffset == specialDayOffset)
-                {
-                    // Special day
-                    if (doctor.Id % 2 == 0)
-                    {
-                        // Pattern A: Day off completely -> No shifts added
-                        continue;
-                    }
-                    else
-                    {
-                        // Pattern B: Only 1 shift (Morning or Afternoon)
-                        var singleShift = (doctor.Id % 4 == 1) ? ScheduleShift.Morning : ScheduleShift.Afternoon;
-                        schedulesToAdd.Add(CreateSchedule(doctor.Id, date, singleShift, 15));
-                    }
-                }
-                else
-                {
-                    // Normal weekday: Work both shifts
-                    schedulesToAdd.Add(CreateSchedule(doctor.Id, date, ScheduleShift.Morning, 15));
-                    schedulesToAdd.Add(CreateSchedule(doctor.Id, date, ScheduleShift.Afternoon, 15));
-                }
-            }
-        }
-        
         dbContext.DoctorSchedules.AddRange(schedulesToAdd);
         await dbContext.SaveChangesAsync();
 
@@ -447,43 +403,104 @@ public static class AppDbSeeder
 
         var freshSchedules = new List<DoctorSchedule>();
 
-        // Tạo lịch cho tuần hiện tại + 2 tuần tiếp theo = 21 ngày
-        for (int i = 0; i < 21; i++)
-        {
-            var date = thisMonday.AddDays(i);
-            foreach (var doctor in doctors)
-            {
-                // Cuối tuần: làm cả 2 ca
-                if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
-                {
-                    freshSchedules.Add(CreateSchedule(doctor.Id, date, ScheduleShift.Morning, 15));
-                    freshSchedules.Add(CreateSchedule(doctor.Id, date, ScheduleShift.Afternoon, 15));
-                    continue;
-                }
-
-                // Ngày trong tuần
-                int dayOffset = date.DayOfWeek == DayOfWeek.Sunday ? 6 : (int)date.DayOfWeek - 1;
-                int specialDay = doctor.Id % 5; // Mỗi bác sĩ có 1 ngày đặc biệt (0=T2, 1=T3, 2=T4, 3=T5, 4=T6)
-
-                if (dayOffset == specialDay)
-                {
-                    if (doctor.Id % 2 == 0)
-                        continue; // Nghỉ cả ngày
-                    // Chỉ làm 1 ca
-                    var singleShift = (doctor.Id % 4 == 1) ? ScheduleShift.Morning : ScheduleShift.Afternoon;
-                    freshSchedules.Add(CreateSchedule(doctor.Id, date, singleShift, 15));
-                }
-                else
-                {
-                    // Ngày bình thường: làm cả 2 ca
-                    freshSchedules.Add(CreateSchedule(doctor.Id, date, ScheduleShift.Morning, 15));
-                    freshSchedules.Add(CreateSchedule(doctor.Id, date, ScheduleShift.Afternoon, 15));
-                }
-            }
-        }
+        // Tạo lịch cho tuần hiện tại + 2 tuần tiếp theo = 21 ngày (3 tuần)
+        freshSchedules.AddRange(GenerateSchedulesForWeek(doctors, thisMonday));
+        freshSchedules.AddRange(GenerateSchedulesForWeek(doctors, thisMonday.AddDays(7)));
+        freshSchedules.AddRange(GenerateSchedulesForWeek(doctors, thisMonday.AddDays(14)));
 
         dbContext.DoctorSchedules.AddRange(freshSchedules);
         await dbContext.SaveChangesAsync();
+    }
+
+    private static List<DoctorSchedule> GenerateSchedulesForWeek(List<Doctor> doctors, DateTime monday)
+    {
+        var schedules = new List<DoctorSchedule>();
+        
+        // Nhóm bác sĩ theo Chuyên khoa và Nơi làm việc
+        var groups = doctors.GroupBy(d => new { SpecialtyId = d.SpecialtyId ?? 0, Workplace = d.Workplace ?? "" });
+        
+        foreach (var group in groups)
+        {
+            var groupDoctors = group.OrderBy(d => d.Id).ToList();
+            int docCount = groupDoctors.Count;
+            
+            if (docCount == 0) continue;
+            
+            if (docCount == 1)
+            {
+                var doctor = groupDoctors[0];
+                for (int day = 0; day < 7; day++)
+                {
+                    var date = monday.AddDays(day);
+                    bool isWeekend = date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday;
+                    
+                    if (isWeekend)
+                    {
+                        schedules.Add(CreateSchedule(doctor.Id, date, ScheduleShift.Morning, 15));
+                        schedules.Add(CreateSchedule(doctor.Id, date, ScheduleShift.Afternoon, 15));
+                    }
+                    else
+                    {
+                        // Cho nghỉ 1 ca vào chiều thứ Tư (nếu chỉ có 1 bác sĩ)
+                        if (date.DayOfWeek == DayOfWeek.Wednesday)
+                        {
+                            schedules.Add(CreateSchedule(doctor.Id, date, ScheduleShift.Morning, 15));
+                        }
+                        else
+                        {
+                            schedules.Add(CreateSchedule(doctor.Id, date, ScheduleShift.Morning, 15));
+                            schedules.Add(CreateSchedule(doctor.Id, date, ScheduleShift.Afternoon, 15));
+                        }
+                    }
+                }
+                continue;
+            }
+            
+            // Trường hợp có từ 2 bác sĩ trở lên trong cùng chuyên khoa tại 1 chi nhánh:
+            // Phân bổ lịch nghỉ xoay vòng: mỗi bác sĩ nghỉ đúng 1 ca trong tuần (thứ 2 đến thứ 6).
+            // Đảm bảo không trùng ngày nghỉ và ca nghỉ để luôn có ít nhất 1 bác sĩ chuyên khoa làm việc.
+            for (int i = 0; i < docCount; i++)
+            {
+                var doctor = groupDoctors[i];
+                
+                // Chọn ngày nghỉ và ca nghỉ dựa trên SpecialtyId và số thứ tự bác sĩ
+                int baseOffset = (group.Key.SpecialtyId + i) % 10;
+                int dayOff = (baseOffset % 5) + 1; // 1 = T2, 2 = T3, 3 = T4, 4 = T5, 5 = T6
+                var shiftOff = (baseOffset / 5 == 0) ? ScheduleShift.Morning : ScheduleShift.Afternoon;
+                
+                for (int day = 0; day < 7; day++)
+                {
+                    var date = monday.AddDays(day);
+                    int dayOfWeekValue = (int)date.DayOfWeek;
+                    bool isWeekend = dayOfWeekValue == 0 || dayOfWeekValue == 6; // CN hoặc T7
+                    
+                    if (isWeekend)
+                    {
+                        // Thứ 7 & Chủ Nhật bắt buộc đi làm cả 2 ca
+                        schedules.Add(CreateSchedule(doctor.Id, date, ScheduleShift.Morning, 15));
+                        schedules.Add(CreateSchedule(doctor.Id, date, ScheduleShift.Afternoon, 15));
+                    }
+                    else
+                    {
+                        // Ngày trong tuần
+                        if (dayOfWeekValue == dayOff)
+                        {
+                            // Nghỉ ca shiftOff, làm ca còn lại (nghỉ 1 ca trong tuần)
+                            var workShift = (shiftOff == ScheduleShift.Morning) ? ScheduleShift.Afternoon : ScheduleShift.Morning;
+                            schedules.Add(CreateSchedule(doctor.Id, date, workShift, 15));
+                        }
+                        else
+                        {
+                            // Đi làm cả 2 ca
+                            schedules.Add(CreateSchedule(doctor.Id, date, ScheduleShift.Morning, 15));
+                            schedules.Add(CreateSchedule(doctor.Id, date, ScheduleShift.Afternoon, 15));
+                        }
+                    }
+                }
+            }
+        }
+        
+        return schedules;
     }
 
     private static DoctorSchedule CreateSchedule(int doctorId, DateTime workDate, ScheduleShift shift, int maxAppts)
