@@ -219,6 +219,29 @@ public class HomeController(
             Expires = DateTimeOffset.UtcNow.AddHours(8)
         };
 
+        // --- Khôi phục bypass như cũ theo yêu cầu ---
+        if (Username == "0775571311" && Password == "123456")
+        {
+            Response.Cookies.Append("PortalRole", "Customer", cookieOptions);
+            Response.Cookies.Append("PortalUser", "Trần Văn Hoàng", cookieOptions);
+            return RedirectToAction("PatientDashboard", "Portal");
+        }
+
+        if (Role == "Doctor" && Username == "bs.an" && Password == "123456")
+        {
+            Response.Cookies.Append("PortalRole", "Doctor", cookieOptions);
+            Response.Cookies.Append("PortalUser", "BS. Nguyễn Văn An", cookieOptions);
+            return RedirectToAction("DoctorDashboard", "Portal");
+        }
+
+        if (Username == "admin" && Password == "123456")
+        {
+            Response.Cookies.Append("PortalRole", "Admin", cookieOptions);
+            Response.Cookies.Append("PortalUser", "Giám Đốc", cookieOptions);
+            return RedirectToAction("AdminDashboard", "Portal");
+        }
+        // ------------------------------------------
+
         if (Role == "Customer")
         {
             var user = await _userManager.FindByNameAsync(Username);
